@@ -24,7 +24,7 @@ toast.error(err.message ?? 'Something went wrong');
 - `react-i18next`; files `shared/i18n/locales/vi.json` and `en.json`, nested keys by feature (`alerts.form.submit`), plus `errors.*`, `validation.*`, `fields.*`, `notifications.*`, `market.status.*`.
 - Every new key goes into **both** files in the same commit (Vitest parity test fails otherwise). ESLint `i18next/no-literal-string` must stay on.
 - Numbers, prices, percentages, volumes, dates only through `shared/format` (`Intl`, current locale + user timezone). Never `toFixed()` or `toLocaleString()` directly in components.
-- Exception: the official Vietnamese title (`footer-title`) and "Đồ án chuyên ngành — UIT" (`footer-course`) are translation keys with the same Vietnamese value in both files.
+- Footer title (`footer-title`) and course line (`footer-course`) are translated: vi = Vietnamese official title + "Đồ án chuyên ngành — UIT"; en = English official title + "Specialized Project — UIT". The footer has a close button (`footer-close`) whose state is stored in localStorage key `crypto-alert.footer-hidden`.
 
 ## Styling
 - Tailwind utilities mapped to tokens (`bg-surface`, `text-muted`, `text-up`, `border-border`…). No hex colors, no arbitrary values like `p-[13px]`, no inline `style` for colors.
@@ -38,7 +38,7 @@ toast.error(err.message ?? 'Something went wrong');
 - `setData` on load, `update` for live ticks; indicator lib functions are pure and unit-tested.
 
 ## Testing hooks
-- Stable `data-testid` for Playwright: `market-row-<SYMBOL>`, `chart-root`, `chart-legend`, `tf-<interval>`, `watchlist-row-<SYMBOL>`, `star-<SYMBOL>`, `alert-row-<id>`, `bell-badge`, `notification-item-<id>`, `toast`, `conn-banner`, `market-status-badge`, `lang-switcher`, `theme-toggle`, `footer-title`, `footer-course`.
+- Stable `data-testid` for Playwright: `market-row-<SYMBOL>`, `chart-root`, `chart-legend`, `tf-<interval>`, `watchlist-row-<SYMBOL>`, `star-<SYMBOL>`, `alert-row-<id>`, `bell-badge`, `notification-item-<id>`, `toast`, `conn-banner`, `market-status-badge`, `lang-switcher`, `theme-toggle`, `footer-title`, `footer-course`, `footer-disclaimer`, `footer-close`.
 - Vitest: indicator lib (vs oracle), format helpers, i18n key parity, http client refresh logic.
 
 ## Accessibility

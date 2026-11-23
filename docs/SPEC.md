@@ -7,10 +7,12 @@
 
 | Item | Value |
 |---|---|
-| Official title (use exactly, Vietnamese, in UI footer and README) | **Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá** |
+| Official title, Vietnamese (use exactly; README and Vietnamese UI footer) | **Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá** |
+| Official title, English (English UI footer) | **Building a Web Application for Cryptocurrency Market Tracking with Real-Time Technical Charts and Price Alerts** |
 | Course | Đồ án chuyên ngành — UIT (VNU-HCM), solo |
 | Market | Crypto, **USDT spot pairs only**, public Binance market data |
 | Disclaimer (footer, translated) | vi: "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư." / en: "Information is for reference only and is not investment advice." |
+| Course line (footer, translated) | vi: "Đồ án chuyên ngành — UIT" / en: "Specialized Project — UIT" |
 | Deadline | ~early December 2026 (2–3 weeks) — working deployed demo + report |
 
 ### 0.1 Conflicts with the proposal report (this spec wins)
@@ -189,7 +191,7 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 | ID | Steps → expected result |
 |---|---|
 | AC-I18N-01 | First visit, fresh browser (any browser language) → UI in Vietnamese; `<html lang="vi">`. |
-| AC-I18N-02 | Switch language to English via header switcher → **every visible text changes** on dashboard, auth pages, account page, alerts form, notifications panel, toasts, empty states, 404 page; `<html lang="en">`. Test: no visible text contains Vietnamese diacritics except the two footer lines with `data-testid` `footer-title` and `footer-course` (the official title and "Đồ án chuyên ngành — UIT", shown in Vietnamese in both languages); no raw i18n keys (e.g. `alerts.form.title`) appear in either language. |
+| AC-I18N-02 | Switch language to English via header switcher → **every visible text changes** on dashboard, auth pages, account page, alerts form, notifications panel, toasts, empty states, 404 page; `<html lang="en">`. Test: no visible text contains Vietnamese diacritics (no exceptions); no raw i18n keys (e.g. `alerts.form.title`) appear in either language. |
 | AC-I18N-03 | Error messages are translated: trigger `INVALID_CREDENTIALS` in vi, switch to en → same error shown in English (and vice versa). Unknown error code → generic translated "Something went wrong". |
 | AC-I18N-04 | Numbers and dates follow locale: price `67.234,50` (vi) vs `67,234.50` (en); dates `21/11/2026 14:05` (vi) vs `11/21/2026, 2:05 PM` (en). |
 | AC-I18N-05 | Guest choice persists after reload (browser storage). Logged-in choice is saved to the account: log in on a new browser context → UI uses the saved language. After login, the account setting overrides the guest choice. |
@@ -208,7 +210,7 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 |---|---|
 | AC-UI-01 | Viewport 1440×900 → three columns: market list (left), chart (center), Watchlist/Alerts tabs (right); header with logo, language switcher, theme toggle, bell, user menu; footer visible. |
 | AC-UI-02 | Viewport 390×844 → single column with bottom tab bar Markets / Chart / Watchlist / Alerts; each tab shows its panel; no horizontal page scroll. |
-| AC-UI-03 | Footer shows exactly "Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá" in **both** languages, plus the translated disclaimer and "Đồ án chuyên ngành — UIT". |
+| AC-UI-03 | Footer is visible by default. vi: Vietnamese official title, vi disclaimer, "Đồ án chuyên ngành — UIT". en: English official title, en disclaimer, "Specialized Project — UIT" (testids `footer-title`, `footer-course` and the existing disclaimer testid). Footer has a close button (`data-testid="footer-close"`, translated aria-label); clicking it hides the footer; after reload it stays hidden (stored in localStorage, same for guests and logged-in users). |
 | AC-UI-04 | Unknown route `/abc` → translated 404 page with link to home. |
 
 ### F12 Operations — `AC-OPS`
@@ -227,7 +229,7 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 | Security | Passwords hashed (argon2id); refresh token httpOnly cookie, hashed in DB; never return hashes; login rate limit; all inputs validated server-side; test endpoints disabled in production. |
 | Browsers | Latest Chrome/Edge/Firefox; Playwright runs Chromium. |
 | Accessibility | Visible focus ring; text contrast ≥ 4.5:1 in both themes; up/down not conveyed by color alone (`+`/`−` sign). |
-| Compliance | Lightweight Charts attribution logo enabled; disclaimer in footer. |
+| Compliance | Lightweight Charts attribution logo enabled; disclaimer in footer (visible by default; the user may close the footer). |
 
 ## 7. Assumptions & defaults (veto any of these early)
 

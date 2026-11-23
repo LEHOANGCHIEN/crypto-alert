@@ -6,9 +6,9 @@ How to use: (1) start Claude Code in the project folder, (2) run `/model` and se
 |---|---|---|
 | Very first session | a. KICKOFF | Sonnet 5.5 + Medium, Plan ON |
 | Start or continue phase N | b. PHASE START | see table inside b |
-| Phase checklist done + CI green | c. PHASE REVIEW (new session) | Opus 5.5 + High, Plan ON |
+| Phase checklist done + CI green | c. PHASE REVIEW — paste into the Claude Code project 'Đồ án chuyên ngành - Review', not the builder | Opus 5.5 + High, ask before edits (not Auto) |
 | Review said PASS | e. MERGE | Sonnet 5.5 + Medium, Plan OFF |
-| Review said FAIL | the fix prompt printed by the review | same as phase |
+| Review said FAIL | coordinator writes reviews/phase-<N>-review.decision.md; paste into the builder: Read reviews/phase-<N>-review.decision.md and apply the Fix instructions block exactly | as written in the decision |
 | Same bug failed 2–3 times | d. STUCK BUG | Opus 5.5 + Extra, Plan OFF (it stops and waits for "OK fix"); near quota limit → Sonnet 5.5 + Medium |
 | Something broke, go back | f. ROLLBACK | Sonnet 5.5 + Medium, Plan OFF (it stops and waits for your choice) |
 
@@ -33,7 +33,7 @@ Then do ONLY Phase 0 from docs/PROGRESS.md, in checklist order:
 
 In Plan mode, first show me a short plan of the Phase 0 items (in English) plus a 3-line summary in Vietnamese of what I will have at the end. After I approve, execute.
 
-Finish only when the Definition of Done in CLAUDE.md is met: npm run check passes, CI is green on phase-0-scaffold, the deployed /api/v1/health shows provider "binance" and connected true, docs/PROGRESS.md (ticks + dated log line with last commit hash) and docs/TRACEABILITY.md are updated. End your reply with "Cách kiểm tra thủ công" (numbered, simple Vietnamese) and tell me the next step is the PHASE REVIEW PROMPT for phase 0 in a new session with Opus 5.5 + High.
+Finish only when the Definition of Done in CLAUDE.md is met: npm run check passes, CI is green on phase-0-scaffold, the deployed /api/v1/health shows provider "binance" and connected true, docs/PROGRESS.md (ticks + dated log line with last commit hash) and docs/TRACEABILITY.md are updated. End your reply with "Cách kiểm tra thủ công" (numbered, simple Vietnamese) and tell me the next step is the PHASE REVIEW (section c) in the Review project.
 ```
 
 ---
@@ -62,35 +62,31 @@ Work on Phase <N> only.
 7. If the same bug survives 2 fix attempts, stop and tell me in Vietnamese to use the STUCK BUG PROMPT.
 8. If the session gets long, finish the current item, commit, log, and stop.
 
-Finish with the Definition of Done from CLAUDE.md: npm run check passes, CI green on the branch, docs/PROGRESS.md ticked + one dated log line (model + effort, summary, last commit hash, CI status), docs/TRACEABILITY.md updated. End with "Cách kiểm tra thủ công" in simple Vietnamese (numbered steps in the browser, what I should see), the list of AC IDs now passing, and the next step (continue this phase, or run the PHASE REVIEW PROMPT in a new session with Opus 5.5 + High).
+Finish with the Definition of Done from CLAUDE.md: npm run check passes, CI green on the branch, docs/PROGRESS.md ticked + one dated log line (model + effort, summary, last commit hash, CI status), docs/TRACEABILITY.md updated. End with "Cách kiểm tra thủ công" in simple Vietnamese (numbered steps in the browser, what I should see), the list of AC IDs now passing, and the next step (continue this phase, or the PHASE REVIEW (section c) in the Review project).
 ```
 
 ---
 
-## c. PHASE REVIEW PROMPT
+## c. PHASE REVIEW PROMPT — paste into the Claude Code project "Đồ án chuyên ngành - Review" (NOT the builder)
+
+Settings: Opus 5.5 + High, ask before edits (not Auto). Replace `<N>`, `<name>` (from PROGRESS.md) and `<URL>` (deployed URL from PROGRESS.md). For a recheck after a decision, use the Recheck block written in `reviews/phase-<N>-review.decision.md` instead.
 
 ```text
-SETTINGS: Opus 5.5 + High, Plan mode ON
+Review Phase <N> of crypto-alert on branch phase-<N>-<name> (folder ~/Projects/crypto-alert). Read-only: do not edit, commit, push, or switch branches if the working tree is dirty. The only file you may create is reviews/phase-<N>-review.md.
 
-You are an independent reviewer in a fresh session. This session is READ-ONLY: do not edit, create or delete any file, do not commit, push, merge or change branches' content, and do not ask to exit Plan mode — just output the report. You may only read files and run read-only or test commands (git status, git log, git diff, gh run list/view, npm run check, npm run test:e2e). Run them on branch phase-<N>-<name> (git switch is allowed only if the working tree is clean).
+1. Read CLAUDE.md, docs/SPEC.md, docs/ARCHITECTURE.md, docs/API.md, docs/DATABASE.md, docs/PROGRESS.md, docs/TRACEABILITY.md, backend/CONTEXT.md, frontend/CONTEXT.md, and any reviews/*.decision.md files.
+2. git diff main...phase-<N>-<name> --stat, then read the changed files and the docs diff. A change to docs/SPEC.md not authorized by a reviews/*.decision.md file, or a contract change that makes an AC easier to pass, is Major.
+3. CI: gh run list --branch phase-<N>-<name> --limit 3 (latest run green and for the latest commit). Run npm run check; if the environment blocks part of it, say which part and rely on CI.
+4. For every AC ID listed for Phase <N> in docs/PROGRESS.md: a Playwright test titled with that ID exists, really checks what SPEC.md says (no trivial, skipped or weakened assertions), and TRACEABILITY.md is correct.
+5. Contracts and rules: API.md routes/fields/events/error codes; DATABASE.md schema and migrations (no db push, no edited migrations); CLAUDE.md hard rules; no secrets committed; PROGRESS.md checklist + log line; Conventional Commits; no commit message contains "Co-Authored-By", "Generated with", or mentions Claude/AI (git log main..phase-<N>-<name> --format=%B).
+6. Live app: GET <URL>/api/v1/health → db up, provider binance, connected true; POST <URL>/api/v1/test/reset → 404.
+7. Assess every deviation the builder declared in the PROGRESS.md log line.
 
-Review Phase <N> on branch phase-<N>-<name>.
-
-1. Read CLAUDE.md, docs/SPEC.md, docs/ARCHITECTURE.md, docs/API.md, docs/DATABASE.md, docs/PROGRESS.md, docs/TRACEABILITY.md, backend/CONTEXT.md, frontend/CONTEXT.md.
-2. Look at the changes: git diff main...phase-<N>-<name> --stat, then read the changed files. Also run git diff main...phase-<N>-<name> -- docs CLAUDE.md backend/CONTEXT.md frontend/CONTEXT.md; any change to docs/SPEC.md, or any contract change that makes an AC easier to pass, is a Major issue.
-3. Check CI: gh run list --branch phase-<N>-<name> --limit 3 (latest run must be green and for the latest commit). Run npm run check locally.
-4. For every AC ID listed for Phase <N> in docs/PROGRESS.md:
-   - a Playwright test exists whose title starts with that ID;
-   - the test really checks what SPEC.md says (not a trivial or skipped test, no weakened assertions);
-   - TRACEABILITY.md status is correct.
-5. Check the contracts and rules: routes, field names, event names and error codes exactly as API.md; schema and migrations per DATABASE.md (no db push, no edited migrations, no BigInt); CLAUDE.md hard rules (no hard-coded UI strings, codes not messages from backend, tokens only for colors, no secrets committed, no password hashes returned, attribution logo on, nothing out of scope); PROGRESS.md checklist and log line present; Git rules (branch name, Conventional Commits, no force-push).
-6. Output, in this exact order:
-   VERDICT: PASS or FAIL  (PASS only if there are no Blocker or Major issues)
-   Issues: numbered list. Each issue: severity (Blocker / Major / Minor), file and line, what is wrong, and a 1–2 sentence explanation in simple Vietnamese for a non-programmer.
-   Tóm tắt cho chủ dự án: 3–5 lines in simple Vietnamese (what works, what does not, what to do next).
-   Kiểm tra thủ công đề nghị: 3–6 numbered browser checks in simple Vietnamese.
-   If FAIL: one English fix prompt in a code block that I can paste into a new coding session. It must start with the SETTINGS line of this phase from docs/PROMPTS.md (Plan mode ON), list every Blocker and Major issue with file paths, and require the Definition of Done from CLAUDE.md.
-   If PASS: tell me to run the MERGE PROMPT for phase <N> (Sonnet 5.5 + Medium, Plan mode OFF).
+Write reviews/phase-<N>-review.md:
+VERDICT: PASS or FAIL (PASS only if no Blocker or Major issues)
+Issues: numbered; each with severity (Blocker / Major / Minor), file and line, what is wrong, and 1–2 sentences in simple Vietnamese.
+Tóm tắt cho chủ dự án: 3–5 lines in simple Vietnamese.
+Do not write a fix prompt; the project coordinator writes the decision file.
 ```
 
 ---

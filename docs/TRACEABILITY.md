@@ -4,15 +4,15 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 0 · failing 0 · pending 76 · last CI run: —
+**Summary:** 76 ACs · passing 5 · failing 0 · pending 71 · last CI run: green on phase-0-scaffold (2026-11-23)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
-| AC-OPS-01 | 0 | ops.spec.ts | AC-OPS-01 health reports db and market data | pending | |
-| AC-I18N-01 | 0 | i18n.spec.ts | AC-I18N-01 Vietnamese by default | pending | |
-| AC-THEME-01 | 0 | theme.spec.ts | AC-THEME-01 dark theme by default | pending | |
-| AC-UI-03 | 0 | layout.spec.ts | AC-UI-03 footer shows exact title and disclaimer | pending | |
-| AC-UI-04 | 0 | layout.spec.ts | AC-UI-04 unknown route shows 404 | pending | |
+| AC-OPS-01 | 0 | ops.spec.ts | AC-OPS-01 health reports db and market data | passing | |
+| AC-I18N-01 | 0 | i18n.spec.ts | AC-I18N-01 Vietnamese by default | passing | |
+| AC-THEME-01 | 0 | theme.spec.ts | AC-THEME-01 dark theme by default | passing | |
+| AC-UI-03 | 0 | layout.spec.ts | AC-UI-03 footer shows translated texts and can be closed | passing | |
+| AC-UI-04 | 0 | layout.spec.ts | AC-UI-04 unknown route shows 404 | passing | |
 | AC-AUTH-01 | 1 | auth.spec.ts | AC-AUTH-01 register success | pending | |
 | AC-AUTH-02 | 1 | auth.spec.ts | AC-AUTH-02 duplicate email rejected | pending | |
 | AC-AUTH-03 | 1 | auth.spec.ts | AC-AUTH-03 register validation errors | pending | |

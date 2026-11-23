@@ -1,0 +1,56 @@
+{
+  "name": "@crypto-alert/backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "prisma generate && nest build",
+    "start": "node dist/main.js",
+    "start:dev": "dotenv run -f ../.env -- nest start --watch",
+    "start:prod": "prisma migrate deploy && node dist/main.js",
+    "typecheck": "prisma generate && tsc -p tsconfig.check.json",
+    "lint": "eslint \"{src,test,prisma}/**/*.ts\"",
+    "test": "jest",
+    "test:integration": "node test/run-integration.mjs",
+    "db:migrate": "dotenv run -f ../.env -- prisma migrate dev",
+    "db:seed": "dotenv run -f ../.env -- tsx prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.2.11",
+    "@nestjs/config": "^4.0.4",
+    "@nestjs/core": "^11.2.11",
+    "@nestjs/platform-express": "^11.2.11",
+    "@prisma/client": "^6.19.3",
+    "argon2": "^0.45.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "express": "^5.3.0",
+    "prisma": "^6.19.3",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "ws": "^8.23.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@nestjs/cli": "^11.0.24",
+    "@nestjs/schematics": "^11.1.0",
+    "@nestjs/testing": "^11.2.11",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "@types/supertest": "^7.2.1",
+    "@types/ws": "^8.18.2",
+    "dotenv-cli": "^11.1.0",
+    "eslint": "^9.39.5",
+    "jest": "^30.5.2",
+    "prettier": "^3.10.1",
+    "supertest": "^7.3.2",
+    "ts-jest": "^29.4.15",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0"
+  }
+}

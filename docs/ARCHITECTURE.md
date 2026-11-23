@@ -219,8 +219,8 @@ Layering (BE): controller (HTTP + DTO validation) → service (business rules, t
 | Item | Choice |
 |---|---|
 | Host | Railway, region **Singapore** (`asia-southeast1`), Hobby plan. One web service + Railway PostgreSQL in the same region. Binance returns HTTP 451 for US IPs → never deploy to a US region. |
-| Topology | Same origin: NestJS serves `/api/v1/*`, `/socket.io/*` and the built SPA (`@nestjs/serve-static`, SPA fallback to `index.html`). No CORS and simple cookies in prod. Dev: Vite proxies `/api` and `/socket.io` to the backend. |
-| Start | `prisma migrate deploy && node dist/main.js`; health check `GET /api/v1/health`. |
+| Topology | Same origin: NestJS serves `/api/v1/*`, `/socket.io/*` and the built SPA (Express static middleware + SPA fallback to `index.html` in `backend/src/configure-app.ts`; `/api` and `/socket.io` excluded). No CORS and simple cookies in prod. Dev: Vite proxies `/api` and `/socket.io` to the backend. |
+| Start | Root `npm start` = `cd backend && npx prisma migrate deploy && node dist/main.js` (Railpack runs root `npm run build` then `npm start`). Healthcheck `GET /api/v1/health` and restart policy On Failure ×5 are set in Railway service settings (dashboard). No railway.json/railway.toml: Railway Config as Code is deprecated (cutoff 2026-12-01). |
 | Deploy method | Railway CLI `railway up`, run by Claude Code: from the phase branch for the Phase 0 smoke deploy and the Phase 7 pre-release check, from `main` after every merge (Merge Prompt). The owner only creates the account, logs in and picks the Singapore region. |
 | Seed | `npm run db:seed -w backend` run once manually after first deploy (idempotent upsert of demo data). |
 | Binance check (Phase 0) | `/api/v1/health` reports provider connected + recent `lastMessageAt`; if not → region is wrong. |
@@ -262,7 +262,7 @@ No Figma. Clean trading-dashboard look *inspired by* Binance/TradingView layouts
 | `/login`, `/register` | Centered card 400 px | Full-width card, 16 px margin |
 | `/account` | Single column 640 px: Profile · Change password · Preferences (language, theme, timezone) | Full width |
 | 404 | Centered message + Home button | same |
-| Footer (all pages) | Official Vietnamese title (`data-testid="footer-title"`) · translated disclaimer · "Đồ án chuyên ngành — UIT" (`data-testid="footer-course"`); title and course line stay Vietnamese in both languages (12 px, muted) | same, wraps |
+| Footer (all pages) | Official title (`data-testid="footer-title"`) · translated disclaimer (`footer-disclaimer`) · course line (`footer-course`); all translated: vi = Vietnamese title + "Đồ án chuyên ngành — UIT", en = English title + "Specialized Project — UIT" (12 px, muted). Close button (`footer-close`); hidden state stored in localStorage `crypto-alert.footer-hidden` | same, wraps |
 
 ### 11.2 Color tokens
 
@@ -305,7 +305,7 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, fla
 
 | ID | Decision | Reason | Consequence |
 |---|---|---|---|
-| ADR-01 | **NestJS** instead of Express (report said Express, "subject to change") | Modules/DI/guards/pipes give Claude Code a fixed structure; built-in Socket.IO gateway, throttler, serve-static | Slightly more boilerplate |
+| ADR-01 | **NestJS** instead of Express (report said Express, "subject to change") | Modules/DI/guards/pipes give Claude Code a fixed structure; built-in Socket.IO gateway, throttler, static file serving | Slightly more boilerplate |
 | ADR-02 | **Socket.IO** to browsers; raw `ws` to Binance | Rooms, auto-reconnect, auth handshake out of the box | Browser can't use plain WS clients (fine) |
 | ADR-03 | **INTEGER autoincrement IDs**, not BigInt | BigInt serialises as string → FE/BE type mismatch | Max ~2.1 billion rows per table (enough) |
 | ADR-04 | Prices as **Decimal in DB, number in JSON** | Exact storage; simple FE types | Global serializer converts `Prisma.Decimal` → `number` |

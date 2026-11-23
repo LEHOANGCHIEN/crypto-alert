@@ -1,0 +1,24 @@
+{
+  "app": { "name": "Crypto Alert" },
+  "nav": {
+    "login": "Log in",
+    "register": "Sign up",
+    "home": "Back to home"
+  },
+  "language": { "label": "Language", "vi": "VI", "en": "EN" },
+  "theme": { "toggle": "Toggle dark/light theme", "dark": "Dark", "light": "Light" },
+  "footer": {
+    "title": "Building a Web Application for Cryptocurrency Market Tracking with Real-Time Technical Charts and Price Alerts",
+    "course": "Specialized Project — UIT",
+    "disclaimer": "Information is for reference only and is not investment advice.",
+    "close": "Close footer"
+  },
+  "pages": {
+    "trade": { "title": "Market", "placeholder": "The chart and market list arrive in later phases." },
+    "login": { "title": "Log in", "placeholder": "Login arrives in a later phase." },
+    "register": { "title": "Sign up", "placeholder": "Registration arrives in a later phase." },
+    "account": { "title": "Account", "placeholder": "The account page arrives in a later phase." },
+    "notFound": { "title": "Page not found", "description": "The page you opened does not exist." }
+  },
+  "errors": { "UNKNOWN": "Something went wrong, please try again." }
+}

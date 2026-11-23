@@ -11,3 +11,5 @@ blob-report/
 .vite/
 *.log
 .DS_Store
+*.tsbuildinfo
+.vitest/

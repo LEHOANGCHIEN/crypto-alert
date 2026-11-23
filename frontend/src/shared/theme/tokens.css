@@ -1,0 +1,71 @@
+/*
+ * Design tokens (docs/ARCHITECTURE.md §11.2). Every visual value in the app comes from here.
+ * @theme holds the dark (default) values and makes Tailwind generate utilities
+ * (bg-surface, text-text-muted, text-up, border-border …) that read the CSS variables at runtime,
+ * so the light block below re-themes everything without rebuilding.
+ */
+@theme {
+  --color-bg: #0f1115;
+  --color-surface: #161a20;
+  --color-surface-2: #1e232b;
+  --color-border: #2a303a;
+  --color-text: #e6e8eb;
+  --color-text-muted: #8b93a1;
+  --color-accent: #3b82f6;
+  --color-danger: #f97316;
+  --color-warning: #f59e0b;
+  --color-up: #26a69a;
+  --color-down: #ef5350;
+  --color-chart-grid: #1e232b;
+  --color-chart-crosshair: #5b6472;
+  --color-ind-1: #f59e0b;
+  --color-ind-2: #a855f7;
+  --color-ind-3: #38bdf8;
+  --color-ind-rsi: #a855f7;
+  --color-ind-macd: #3b82f6;
+  --color-ind-signal: #f97316;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --text-meta: 12px;
+  --text-row: 13px;
+  --text-body: 14px;
+  --text-section: 16px;
+  --text-price: 20px;
+  --text-page: 24px;
+
+  --radius-input: 4px;
+  --radius-button: 6px;
+  --radius-card: 8px;
+
+  --spacing-header: 56px;
+}
+
+:root[data-theme='light'] {
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f2f5;
+  --color-border: #dde1e6;
+  --color-text: #12161c;
+  --color-text-muted: #5b6472;
+  --color-accent: #2563eb;
+  --color-danger: #c2410c;
+  --color-warning: #b45309;
+  --color-up: #0a7f6f;
+  --color-down: #d32f2f;
+  --color-chart-grid: #eef0f3;
+  --color-chart-crosshair: #9aa3af;
+  --color-ind-1: #d97706;
+  --color-ind-2: #9333ea;
+  --color-ind-3: #0284c7;
+  --color-ind-rsi: #9333ea;
+  --color-ind-macd: #2563eb;
+  --color-ind-signal: #ea580c;
+}
+
+:root {
+  color-scheme: dark;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+}
