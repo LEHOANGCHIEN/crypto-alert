@@ -121,6 +121,24 @@ describe('auth + users (real test DB)', () => {
     expect(await prisma.refreshToken.count({ where: { revokedAt: null } })).toBe(0);
   });
 
+  it('token revoked by change-password (not rotated): session B refresh → REFRESH_TOKEN_INVALID, session A stays valid', async () => {
+    const a = await http().post('/api/v1/auth/register').send(valid).expect(201);
+    const tA = tokenOf(a);
+    const b = await http().post('/api/v1/auth/login').send({ email: valid.email, password: valid.password }).expect(200);
+    const tB = tokenOf(b);
+    await http()
+      .post('/api/v1/auth/change-password')
+      .set('Authorization', `Bearer ${a.body.data.accessToken}`)
+      .set('Cookie', withCookie(tA))
+      .send({ currentPassword: valid.password, newPassword: 'NewPassw0rd' })
+      .expect(200);
+    const res = await http().post('/api/v1/auth/refresh').set('Cookie', withCookie(tB)).expect(401);
+    expect(res.body.error.code).toBe('REFRESH_TOKEN_INVALID');
+    expect(cookieOf(res)).toMatch(/refresh_token=;/);
+    // session A is untouched
+    await http().post('/api/v1/auth/refresh').set('Cookie', withCookie(tA)).expect(200);
+  });
+
   it('logout: revokes the token, clears cookie, always succeeds', async () => {
     const reg = await http().post('/api/v1/auth/register').send(valid).expect(201);
     const t1 = tokenOf(reg);

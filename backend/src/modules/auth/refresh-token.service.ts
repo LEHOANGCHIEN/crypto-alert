@@ -52,12 +52,14 @@ export class RefreshTokenService {
 
   private async handleRevoked(id: number): Promise<{ userId: number; raw: string }> {
     const row = await this.prisma.refreshToken.findUniqueOrThrow({ where: { id } });
-    const rotatedRecently =
-      row.replacedById !== null && row.revokedAt !== null && Date.now() - row.revokedAt.getTime() < REUSE_GRACE_MS;
+    // Revoked by logout / change-password (never rotated): just invalid, nothing else is revoked.
+    if (row.replacedById === null) throw new AppError('REFRESH_TOKEN_INVALID');
+    const rotatedRecently = row.revokedAt !== null && Date.now() - row.revokedAt.getTime() < REUSE_GRACE_MS;
     if (rotatedRecently) {
       const next = await this.create(row.userId);
       return { userId: row.userId, raw: next.raw };
     }
+    // A rotated token presented after the grace window = reuse (theft): revoke every token of the user.
     await this.revokeAll(row.userId);
     throw new AppError('REFRESH_TOKEN_INVALID');
   }
