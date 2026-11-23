@@ -10,7 +10,8 @@
   "footer": {
     "title": "Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá",
     "course": "Đồ án chuyên ngành — UIT",
-    "disclaimer": "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư."
+    "disclaimer": "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư.",
+    "close": "Đóng chân trang"
   },
   "pages": {
     "trade": { "title": "Thị trường", "placeholder": "Biểu đồ và danh sách thị trường sẽ có ở các giai đoạn sau." },

@@ -11,9 +11,9 @@ describe('i18n key parity', () => {
   it('vi.json and en.json have exactly the same keys', () => {
     expect(keys(vi).sort()).toEqual(keys(en).sort());
   });
-  it('official title and course line are identical (Vietnamese) in both languages', () => {
-    expect(en.footer.title).toBe(vi.footer.title);
-    expect(en.footer.course).toBe(vi.footer.course);
+  it('footer title and course line are translated; Vietnamese title is exact', () => {
+    expect(en.footer.title).not.toBe(vi.footer.title);
+    expect(en.footer.course).toBe('Specialized Project — UIT');
     expect(vi.footer.title).toBe(
       'Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá',
     );

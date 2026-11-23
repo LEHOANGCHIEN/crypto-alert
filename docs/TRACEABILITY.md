@@ -11,7 +11,7 @@
 | AC-OPS-01 | 0 | ops.spec.ts | AC-OPS-01 health reports db and market data | passing | |
 | AC-I18N-01 | 0 | i18n.spec.ts | AC-I18N-01 Vietnamese by default | passing | |
 | AC-THEME-01 | 0 | theme.spec.ts | AC-THEME-01 dark theme by default | passing | |
-| AC-UI-03 | 0 | layout.spec.ts | AC-UI-03 footer shows exact title and disclaimer | passing | |
+| AC-UI-03 | 0 | layout.spec.ts | AC-UI-03 footer shows translated texts and can be closed | passing | |
 | AC-UI-04 | 0 | layout.spec.ts | AC-UI-04 unknown route shows 404 | passing | |
 | AC-AUTH-01 | 1 | auth.spec.ts | AC-AUTH-01 register success | pending | |
 | AC-AUTH-02 | 1 | auth.spec.ts | AC-AUTH-02 duplicate email rejected | pending | |

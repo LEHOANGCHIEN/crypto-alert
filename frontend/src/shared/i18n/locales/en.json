@@ -8,9 +8,10 @@
   "language": { "label": "Language", "vi": "VI", "en": "EN" },
   "theme": { "toggle": "Toggle dark/light theme", "dark": "Dark", "light": "Light" },
   "footer": {
-    "title": "Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá",
-    "course": "Đồ án chuyên ngành — UIT",
-    "disclaimer": "Information is for reference only and is not investment advice."
+    "title": "Building a Web Application for Cryptocurrency Market Tracking with Real-Time Technical Charts and Price Alerts",
+    "course": "Specialized Project — UIT",
+    "disclaimer": "Information is for reference only and is not investment advice.",
+    "close": "Close footer"
   },
   "pages": {
     "trade": { "title": "Market", "placeholder": "The chart and market list arrive in later phases." },
