@@ -35,22 +35,22 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] First commit = docs only (`CLAUDE.md`, `docs/`, `backend/CONTEXT.md`, `frontend/CONTEXT.md`, `.gitignore`): `docs: initial project documentation`
 - [x] Public GitHub repo (`gh repo create crypto-alert --public --source=. --remote=origin --push`); `main` pushed
 - [x] Branch `phase-0-scaffold` created and pushed
-- [ ] Root `package.json` with workspaces + scripts: `dev`, `build`, `typecheck`, `lint`, `test`, `test:e2e`, `check`, `db:migrate`, `db:seed`, `secrets:check`
-- [ ] `docker-compose.yml` (Postgres 16; creates `crypto_alert` and `crypto_alert_test`)
-- [ ] `.env.example` with every var of ARCHITECTURE §10.1; env validation fails fast on missing vars
-- [ ] `scripts/check-secrets.mjs` (blocks staged `.env*`, private keys, non-local DB URLs with passwords, long random secrets; always allows `.env.example`, `package-lock.json` and `**/fixtures/**`) + pre-commit hook (`simple-git-hooks`)
-- [ ] Backend skeleton: global prefix `/api/v1`, envelope interceptor, exception filter, `AppError`, all error codes from API.md §1.2, Decimal→number serializer, validation pipe mapping to field codes
-- [ ] Prisma schema copied verbatim from DATABASE.md §3; `init` migration incl. §3.1 raw SQL; seed per DATABASE.md §6
-- [ ] `MarketDataProvider` interface; minimal `BinanceProvider` (REST ping + WS `!miniTicker@arr` to track `connected`/`lastMessageAt`); minimal `MockProvider` (heartbeat)
-- [ ] `GET /api/v1/health` per API.md; `test-support` module with `POST /test/reset` (guarded per API.md §3.8; app refuses to boot with test endpoints in production)
-- [ ] Serve built frontend from backend (`SERVE_FRONTEND`), SPA fallback
-- [ ] Frontend skeleton: routes of SPEC §3 (pages may be placeholders), header (language switcher, theme toggle), footer (exact title + disclaimer), 404 page
-- [ ] Design tokens (ARCHITECTURE §11.2) in `tokens.css` + Tailwind v4 `@theme`; ThemeProvider (dark default, guest choice in localStorage)
-- [ ] react-i18next with `vi.json`/`en.json` (vi default), `<html lang>` sync; ESLint `i18next/no-literal-string`; Vitest key-parity test; format helpers skeleton
-- [ ] `e2e/` workspace: Playwright config (`webServer` per ARCHITECTURE §8, Chromium, workers 1), helpers (`resetApp()`), tests for this phase's ACs
-- [ ] `.github/workflows/ci.yml` per ARCHITECTURE §9 (Postgres service, Playwright report artifact); CI green
+- [x] Root `package.json` with workspaces + scripts: `dev`, `build`, `typecheck`, `lint`, `test`, `test:e2e`, `check`, `db:migrate`, `db:seed`, `secrets:check`
+- [x] `docker-compose.yml` (Postgres 16; creates `crypto_alert` and `crypto_alert_test`)
+- [x] `.env.example` with every var of ARCHITECTURE §10.1; env validation fails fast on missing vars
+- [x] `scripts/check-secrets.mjs` (blocks staged `.env*`, private keys, non-local DB URLs with passwords, long random secrets; always allows `.env.example`, `package-lock.json` and `**/fixtures/**`) + pre-commit hook (`simple-git-hooks`)
+- [x] Backend skeleton: global prefix `/api/v1`, envelope interceptor, exception filter, `AppError`, all error codes from API.md §1.2, Decimal→number serializer, validation pipe mapping to field codes
+- [x] Prisma schema copied verbatim from DATABASE.md §3; `init` migration incl. §3.1 raw SQL; seed per DATABASE.md §6
+- [x] `MarketDataProvider` interface; minimal `BinanceProvider` (REST ping + WS `!miniTicker@arr` to track `connected`/`lastMessageAt`); minimal `MockProvider` (heartbeat)
+- [x] `GET /api/v1/health` per API.md; `test-support` module with `POST /test/reset` (guarded per API.md §3.8; app refuses to boot with test endpoints in production)
+- [x] Serve built frontend from backend (`SERVE_FRONTEND`), SPA fallback
+- [x] Frontend skeleton: routes of SPEC §3 (pages may be placeholders), header (language switcher, theme toggle), footer (exact title + disclaimer), 404 page
+- [x] Design tokens (ARCHITECTURE §11.2) in `tokens.css` + Tailwind v4 `@theme`; ThemeProvider (dark default, guest choice in localStorage)
+- [x] react-i18next with `vi.json`/`en.json` (vi default), `<html lang>` sync; ESLint `i18next/no-literal-string`; Vitest key-parity test; format helpers skeleton
+- [x] `e2e/` workspace: Playwright config (`webServer` per ARCHITECTURE §8, Chromium, workers 1), helpers (`resetApp()`), tests for this phase's ACs
+- [x] `.github/workflows/ci.yml` per ARCHITECTURE §9 (Postgres service, Playwright report artifact); CI green
 - [ ] `railway.json` (build + start + healthcheck `/api/v1/health`); smoke deploy with `railway up` from this branch; env vars set in Railway; **health on the deployed URL shows `provider: "binance"`, `connected: true`** (proves Singapore region can reach Binance); deployed URL written in the log
-- [ ] `README.md`: exact Vietnamese title, what the app does, how to run locally, link to docs
+- [x] `README.md`: exact Vietnamese title, what the app does, how to run locally, link to docs
 - [ ] TRACEABILITY updated; log line
 
 **Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 0)
