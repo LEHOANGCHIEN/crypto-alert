@@ -8,7 +8,7 @@
 
 | Phase | Name | Branch | Settings | Target dates | State |
 |---|---|---|---|---|---|
-| 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | built, awaiting review |
+| 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | done |
 | 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | not started |
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
@@ -58,6 +58,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - 2026-11-24 · Sonnet 5.5 + Medium · Phase 0 complete: git/GitHub, workspaces, Postgres+Prisma init migration+seed, NestJS skeleton (envelope, errors, health, test reset), Binance/mock providers, React+Tailwind tokens+i18n skeleton, Playwright tests for 5 ACs, CI, README; smoke deploy to Railway Singapore at https://web-production-49fda79f.up.railway.app (health: provider binance, connected true). Deviations: Nest 11 (Nest 12 is ESM-only), SPA served by Express middleware instead of @nestjs/serve-static, root `start` script added for Railpack · last commit 46a034b · CI green
 - 2026-11-24 · Sonnet 5.5 + Medium · applied reviews/phase-0-review.decision.md: prisma CLI in runtime deps, railway.json removed (settings now in Railway dashboard + root scripts), footer translated (EN title/course) with close button, PROMPTS review routing, reviews/ committed. Doc changes: SPEC (title rows, course row, AC-I18N-02, AC-UI-03, compliance), ARCHITECTURE §10 + ADR-01, PROMPTS c + table, TRACEABILITY AC-UI-03 · last commit 7b4e3e9 · CI green (run 45234293333); redeployed health OK
 - 2026-11-24 · Sonnet 5.5 + Medium · applied 3 Minor doc fixes from reviews/phase-0-recheck.md (PASS): frontend/CONTEXT.md + ARCHITECTURE §11 footer rules (translated title/course, footer-close, localStorage key, testids), PROGRESS Phase 6 AC-I18N-02 no exceptions, PROGRESS review workflow lines; added reviews/phase-0-recheck.md. Docs changed: ARCHITECTURE.md, PROGRESS.md, frontend/CONTEXT.md.
+- 2026-11-24 · MERGED into main · merge 12894dc · tag v0.0 · CI green · deployed
 
 ---
 
