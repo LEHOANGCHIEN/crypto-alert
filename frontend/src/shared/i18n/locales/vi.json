@@ -1,0 +1,23 @@
+{
+  "app": { "name": "Crypto Alert" },
+  "nav": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "home": "Về trang chủ"
+  },
+  "language": { "label": "Ngôn ngữ", "vi": "VI", "en": "EN" },
+  "theme": { "toggle": "Đổi giao diện sáng/tối", "dark": "Tối", "light": "Sáng" },
+  "footer": {
+    "title": "Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá",
+    "course": "Đồ án chuyên ngành — UIT",
+    "disclaimer": "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư."
+  },
+  "pages": {
+    "trade": { "title": "Thị trường", "placeholder": "Biểu đồ và danh sách thị trường sẽ có ở các giai đoạn sau." },
+    "login": { "title": "Đăng nhập", "placeholder": "Chức năng đăng nhập sẽ có ở giai đoạn sau." },
+    "register": { "title": "Đăng ký", "placeholder": "Chức năng đăng ký sẽ có ở giai đoạn sau." },
+    "account": { "title": "Tài khoản", "placeholder": "Trang tài khoản sẽ có ở giai đoạn sau." },
+    "notFound": { "title": "Không tìm thấy trang", "description": "Trang bạn mở không tồn tại." }
+  },
+  "errors": { "UNKNOWN": "Đã xảy ra lỗi, vui lòng thử lại." }
+}
