@@ -1,6 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { Toaster } from '../../shared/ui/toast';
+import { PreferencesSync } from '../PreferencesSync';
 
 export function AppLayout() {
   return (
@@ -10,6 +12,8 @@ export function AppLayout() {
         <Outlet />
       </main>
       <Footer />
+      <Toaster />
+      <PreferencesSync />
     </div>
   );
 }

@@ -5,6 +5,9 @@ import './shared/i18n';
 import './index.css';
 import { ThemeProvider } from './shared/theme/ThemeProvider';
 import { router } from './app/router';
+import { useAuth } from './features/auth/auth.store';
+
+void useAuth.getState().restore(); // session restore before/while the first render
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

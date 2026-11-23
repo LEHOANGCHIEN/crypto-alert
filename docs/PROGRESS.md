@@ -71,11 +71,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] JWT access guard + `@CurrentUser()`; throttler on login/register (`LOGIN_RATE_LIMIT_PER_MINUTE`); test reset clears throttler storage
 - [x] `GET/PATCH /users/me`, `PATCH /users/me/settings` (timezone validation)
 - [x] Integration tests (real test DB): register, duplicate email, login, refresh rotation, reuse detection, logout, change password revokes others, no hash in responses. Reuse detection covers both cases explicitly: (a) a rotated token presented again within 10 s → new tokens issued, no other tokens revoked; (b) presented after 10 s → all tokens of that user revoked. Never remove the 10 s grace window to make a test pass.
-- [ ] FE http client: envelope unwrap, `ApiError(code, details)`, single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`, session restore on app start
-- [ ] FE auth store, `RequireAuth` with return-to, Login & Register pages with client validation (same rules as API.md)
-- [ ] Account page: profile, change password, preferences (language, theme, timezone select)
-- [ ] Preferences sync: guest localStorage ↔ account settings (account wins after login)
-- [ ] Translations for **all** error codes (`errors.*`) and field codes (`validation.*`) in vi + en
+- [x] FE http client: envelope unwrap, `ApiError(code, details)`, single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`, session restore on app start
+- [x] FE auth store, `RequireAuth` with return-to, Login & Register pages with client validation (same rules as API.md)
+- [x] Account page: profile, change password, preferences (language, theme, timezone select)
+- [x] Preferences sync: guest localStorage ↔ account settings (account wins after login)
+- [x] Translations for **all** error codes (`errors.*`) and field codes (`validation.*`) in vi + en
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-1-review.decision.md; paste into the builder: Read reviews/phase-1-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
