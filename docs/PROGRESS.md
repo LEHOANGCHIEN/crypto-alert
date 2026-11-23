@@ -20,7 +20,7 @@
 
 Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; buffer until Dec 10.
 
-**Every phase ends with:** CI green → **Review** (fresh session, **Opus 5.5 + High**, Plan mode ON, *Phase Review Prompt*) → if PASS, *Merge Prompt* (Sonnet 5.5 + Medium): merge, tag `v0.N`, redeploy `main` to Railway. If FAIL → paste the fix prompt from the review into a new session (same settings as the phase), then review again.
+**Every phase ends with:** CI green → **Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-N-review.decision.md; paste into the builder: Read reviews/phase-N-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.** → if PASS, *Merge Prompt* (Sonnet 5.5 + Medium): merge, tag `v0.N`, redeploy `main` to Railway.
 **Usage rule:** near the weekly quota limit (`/usage`) → Sonnet 5.5 + Medium for everything except Phase Review (this includes phases 3, 4, 6 and Stuck Bug sessions); the review stays Opus 5.5 + High.
 **Bug rule:** same bug failed 2–3 times → *Stuck Bug Prompt* with **Opus 5.5 + Extra** (near the weekly quota limit → Sonnet 5.5 + Medium).
 
@@ -53,10 +53,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] `README.md`: exact Vietnamese title, what the app does, how to run locally, link to docs
 - [x] TRACEABILITY updated; log line
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 0)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-0-review.decision.md; paste into the builder: Read reviews/phase-0-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 - 2026-11-24 · Sonnet 5.5 + Medium · Phase 0 complete: git/GitHub, workspaces, Postgres+Prisma init migration+seed, NestJS skeleton (envelope, errors, health, test reset), Binance/mock providers, React+Tailwind tokens+i18n skeleton, Playwright tests for 5 ACs, CI, README; smoke deploy to Railway Singapore at https://web-production-49fda79f.up.railway.app (health: provider binance, connected true). Deviations: Nest 11 (Nest 12 is ESM-only), SPA served by Express middleware instead of @nestjs/serve-static, root `start` script added for Railpack · last commit 46a034b · CI green
 - 2026-11-24 · Sonnet 5.5 + Medium · applied reviews/phase-0-review.decision.md: prisma CLI in runtime deps, railway.json removed (settings now in Railway dashboard + root scripts), footer translated (EN title/course) with close button, PROMPTS review routing, reviews/ committed. Doc changes: SPEC (title rows, course row, AC-I18N-02, AC-UI-03, compliance), ARCHITECTURE §10 + ADR-01, PROMPTS c + table, TRACEABILITY AC-UI-03 · last commit 7b4e3e9 · CI green (run 45234293333); redeployed health OK
+- 2026-11-24 · Sonnet 5.5 + Medium · applied 3 Minor doc fixes from reviews/phase-0-recheck.md (PASS): frontend/CONTEXT.md + ARCHITECTURE §11 footer rules (translated title/course, footer-close, localStorage key, testids), PROGRESS Phase 6 AC-I18N-02 no exceptions, PROGRESS review workflow lines; added reviews/phase-0-recheck.md. Docs changed: ARCHITECTURE.md, PROGRESS.md, frontend/CONTEXT.md.
 
 ---
 
@@ -76,7 +77,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] Translations for **all** error codes (`errors.*`) and field codes (`validation.*`) in vi + en
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 1)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-1-review.decision.md; paste into the builder: Read reviews/phase-1-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 
 ---
@@ -96,7 +97,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] Chart theme from tokens, re-applied on theme toggle
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 2)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-2-review.decision.md; paste into the builder: Read reviews/phase-2-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 
 ---
@@ -116,7 +117,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] FE live updates: market list rows + flash, chart `series.update()`, header price
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 3)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-3-review.decision.md; paste into the builder: Read reviews/phase-3-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 
 ---
@@ -134,7 +135,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 - [ ] Owner manual check: compare BTCUSDT 1h values with TradingView (listed in "Cách kiểm tra thủ công")
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 4)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-4-review.decision.md; paste into the builder: Read reviews/phase-4-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 
 ---
@@ -149,7 +150,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] Guest prompt; optimistic updates with rollback on error
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 5)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-5-review.decision.md; paste into the builder: Read reviews/phase-5-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 
 ---
@@ -168,7 +169,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] FE toasts on `notification:new`, bell badge (`9+`), notifications panel, mark read / all, cross-tab sync, unread summary toast after login
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 6)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6-review.decision.md; paste into the builder: Read reviews/phase-6-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 
 ---
@@ -177,7 +178,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=7)
 **ACs:** AC-I18N-02, AC-OPS-02 (+ full regression of all ACs)
 
-- [ ] i18n sweep: every page/state in both languages; AC-I18N-02 test (no Vietnamese diacritics in EN except `footer-title` and `footer-course`; no raw keys)
+- [ ] i18n sweep: every page/state in both languages; AC-I18N-02 test (no Vietnamese diacritics in EN, no exceptions; no raw keys)
 - [ ] UX states: loading skeletons, empty states, error boundary, toasts; mobile pass at 390 px
 - [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
 - [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
@@ -187,5 +188,5 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
 - [ ] TRACEABILITY; log line (the Merge Prompt tags `v0.7` **and** `v1.0`)
 
-**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 7)
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-7-review.decision.md; paste into the builder: Read reviews/phase-7-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**

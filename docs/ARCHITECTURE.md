@@ -262,7 +262,7 @@ No Figma. Clean trading-dashboard look *inspired by* Binance/TradingView layouts
 | `/login`, `/register` | Centered card 400 px | Full-width card, 16 px margin |
 | `/account` | Single column 640 px: Profile · Change password · Preferences (language, theme, timezone) | Full width |
 | 404 | Centered message + Home button | same |
-| Footer (all pages) | Official Vietnamese title (`data-testid="footer-title"`) · translated disclaimer · "Đồ án chuyên ngành — UIT" (`data-testid="footer-course"`); title and course line stay Vietnamese in both languages (12 px, muted) | same, wraps |
+| Footer (all pages) | Official title (`data-testid="footer-title"`) · translated disclaimer (`footer-disclaimer`) · course line (`footer-course`); all translated: vi = Vietnamese title + "Đồ án chuyên ngành — UIT", en = English title + "Specialized Project — UIT" (12 px, muted). Close button (`footer-close`); hidden state stored in localStorage `crypto-alert.footer-hidden` | same, wraps |
 
 ### 11.2 Color tokens
 
