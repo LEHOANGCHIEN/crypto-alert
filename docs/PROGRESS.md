@@ -31,10 +31,10 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **ACs:** AC-OPS-01, AC-I18N-01, AC-THEME-01, AC-UI-03, AC-UI-04
 **Owner actions needed (Claude Code gives Vietnamese steps):** `gh auth login`; create Railway account (Hobby plan); `railway login`; create a Railway project with PostgreSQL in region Singapore.
 
-- [ ] `git init` on `main`; complete `.gitignore` (`node_modules/`, `dist/`, `build/`, `.env`, `.env.*`, `!.env.example`, `coverage/`, `playwright-report/`, `test-results/`, `blob-report/`, `.vite/`, `*.log`, `.DS_Store`)
-- [ ] First commit = docs only (`CLAUDE.md`, `docs/`, `backend/CONTEXT.md`, `frontend/CONTEXT.md`, `.gitignore`): `docs: initial project documentation`
-- [ ] Public GitHub repo (`gh repo create crypto-alert --public --source=. --remote=origin --push`); `main` pushed
-- [ ] Branch `phase-0-scaffold` created and pushed
+- [x] `git init` on `main`; complete `.gitignore` (`node_modules/`, `dist/`, `build/`, `.env`, `.env.*`, `!.env.example`, `coverage/`, `playwright-report/`, `test-results/`, `blob-report/`, `.vite/`, `*.log`, `.DS_Store`)
+- [x] First commit = docs only (`CLAUDE.md`, `docs/`, `backend/CONTEXT.md`, `frontend/CONTEXT.md`, `.gitignore`): `docs: initial project documentation`
+- [x] Public GitHub repo (`gh repo create crypto-alert --public --source=. --remote=origin --push`); `main` pushed
+- [x] Branch `phase-0-scaffold` created and pushed
 - [ ] Root `package.json` with workspaces + scripts: `dev`, `build`, `typecheck`, `lint`, `test`, `test:e2e`, `check`, `db:migrate`, `db:seed`, `secrets:check`
 - [ ] `docker-compose.yml` (Postgres 16; creates `crypto_alert` and `crypto_alert_test`)
 - [ ] `.env.example` with every var of ARCHITECTURE §10.1; env validation fails fast on missing vars
