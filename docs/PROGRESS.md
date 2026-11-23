@@ -49,7 +49,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] react-i18next with `vi.json`/`en.json` (vi default), `<html lang>` sync; ESLint `i18next/no-literal-string`; Vitest key-parity test; format helpers skeleton
 - [x] `e2e/` workspace: Playwright config (`webServer` per ARCHITECTURE §8, Chromium, workers 1), helpers (`resetApp()`), tests for this phase's ACs
 - [x] `.github/workflows/ci.yml` per ARCHITECTURE §9 (Postgres service, Playwright report artifact); CI green
-- [x] `railway.json` (build + start + healthcheck `/api/v1/health`); smoke deploy with `railway up` from this branch; env vars set in Railway; **health on the deployed URL shows `provider: "binance"`, `connected: true`** (proves Singapore region can reach Binance); deployed URL written in the log
+- [x] Railway service settings (healthcheck `/api/v1/health`, restart On Failure ×5) + root build/start scripts (no railway.json); smoke deploy with `railway up` from this branch; env vars set in Railway; **health on the deployed URL shows `provider: "binance"`, `connected: true`** (proves Singapore region can reach Binance); deployed URL written in the log
 - [x] `README.md`: exact Vietnamese title, what the app does, how to run locally, link to docs
 - [x] TRACEABILITY updated; log line
 

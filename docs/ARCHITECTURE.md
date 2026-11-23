@@ -220,7 +220,7 @@ Layering (BE): controller (HTTP + DTO validation) → service (business rules, t
 |---|---|
 | Host | Railway, region **Singapore** (`asia-southeast1`), Hobby plan. One web service + Railway PostgreSQL in the same region. Binance returns HTTP 451 for US IPs → never deploy to a US region. |
 | Topology | Same origin: NestJS serves `/api/v1/*`, `/socket.io/*` and the built SPA (Express static middleware + SPA fallback to `index.html` in `backend/src/configure-app.ts`; `/api` and `/socket.io` excluded). No CORS and simple cookies in prod. Dev: Vite proxies `/api` and `/socket.io` to the backend. |
-| Start | `prisma migrate deploy && node dist/main.js`; health check `GET /api/v1/health`. |
+| Start | Root `npm start` = `cd backend && npx prisma migrate deploy && node dist/main.js` (Railpack runs root `npm run build` then `npm start`). Healthcheck `GET /api/v1/health` and restart policy On Failure ×5 are set in Railway service settings (dashboard). No railway.json/railway.toml: Railway Config as Code is deprecated (cutoff 2026-12-01). |
 | Deploy method | Railway CLI `railway up`, run by Claude Code: from the phase branch for the Phase 0 smoke deploy and the Phase 7 pre-release check, from `main` after every merge (Merge Prompt). The owner only creates the account, logs in and picks the Singapore region. |
 | Seed | `npm run db:seed -w backend` run once manually after first deploy (idempotent upsert of demo data). |
 | Binance check (Phase 0) | `/api/v1/health` reports provider connected + recent `lastMessageAt`; if not → region is wrong. |
