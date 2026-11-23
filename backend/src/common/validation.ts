@@ -10,6 +10,8 @@ const CONSTRAINT_TO_CODE: Record<string, FieldErrorCode> = {
   isInt: 'INVALID_TYPE',
   isBoolean: 'INVALID_TYPE',
   isEmail: 'INVALID_EMAIL',
+  matches: 'INVALID_TYPE',
+  isTimezone: 'INVALID_TIMEZONE',
   minLength: 'TOO_SHORT',
   maxLength: 'TOO_LONG',
   min: 'OUT_OF_RANGE',
@@ -45,6 +47,7 @@ export function createValidationPipe(): ValidationPipe {
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
+    stopAtFirstError: true,
     exceptionFactory: (errors) => new AppError('VALIDATION_ERROR', flattenValidationErrors(errors)),
   });
 }

@@ -1,6 +1,7 @@
 import { INestApplication, LogLevel } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import cookieParser from 'cookie-parser';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -25,6 +26,7 @@ export function configureApp(app: INestApplication): void {
   const hops = config.get('TRUST_PROXY_HOPS', { infer: true });
   if (hops > 0) nest.set('trust proxy', hops);
   nest.disable('x-powered-by');
+  nest.use(cookieParser());
 
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(createValidationPipe());

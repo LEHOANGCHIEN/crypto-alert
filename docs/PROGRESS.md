@@ -66,11 +66,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=1)
 **ACs:** AC-AUTH-01…10, AC-PROF-01…04, AC-I18N-03, AC-I18N-05, AC-THEME-03
 
-- [ ] `PasswordService` (argon2id); `RefreshTokenService` (hash, rotation, reuse detection, revoke-others)
-- [ ] `POST /auth/register|login|refresh|logout|change-password` exactly per API.md §3.1; cookie flags per API.md §1
-- [ ] JWT access guard + `@CurrentUser()`; throttler on login/register (`LOGIN_RATE_LIMIT_PER_MINUTE`); test reset clears throttler storage
-- [ ] `GET/PATCH /users/me`, `PATCH /users/me/settings` (timezone validation)
-- [ ] Integration tests (real test DB): register, duplicate email, login, refresh rotation, reuse detection, logout, change password revokes others, no hash in responses. Reuse detection covers both cases explicitly: (a) a rotated token presented again within 10 s → new tokens issued, no other tokens revoked; (b) presented after 10 s → all tokens of that user revoked. Never remove the 10 s grace window to make a test pass.
+- [x] `PasswordService` (argon2id); `RefreshTokenService` (hash, rotation, reuse detection, revoke-others)
+- [x] `POST /auth/register|login|refresh|logout|change-password` exactly per API.md §3.1; cookie flags per API.md §1
+- [x] JWT access guard + `@CurrentUser()`; throttler on login/register (`LOGIN_RATE_LIMIT_PER_MINUTE`); test reset clears throttler storage
+- [x] `GET/PATCH /users/me`, `PATCH /users/me/settings` (timezone validation)
+- [x] Integration tests (real test DB): register, duplicate email, login, refresh rotation, reuse detection, logout, change password revokes others, no hash in responses. Reuse detection covers both cases explicitly: (a) a rotated token presented again within 10 s → new tokens issued, no other tokens revoked; (b) presented after 10 s → all tokens of that user revoked. Never remove the 10 s grace window to make a test pass.
 - [ ] FE http client: envelope unwrap, `ApiError(code, details)`, single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`, session restore on app start
 - [ ] FE auth store, `RequireAuth` with return-to, Login & Register pages with client validation (same rules as API.md)
 - [ ] Account page: profile, change password, preferences (language, theme, timezone select)
