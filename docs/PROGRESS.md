@@ -8,7 +8,7 @@
 
 | Phase | Name | Branch | Settings | Target dates | State |
 |---|---|---|---|---|---|
-| 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | not started |
+| 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | built, awaiting review |
 | 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | not started |
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
@@ -49,12 +49,13 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] react-i18next with `vi.json`/`en.json` (vi default), `<html lang>` sync; ESLint `i18next/no-literal-string`; Vitest key-parity test; format helpers skeleton
 - [x] `e2e/` workspace: Playwright config (`webServer` per ARCHITECTURE §8, Chromium, workers 1), helpers (`resetApp()`), tests for this phase's ACs
 - [x] `.github/workflows/ci.yml` per ARCHITECTURE §9 (Postgres service, Playwright report artifact); CI green
-- [ ] `railway.json` (build + start + healthcheck `/api/v1/health`); smoke deploy with `railway up` from this branch; env vars set in Railway; **health on the deployed URL shows `provider: "binance"`, `connected: true`** (proves Singapore region can reach Binance); deployed URL written in the log
+- [x] `railway.json` (build + start + healthcheck `/api/v1/health`); smoke deploy with `railway up` from this branch; env vars set in Railway; **health on the deployed URL shows `provider: "binance"`, `connected: true`** (proves Singapore region can reach Binance); deployed URL written in the log
 - [x] `README.md`: exact Vietnamese title, what the app does, how to run locally, link to docs
-- [ ] TRACEABILITY updated; log line
+- [x] TRACEABILITY updated; log line
 
 **Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 0)
 **Log:**
+- 2026-11-24 · Sonnet 5.5 + Medium · Phase 0 complete: git/GitHub, workspaces, Postgres+Prisma init migration+seed, NestJS skeleton (envelope, errors, health, test reset), Binance/mock providers, React+Tailwind tokens+i18n skeleton, Playwright tests for 5 ACs, CI, README; smoke deploy to Railway Singapore at https://web-production-49fda79f.up.railway.app (health: provider binance, connected true). Deviations: Nest 11 (Nest 12 is ESM-only), SPA served by Express middleware instead of @nestjs/serve-static, root `start` script added for Railpack · last commit 46a034b · CI green
 
 ---
 
