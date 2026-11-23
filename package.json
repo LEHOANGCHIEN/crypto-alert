@@ -37,6 +37,7 @@
     "prisma@6.19.3": true,
     "argon2@0.45.2": true,
     "esbuild@0.28.2": true,
-    "@parcel/watcher": false
+    "@parcel/watcher": false,
+    "simple-git-hooks@2.14.0": true
   }
 }
