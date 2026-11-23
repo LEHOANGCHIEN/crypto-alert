@@ -1,0 +1,189 @@
+# PROGRESS — Crypto Alert
+
+> Claude Code ticks checklist items as they are completed (one commit each) and appends **one dated log line per session**. The owner reads only the "Status" table and the log.
+> Log line format: `- YYYY-MM-DD · <model + effort> · <what was done> · last commit <short-hash> · CI <green/red>`
+> On merge add: `- YYYY-MM-DD · MERGED into main · merge <short-hash> · tag v0.N · CI green · deployed`
+
+## Status
+
+| Phase | Name | Branch | Settings | Target dates | State |
+|---|---|---|---|---|---|
+| 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | not started |
+| 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | not started |
+| 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
+| 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
+| 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | not started |
+| 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | not started |
+| 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | not started |
+| 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
+| — | Buffer for slips | — | — | Dec 8–10 | — |
+
+Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; buffer until Dec 10.
+
+**Every phase ends with:** CI green → **Review** (fresh session, **Opus 5.5 + High**, Plan mode ON, *Phase Review Prompt*) → if PASS, *Merge Prompt* (Sonnet 5.5 + Medium): merge, tag `v0.N`, redeploy `main` to Railway. If FAIL → paste the fix prompt from the review into a new session (same settings as the phase), then review again.
+**Usage rule:** near the weekly quota limit (`/usage`) → Sonnet 5.5 + Medium for everything except Phase Review (this includes phases 3, 4, 6 and Stuck Bug sessions); the review stays Opus 5.5 + High.
+**Bug rule:** same bug failed 2–3 times → *Stuck Bug Prompt* with **Opus 5.5 + Extra** (near the weekly quota limit → Sonnet 5.5 + Medium).
+
+---
+
+## Phase 0 — Scaffold
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · prompt: *Kickoff Prompt* (first session), then *Phase Start Prompt* with N=0 for later sessions
+**ACs:** AC-OPS-01, AC-I18N-01, AC-THEME-01, AC-UI-03, AC-UI-04
+**Owner actions needed (Claude Code gives Vietnamese steps):** `gh auth login`; create Railway account (Hobby plan); `railway login`; create a Railway project with PostgreSQL in region Singapore.
+
+- [ ] `git init` on `main`; complete `.gitignore` (`node_modules/`, `dist/`, `build/`, `.env`, `.env.*`, `!.env.example`, `coverage/`, `playwright-report/`, `test-results/`, `blob-report/`, `.vite/`, `*.log`, `.DS_Store`)
+- [ ] First commit = docs only (`CLAUDE.md`, `docs/`, `backend/CONTEXT.md`, `frontend/CONTEXT.md`, `.gitignore`): `docs: initial project documentation`
+- [ ] Public GitHub repo (`gh repo create crypto-alert --public --source=. --remote=origin --push`); `main` pushed
+- [ ] Branch `phase-0-scaffold` created and pushed
+- [ ] Root `package.json` with workspaces + scripts: `dev`, `build`, `typecheck`, `lint`, `test`, `test:e2e`, `check`, `db:migrate`, `db:seed`, `secrets:check`
+- [ ] `docker-compose.yml` (Postgres 16; creates `crypto_alert` and `crypto_alert_test`)
+- [ ] `.env.example` with every var of ARCHITECTURE §10.1; env validation fails fast on missing vars
+- [ ] `scripts/check-secrets.mjs` (blocks staged `.env*`, private keys, non-local DB URLs with passwords, long random secrets; always allows `.env.example`, `package-lock.json` and `**/fixtures/**`) + pre-commit hook (`simple-git-hooks`)
+- [ ] Backend skeleton: global prefix `/api/v1`, envelope interceptor, exception filter, `AppError`, all error codes from API.md §1.2, Decimal→number serializer, validation pipe mapping to field codes
+- [ ] Prisma schema copied verbatim from DATABASE.md §3; `init` migration incl. §3.1 raw SQL; seed per DATABASE.md §6
+- [ ] `MarketDataProvider` interface; minimal `BinanceProvider` (REST ping + WS `!miniTicker@arr` to track `connected`/`lastMessageAt`); minimal `MockProvider` (heartbeat)
+- [ ] `GET /api/v1/health` per API.md; `test-support` module with `POST /test/reset` (guarded per API.md §3.8; app refuses to boot with test endpoints in production)
+- [ ] Serve built frontend from backend (`SERVE_FRONTEND`), SPA fallback
+- [ ] Frontend skeleton: routes of SPEC §3 (pages may be placeholders), header (language switcher, theme toggle), footer (exact title + disclaimer), 404 page
+- [ ] Design tokens (ARCHITECTURE §11.2) in `tokens.css` + Tailwind v4 `@theme`; ThemeProvider (dark default, guest choice in localStorage)
+- [ ] react-i18next with `vi.json`/`en.json` (vi default), `<html lang>` sync; ESLint `i18next/no-literal-string`; Vitest key-parity test; format helpers skeleton
+- [ ] `e2e/` workspace: Playwright config (`webServer` per ARCHITECTURE §8, Chromium, workers 1), helpers (`resetApp()`), tests for this phase's ACs
+- [ ] `.github/workflows/ci.yml` per ARCHITECTURE §9 (Postgres service, Playwright report artifact); CI green
+- [ ] `railway.json` (build + start + healthcheck `/api/v1/health`); smoke deploy with `railway up` from this branch; env vars set in Railway; **health on the deployed URL shows `provider: "binance"`, `connected: true`** (proves Singapore region can reach Binance); deployed URL written in the log
+- [ ] `README.md`: exact Vietnamese title, what the app does, how to run locally, link to docs
+- [ ] TRACEABILITY updated; log line
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 0)
+**Log:**
+
+---
+
+## Phase 1 — Auth & account
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=1)
+**ACs:** AC-AUTH-01…10, AC-PROF-01…04, AC-I18N-03, AC-I18N-05, AC-THEME-03
+
+- [ ] `PasswordService` (argon2id); `RefreshTokenService` (hash, rotation, reuse detection, revoke-others)
+- [ ] `POST /auth/register|login|refresh|logout|change-password` exactly per API.md §3.1; cookie flags per API.md §1
+- [ ] JWT access guard + `@CurrentUser()`; throttler on login/register (`LOGIN_RATE_LIMIT_PER_MINUTE`); test reset clears throttler storage
+- [ ] `GET/PATCH /users/me`, `PATCH /users/me/settings` (timezone validation)
+- [ ] Integration tests (real test DB): register, duplicate email, login, refresh rotation, reuse detection, logout, change password revokes others, no hash in responses. Reuse detection covers both cases explicitly: (a) a rotated token presented again within 10 s → new tokens issued, no other tokens revoked; (b) presented after 10 s → all tokens of that user revoked. Never remove the 10 s grace window to make a test pass.
+- [ ] FE http client: envelope unwrap, `ApiError(code, details)`, single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`, session restore on app start
+- [ ] FE auth store, `RequireAuth` with return-to, Login & Register pages with client validation (same rules as API.md)
+- [ ] Account page: profile, change password, preferences (language, theme, timezone select)
+- [ ] Preferences sync: guest localStorage ↔ account settings (account wins after login)
+- [ ] Translations for **all** error codes (`errors.*`) and field codes (`validation.*`) in vi + en
+- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 1)
+**Log:**
+
+---
+
+## Phase 2 — Market list + chart (REST only)
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=2)
+**ACs:** AC-MKT-01, 02, 04, 05, 06 · AC-CHART-01…06 · AC-PROF-05 · AC-I18N-04 · AC-THEME-02 · AC-UI-01, AC-UI-02
+
+- [ ] `SymbolRegistry` (exchangeInfo, USDT + TRADING + spot, tickSize → pricePrecision, 6 h refresh)
+- [ ] `TickerStore` snapshot via REST (startup + every 5 min); `GET /market/symbols`, `GET /market/tickers`
+- [ ] `CandleCacheService` per ARCHITECTURE §3.2; `GET /market/klines`; unit tests for window/gap logic
+- [ ] `MockProvider` full data: symbols of ARCHITECTURE §8, BTCUSDT-1h fixture (1000 real candles fetched once by a script from data-api.binance.vision and committed), seeded PRNG for others; `GET /test/market/stats` (REST call counters)
+- [ ] Dashboard layout: 3 columns desktop, bottom tabs mobile (right panel may show login prompt/placeholder)
+- [ ] Market list: virtualised, search, columns & colors per SPEC, row select → `/trade/:symbol?tf=`
+- [ ] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
+- [ ] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
+- [ ] Chart theme from tokens, re-applied on theme toggle
+- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 2)
+**Log:**
+
+---
+
+## Phase 3 — Real-time relay
+**Settings before starting:** Opus 5.5 + High · Plan mode ON · *Phase Start Prompt* (N=3) · near the weekly quota limit → Sonnet 5.5 + Medium
+**ACs:** AC-MKT-03 · AC-RT-01…06
+
+- [ ] `PriceBus`; BinanceProvider WS per ARCHITECTURE §4 (combined stream, subscribe queue ≤ 4 msg/s, backoff + jitter, 30 s watchdog, 23 h reconnect, resubscribe, gap recovery)
+- [ ] Unit tests: backoff schedule, subscribe queue, resubscribe after reconnect (fake WS server)
+- [ ] `SubscriptionManager` ref-count with 5 s grace; unit tests
+- [ ] Subscription caps (≤ 2 kline subscriptions per socket → `SUBSCRIPTION_LIMIT_REACHED`; ≤ 200 upstream kline streams → `MARKET_DATA_UNAVAILABLE`) with unit tests for both caps
+- [ ] `RealtimeGateway`: handshake auth per API.md §4.1, rooms, events of API.md §4.2–4.3, acks in envelope format
+- [ ] `tickers:update` batching (changed only, ≤ 1/s); `kline:update`; closed candles upserted to cache; `market:status`
+- [ ] Mock test endpoints: `tick`, `close-candle`, `disconnect`; stats show `upstreamStreams`
+- [ ] FE socket client: reconnect with new token, resubscribe on reconnect, klines refetch, "Reconnecting…" banner, "Market data delayed" badge
+- [ ] FE live updates: market list rows + flash, chart `series.update()`, header price
+- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 3)
+**Log:**
+
+---
+
+## Phase 4 — Indicators
+**Settings before starting:** Opus 5.5 + High · Plan mode ON · *Phase Start Prompt* (N=4) · near the weekly quota limit → Sonnet 5.5 + Medium
+**ACs:** AC-IND-01…07
+
+- [ ] Pure functions `sma`, `rsi`, `macd` exactly per SPEC §4.1 (+ incremental update for the last candle)
+- [ ] Vitest: hand-computed small cases + comparison with oracle `technicalindicators` (devDependency) within 0.01 % after 250-candle warm-up
+- [ ] Script generating `e2e/fixtures/indicators.golden.json` from the BTCUSDT-1h fixture using the oracle only; committed
+- [ ] MA lines on price pane (3 configurable, defaults 7/25/99); RSI pane with 70/30; MACD pane (line, signal, histogram colors)
+- [ ] Indicators menu: toggles, period inputs (2–200) with translated validation; settings in localStorage
+- [ ] Legend values for hovered/latest candle; live recompute on `kline:update`
+- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [ ] Owner manual check: compare BTCUSDT 1h values with TradingView (listed in "Cách kiểm tra thủ công")
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 4)
+**Log:**
+
+---
+
+## Phase 5 — Watchlist
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=5)
+**ACs:** AC-WL-01…07
+
+- [ ] `GET /watchlist`, `PUT|DELETE /watchlist/:symbol` per API.md §3.4 (idempotent, limit 50, symbol check)
+- [ ] Integration tests (limit, idempotency, isolation between users)
+- [ ] Star buttons (market row + chart header), Watchlist panel with live prices, remove, click → chart
+- [ ] Guest prompt; optimistic updates with rollback on error
+- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 5)
+**Log:**
+
+---
+
+## Phase 6 — Alerts + notifications
+**Settings before starting:** Opus 5.5 + High · Plan mode ON · *Phase Start Prompt* (N=6) · near the weekly quota limit → Sonnet 5.5 + Medium
+**ACs:** AC-ALERT-01…10 · AC-NOTIF-01…05
+
+- [ ] Alerts API per API.md §3.5 (check order, limit 20, already-met check from `TickerStore`)
+- [ ] `AlertWorker` per ARCHITECTURE §5 (index, boot load, sync on create/delete, atomic one-shot trigger in a transaction, in-flight guard)
+- [ ] `NotificationChannel` interface + `NOTIFICATION_CHANNELS` token + `InAppChannel`; `NotificationService`
+- [ ] Notifications API per API.md §3.6; `notification:new` and `notification:read` socket events
+- [ ] `POST /test/worker/reload`
+- [ ] Integration tests (real test DB): trigger ABOVE/BELOW, one-shot under burst of ticks, delete prevents trigger, isolation, reload rebuilds index
+- [ ] FE Alerts tab: form (prefill symbol + current price), Active/Triggered lists, delete, translated errors
+- [ ] FE toasts on `notification:new`, bell badge (`9+`), notifications panel, mark read / all, cross-tab sync, unread summary toast after login
+- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 6)
+**Log:**
+
+---
+
+## Phase 7 — Hardening, final deploy, demo account
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=7)
+**ACs:** AC-I18N-02, AC-OPS-02 (+ full regression of all ACs)
+
+- [ ] i18n sweep: every page/state in both languages; AC-I18N-02 test (no Vietnamese diacritics in EN except `footer-title` and `footer-course`; no raw keys)
+- [ ] UX states: loading skeletons, empty states, error boundary, toasts; mobile pass at 390 px
+- [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
+- [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
+- [ ] All 76 ACs passing in TRACEABILITY; CI green
+- [ ] Production deploy from this branch (`railway up`; start command runs `prisma migrate deploy`), seed demo account on production, smoke-check each feature on the live URL (the Merge Prompt redeploys from `main` afterwards)
+- [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
+- [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
+- [ ] TRACEABILITY; log line (the Merge Prompt tags `v0.7` **and** `v1.0`)
+
+**Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 7)
+**Log:**
