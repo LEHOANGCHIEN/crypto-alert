@@ -219,7 +219,7 @@ Layering (BE): controller (HTTP + DTO validation) → service (business rules, t
 | Item | Choice |
 |---|---|
 | Host | Railway, region **Singapore** (`asia-southeast1`), Hobby plan. One web service + Railway PostgreSQL in the same region. Binance returns HTTP 451 for US IPs → never deploy to a US region. |
-| Topology | Same origin: NestJS serves `/api/v1/*`, `/socket.io/*` and the built SPA (`@nestjs/serve-static`, SPA fallback to `index.html`). No CORS and simple cookies in prod. Dev: Vite proxies `/api` and `/socket.io` to the backend. |
+| Topology | Same origin: NestJS serves `/api/v1/*`, `/socket.io/*` and the built SPA (Express static middleware + SPA fallback to `index.html` in `backend/src/configure-app.ts`; `/api` and `/socket.io` excluded). No CORS and simple cookies in prod. Dev: Vite proxies `/api` and `/socket.io` to the backend. |
 | Start | `prisma migrate deploy && node dist/main.js`; health check `GET /api/v1/health`. |
 | Deploy method | Railway CLI `railway up`, run by Claude Code: from the phase branch for the Phase 0 smoke deploy and the Phase 7 pre-release check, from `main` after every merge (Merge Prompt). The owner only creates the account, logs in and picks the Singapore region. |
 | Seed | `npm run db:seed -w backend` run once manually after first deploy (idempotent upsert of demo data). |
@@ -305,7 +305,7 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, fla
 
 | ID | Decision | Reason | Consequence |
 |---|---|---|---|
-| ADR-01 | **NestJS** instead of Express (report said Express, "subject to change") | Modules/DI/guards/pipes give Claude Code a fixed structure; built-in Socket.IO gateway, throttler, serve-static | Slightly more boilerplate |
+| ADR-01 | **NestJS** instead of Express (report said Express, "subject to change") | Modules/DI/guards/pipes give Claude Code a fixed structure; built-in Socket.IO gateway, throttler, static file serving | Slightly more boilerplate |
 | ADR-02 | **Socket.IO** to browsers; raw `ws` to Binance | Rooms, auto-reconnect, auth handshake out of the box | Browser can't use plain WS clients (fine) |
 | ADR-03 | **INTEGER autoincrement IDs**, not BigInt | BigInt serialises as string → FE/BE type mismatch | Max ~2.1 billion rows per table (enough) |
 | ADR-04 | Prices as **Decimal in DB, number in JSON** | Exact storage; simple FE types | Global serializer converts `Prisma.Decimal` → `number` |
