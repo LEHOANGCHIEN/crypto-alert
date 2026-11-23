@@ -80,6 +80,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-1-review.decision.md; paste into the builder: Read reviews/phase-1-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-24 · Sonnet 5.5 + Medium · Phase 1 complete: argon2id auth + rotating refresh tokens, users/settings API, throttler, FE http client with single-flight refresh, login/register/account pages, preference sync, vi/en error+validation translations, 18 integration + 17 Playwright-AC tests. Doc changes (owner-approved, resolving SPEC AC-PROF-04 vs DATABASE.md reuse rule): DATABASE.md §refresh_tokens and API.md §3.1 (+ ARCHITECTURE §6 for consistency) now say reuse detection revokes all tokens ONLY for a rotated token presented after the 10 s window; logout/change-password-revoked tokens → REFRESH_TOKEN_INVALID only. Deps: @nestjs/jwt pinned 11.0.2 (12 is ESM-only) · last commit 71a4ca2 · CI green (run 45250344267)
 
 ---
 
