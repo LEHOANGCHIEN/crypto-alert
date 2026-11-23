@@ -56,6 +56,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Review settings:** Opus 5.5 + High · Plan mode ON · *Phase Review Prompt* (phase 0)
 **Log:**
 - 2026-11-24 · Sonnet 5.5 + Medium · Phase 0 complete: git/GitHub, workspaces, Postgres+Prisma init migration+seed, NestJS skeleton (envelope, errors, health, test reset), Binance/mock providers, React+Tailwind tokens+i18n skeleton, Playwright tests for 5 ACs, CI, README; smoke deploy to Railway Singapore at https://web-production-49fda79f.up.railway.app (health: provider binance, connected true). Deviations: Nest 11 (Nest 12 is ESM-only), SPA served by Express middleware instead of @nestjs/serve-static, root `start` script added for Railpack · last commit 46a034b · CI green
+- 2026-11-24 · Sonnet 5.5 + Medium · applied reviews/phase-0-review.decision.md: prisma CLI in runtime deps, railway.json removed (settings now in Railway dashboard + root scripts), footer translated (EN title/course) with close button, PROMPTS review routing, reviews/ committed. Doc changes: SPEC (title rows, course row, AC-I18N-02, AC-UI-03, compliance), ARCHITECTURE §10 + ADR-01, PROMPTS c + table, TRACEABILITY AC-UI-03 · last commit 7b4e3e9 · CI green (run 45234293333); redeployed health OK
 
 ---
 
