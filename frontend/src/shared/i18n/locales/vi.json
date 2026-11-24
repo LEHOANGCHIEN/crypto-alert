@@ -155,5 +155,19 @@
     },
     "empty": "Không tìm thấy cặp giao dịch nào.",
     "retry": "Thử lại"
+  },
+  "chart": {
+    "timeframes": "Khung thời gian",
+    "legend": {
+      "open": "O",
+      "high": "H",
+      "low": "L",
+      "close": "C"
+    },
+    "notFound": {
+      "title": "Không tìm thấy cặp giao dịch",
+      "description": "Cặp bạn mở không tồn tại hoặc không được hỗ trợ.",
+      "link": "Mở BTC/USDT"
+    }
   }
 }

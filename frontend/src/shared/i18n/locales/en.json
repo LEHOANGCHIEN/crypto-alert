@@ -155,5 +155,19 @@
     },
     "empty": "No trading pairs found.",
     "retry": "Retry"
+  },
+  "chart": {
+    "timeframes": "Timeframe",
+    "legend": {
+      "open": "O",
+      "high": "H",
+      "low": "L",
+      "close": "C"
+    },
+    "notFound": {
+      "title": "Pair not found",
+      "description": "The pair you opened does not exist or is not supported.",
+      "link": "Open BTC/USDT"
+    }
   }
 }

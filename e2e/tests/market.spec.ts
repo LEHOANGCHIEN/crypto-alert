@@ -72,4 +72,26 @@ test('AC-MKT-05 row click opens chart', async ({ page }) => {
   await expect(page).toHaveURL(/\/trade\/ETHUSDT\?tf=15m$/);
   await expect(page.getByTestId('market-row-ETHUSDT')).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByTestId('market-row-BTCUSDT')).toHaveAttribute('aria-selected', 'false');
+
+  // Chart and header switch to ETHUSDT (15m stays selected).
+  await expect(page.getByTestId('chart-symbol')).toHaveText('ETH/USDT');
+  await expect(page.getByTestId('chart-price')).toHaveText('3.510,25');
+  await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
+  await expect(page.getByTestId('tf-15m')).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('AC-MKT-06 unknown pair shows not found', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/trade/FAKEUSDT');
+
+  await expect(page.getByTestId('chart-not-found')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Không tìm thấy cặp giao dịch' })).toBeVisible();
+  await expect(page.getByTestId('chart-root')).toHaveCount(0);
+  // The app keeps working: the market list is still there and the link goes to BTCUSDT.
+  await expect(page.getByTestId('market-row-BTCUSDT')).toBeVisible();
+  await page.getByTestId('chart-not-found-link').click();
+  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
+  await expect(page.getByTestId('chart-root')).toBeVisible();
+  expect(errors).toEqual([]);
 });
