@@ -195,5 +195,19 @@
       "signal": "Signal",
       "hist": "Hist"
     }
+  },
+  "watchlist": {
+    "star": {
+      "add": "Add {{symbol}} to watchlist",
+      "remove": "Remove {{symbol}} from watchlist"
+    },
+    "list": "Watchlist",
+    "empty": "Your watchlist is empty. Click the star on a pair to add it.",
+    "remove": "Remove {{symbol}} from watchlist",
+    "loginPrompt": {
+      "title": "Log in to use watchlist",
+      "login": "Log in",
+      "cancel": "Not now"
+    }
   }
 }

@@ -5,6 +5,7 @@ import { Toaster } from '../../shared/ui/toast';
 import { PreferencesSync } from '../PreferencesSync';
 import { RealtimeConnection } from '../RealtimeConnection';
 import { ConnBanner } from './ConnBanner';
+import { WatchlistLoginPrompt, WatchlistSession } from '../../features/watchlist';
 
 export function AppLayout() {
   // The dashboard uses the full area; other pages are padded and scrollable.
@@ -20,6 +21,8 @@ export function AppLayout() {
       <Toaster />
       <PreferencesSync />
       <RealtimeConnection />
+      <WatchlistSession />
+      <WatchlistLoginPrompt />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { useKlines, useSymbols, useTickers } from '../../shared/market/queries';
 import { useLiveKlines } from '../../shared/market/useLiveMarket';
 import { useConnection } from '../../shared/socket/connection.store';
 import { IndicatorMenu, useIndicatorData, useIndicatorSettings } from '../indicators';
+import { StarButton } from '../watchlist';
 import { CandleChart } from './CandleChart';
 import { ChartLegend } from './ChartLegend';
 import { parseInterval, TimeframeBar } from './TimeframeBar';
@@ -64,6 +65,7 @@ export function ChartPanel() {
         <h1 data-testid="chart-symbol" className="text-section font-semibold">
           {info ? `${info.baseAsset}/${info.quoteAsset}` : symbol}
         </h1>
+        {info && <StarButton symbol={symbol} />}
         <span data-testid="chart-price" className={`text-price font-semibold ${DIRECTION_CLASS[dir]}`}>
           {ticker && info ? fmt.price(ticker.lastPrice, info.pricePrecision) : '—'}
         </span>

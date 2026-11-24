@@ -195,5 +195,19 @@
       "signal": "Tín hiệu",
       "hist": "Hist"
     }
+  },
+  "watchlist": {
+    "star": {
+      "add": "Thêm {{symbol}} vào danh sách theo dõi",
+      "remove": "Bỏ {{symbol}} khỏi danh sách theo dõi"
+    },
+    "list": "Danh sách theo dõi",
+    "empty": "Danh sách theo dõi trống. Nhấn ngôi sao ở một cặp để thêm.",
+    "remove": "Bỏ {{symbol}} khỏi danh sách theo dõi",
+    "loginPrompt": {
+      "title": "Đăng nhập để sử dụng danh sách theo dõi",
+      "login": "Đăng nhập",
+      "cancel": "Để sau"
+    }
   }
 }

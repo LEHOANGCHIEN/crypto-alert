@@ -8,6 +8,7 @@ import { errorText } from '../../shared/i18n/errorText';
 import { parseInterval } from '../chart/TimeframeBar';
 import { useSymbols, useTickers } from '../../shared/market/queries';
 import { useConnection } from '../../shared/socket/connection.store';
+import { StarButton } from '../watchlist';
 import { PriceCell } from './PriceCell';
 
 const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;
@@ -64,8 +65,9 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
       </div>
       <div
         data-testid="market-columns"
-        className="grid shrink-0 grid-cols-[1.2fr_1fr_0.9fr_0.9fr] gap-2 border-b border-border px-3 py-1 text-meta text-text-muted"
+        className="grid shrink-0 grid-cols-[1.5rem_1.2fr_1fr_0.9fr_0.9fr] gap-2 border-b border-border px-3 py-1 text-meta text-text-muted"
       >
+        <div aria-hidden="true" />
         <span>{t('market.columns.pair')}</span>
         <span className="text-right">{t('market.columns.price')}</span>
         <span className="text-right">{t('market.columns.change')}</span>
@@ -119,11 +121,12 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
                       open(tk.symbol);
                     }
                   }}
-                  className={`absolute left-0 top-0 grid w-full cursor-pointer grid-cols-[1.2fr_1fr_0.9fr_0.9fr] items-center gap-2 px-3 text-row hover:bg-surface-2 ${
+                  className={`absolute left-0 top-0 grid w-full cursor-pointer grid-cols-[1.5rem_1.2fr_1fr_0.9fr_0.9fr] items-center gap-2 px-3 text-row hover:bg-surface-2 ${
                     selected ? 'bg-surface-2' : ''
                   }`}
                   style={{ height: v.size, transform: `translateY(${v.start}px)` }}
                 >
+                  <StarButton symbol={tk.symbol} />
                   <span className="truncate font-medium">
                     {info.baseAsset}
                     <span className="text-text-muted">/{info.quoteAsset}</span>

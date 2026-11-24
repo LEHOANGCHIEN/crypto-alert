@@ -30,7 +30,7 @@ export function DashboardLayout({ market, chart }: Props) {
         data-testid="panel-side"
         className={`${show(active === 'watchlist' || active === 'alerts')} min-h-0 w-full flex-1 flex-col border-border bg-surface lg:flex lg:w-panel-right lg:flex-none lg:border-l`}
       >
-        <SidePanel active={active === 'alerts' ? 'alerts' : 'watchlist'} onChange={setActive} />
+        <SidePanel active={active === 'alerts' ? 'alerts' : 'watchlist'} onChange={setActive} onSelect={() => setActive('chart')} />
       </section>
       <MobileTabBar active={active} onChange={setActive} />
     </div>
