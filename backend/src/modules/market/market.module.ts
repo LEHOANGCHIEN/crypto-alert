@@ -25,7 +25,7 @@ import { MockProvider } from './providers/mock/mock.provider';
       inject: [ConfigService, PriceBus],
       useFactory: (config: ConfigService<Env, true>, bus: PriceBus): MarketDataProvider =>
         config.get('MARKET_DATA_PROVIDER', { infer: true }) === 'mock'
-          ? new MockProvider(bus)
+          ? new MockProvider(bus, config.get('MOCK_AUTO_TICK', { infer: true }))
           : new BinanceProvider(bus, config.get('BINANCE_REST_BASE_URL', { infer: true }), config.get('BINANCE_WS_BASE_URL', { infer: true })),
     },
   ],

@@ -122,3 +122,68 @@ describe('market klines + candle cache (mock provider, real DB)', () => {
     await http().get('/api/v1/market/klines?symbol=btcusdt&interval=1h&limit=5').expect(200);
   });
 });
+
+describe('test-support market controls (API.md §3.8)', () => {
+  let app: INestApplication;
+  const http = () => request(app.getHttpServer());
+
+  beforeAll(async () => {
+    app = await createTestApp();
+  });
+  beforeEach(async () => {
+    await http().post('/api/v1/test/reset').expect(201);
+  });
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('tick sets the last price, visible in GET /market/tickers and in the open candle', async () => {
+    const res = await http().post('/api/v1/test/market/tick').send({ symbol: 'ETHUSDT', price: 3600, quoteVolume: 500_000_000 }).expect(201);
+    expect(res.body.data.ticker).toMatchObject({ symbol: 'ETHUSDT', lastPrice: 3600, quoteVolume: 500_000_000, openPrice: 3400 });
+    expect(res.body.data.ticker.priceChangePercent).toBeCloseTo((200 / 3400) * 100, 8);
+    const tickers = (await http().get('/api/v1/market/tickers').expect(200)).body.data as { symbol: string; lastPrice: number }[];
+    expect(tickers.find((t) => t.symbol === 'ETHUSDT')?.lastPrice).toBe(3600);
+    const k = (await http().get('/api/v1/market/klines?symbol=ETHUSDT&interval=1m').expect(200)).body.data as { close: number; isClosed: boolean }[];
+    expect(k[k.length - 1]).toMatchObject({ close: 3600, isClosed: false });
+  });
+
+  it('tick validates its body and the symbol', async () => {
+    const bad = await http().post('/api/v1/test/market/tick').send({ symbol: 'ETHUSDT', price: -1 }).expect(400);
+    expect(bad.body.error.code).toBe('VALIDATION_ERROR');
+    const unknown = await http().post('/api/v1/test/market/tick').send({ symbol: 'FAKEUSDT', price: 1 }).expect(404);
+    expect(unknown.body.error.code).toBe('SYMBOL_NOT_FOUND');
+  });
+
+  it('close-candle returns the closed and the opened candle; the closed one is cached', async () => {
+    const res = await http().post('/api/v1/test/market/close-candle').send({ symbol: 'BTCUSDT', interval: '1h' }).expect(201);
+    const { closed, opened } = res.body.data as { closed: { openTime: number; closeTime: number; close: number; isClosed: boolean }; opened: { openTime: number; open: number; isClosed: boolean } };
+    expect(closed.isClosed).toBe(true);
+    expect(opened).toMatchObject({ openTime: closed.closeTime + 1, open: closed.close, isClosed: false });
+    const prisma = app.get(PrismaService);
+    let row = null;
+    for (let i = 0; i < 100 && !row; i++) row = await prisma.candle.findFirst({ where: { symbol: 'BTCUSDT', interval: '1h', openTime: new Date(closed.openTime) } });
+    expect(row?.close.toNumber()).toBe(closed.close);
+  });
+
+  it('disconnect makes health report connected:false, then recovers; reset reconnects immediately', async () => {
+    await http().post('/api/v1/test/market/disconnect').send({ durationMs: 300 }).expect(201);
+    expect((await http().get('/api/v1/health').expect(200)).body.data.marketData.connected).toBe(false);
+    const start = Date.now();
+    let connected = false;
+    while (!connected && Date.now() - start < 3000) {
+      await new Promise((r) => setTimeout(r, 50));
+      connected = (await http().get('/api/v1/health')).body.data.marketData.connected;
+    }
+    expect(connected).toBe(true);
+
+    await http().post('/api/v1/test/market/disconnect').send({}).expect(201);
+    await http().post('/api/v1/test/reset').expect(201);
+    expect((await http().get('/api/v1/health').expect(200)).body.data.marketData.connected).toBe(true);
+  });
+
+  it('stats list the all-market ticker stream after reset', async () => {
+    const res = await http().get('/api/v1/test/market/stats').expect(200);
+    expect(res.body.data.upstreamStreams).toEqual(['!miniTicker@arr']);
+    expect(res.body.data.restCalls).toEqual({ symbols: 0, tickers: 0, klines: [] });
+  });
+});

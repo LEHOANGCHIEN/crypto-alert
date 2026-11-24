@@ -120,7 +120,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] Subscription caps (≤ 2 kline subscriptions per socket → `SUBSCRIPTION_LIMIT_REACHED`; ≤ 200 upstream kline streams → `MARKET_DATA_UNAVAILABLE`) with unit tests for both caps
 - [x] `RealtimeGateway`: handshake auth per API.md §4.1, rooms, events of API.md §4.2–4.3, acks in envelope format
 - [x] `tickers:update` batching (changed only, ≤ 1/s); `kline:update`; closed candles upserted to cache; `market:status`
-- [ ] Mock test endpoints: `tick`, `close-candle`, `disconnect`; stats show `upstreamStreams`
+- [x] Mock test endpoints: `tick`, `close-candle`, `disconnect`; stats show `upstreamStreams`
 - [ ] FE socket client: reconnect with new token, resubscribe on reconnect, klines refetch, "Reconnecting…" banner, "Market data delayed" badge
 - [ ] FE live updates: market list rows + flash, chart `series.update()`, header price
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line

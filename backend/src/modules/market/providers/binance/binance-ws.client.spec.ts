@@ -130,12 +130,13 @@ describe('BinanceWsClient (fake upstream server)', () => {
   });
 
   it('a message resets the watchdog', async () => {
-    client = new BinanceWsClient(up.url, { onMessage: () => undefined, onStatus: () => undefined, onReopen: () => undefined }, { watchdogMs: 300 });
+    client = new BinanceWsClient(up.url, { onMessage: () => undefined, onStatus: () => undefined, onReopen: () => undefined }, { watchdogMs: 1000 });
     client.start();
     await waitFor(() => client!.connected);
     const first = up.current;
+    // Messages every 50 ms for 2.5 × the watchdog time: the watchdog must never fire (generous margin for slow CI).
     const pinger = setInterval(() => first.send(JSON.stringify({ stream: '!miniTicker@arr', data: [] })), 50);
-    await new Promise((r) => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 2500));
     clearInterval(pinger);
     expect(up.sockets).toHaveLength(1);
   });
