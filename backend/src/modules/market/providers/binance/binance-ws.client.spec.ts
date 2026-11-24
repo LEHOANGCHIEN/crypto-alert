@@ -291,7 +291,7 @@ describe('BinanceProvider over the fake upstream', () => {
     expect(klines[0]).toEqual({ symbol: 'BTCUSDT', interval: '1m', close: 7 });
 
     up.current.terminate();
-    await waitFor(() => klines.length === 3);
+    await waitFor(() => klines.length === 3 && up.subscribed(1).includes('btcusdt@kline_1m'));
     expect(restCalls).toEqual([{ symbol: 'BTCUSDT', interval: '1m', limit: 2 }]);
     expect(klines.slice(1).map((k) => k.close)).toEqual([100, 101]);
     expect(up.subscribed(1)).toEqual(['btcusdt@kline_1m']);

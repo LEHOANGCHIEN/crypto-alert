@@ -1,0 +1,14 @@
+{
+  "source": "backend/src/modules/market/providers/mock/fixtures/BTCUSDT-1h.json via technicalindicators (oracle)",
+  "symbol": "BTCUSDT",
+  "interval": "1h",
+  "index": 998,
+  "close": 60484.95,
+  "ma7": 60264.45714285669,
+  "ma25": 61132.60039999998,
+  "ma99": 60293.29616161613,
+  "rsi14": 45.71455427965109,
+  "macd": -303.7954291182032,
+  "signal": -245.90435059859726,
+  "hist": -57.89107851960591
+}

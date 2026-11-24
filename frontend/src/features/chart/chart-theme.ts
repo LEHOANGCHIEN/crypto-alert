@@ -7,6 +7,10 @@ export type ChartColors = {
   border: string;
   up: string;
   down: string;
+  ma: string[];
+  rsi: string;
+  macd: string;
+  signal: string;
 };
 
 const cssVar = (name: string): string => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -20,13 +24,17 @@ export function readChartColors(): ChartColors {
     border: cssVar('--color-border'),
     up: cssVar('--color-up'),
     down: cssVar('--color-down'),
+    ma: [cssVar('--color-ind-1'), cssVar('--color-ind-2'), cssVar('--color-ind-3')],
+    rsi: cssVar('--color-ind-rsi'),
+    macd: cssVar('--color-ind-macd'),
+    signal: cssVar('--color-ind-signal'),
   };
 }
 
 /** Options that depend on the theme; used both at creation and when the theme changes. */
 export function chartThemeOptions(c: ChartColors) {
   return {
-    layout: { background: { color: c.background }, textColor: c.text },
+    layout: { background: { color: c.background }, textColor: c.text, panes: { separatorColor: c.border, separatorHoverColor: c.grid } },
     grid: { vertLines: { color: c.grid }, horzLines: { color: c.grid } },
     crosshair: { vertLine: { color: c.crosshair }, horzLine: { color: c.crosshair } },
     rightPriceScale: { borderColor: c.border },

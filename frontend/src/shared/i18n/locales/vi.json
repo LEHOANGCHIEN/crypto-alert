@@ -176,5 +176,24 @@
   },
   "connection": {
     "reconnecting": "Mất kết nối, đang kết nối lại…"
+  },
+  "indicators": {
+    "button": "Chỉ báo",
+    "title": "Chỉ báo kỹ thuật",
+    "close": "Đóng",
+    "maSlot": "MA #{{n}}",
+    "show": "Hiện MA #{{n}}",
+    "period": "Chu kỳ MA #{{n}}",
+    "rsi": "RSI ({{period}})",
+    "macd": "MACD ({{fast}}, {{slow}}, {{signal}})",
+    "periodError": "Chu kỳ phải là số nguyên từ {{min}} đến {{max}}.",
+    "legend": {
+      "ma": "MA({{period}})",
+      "rsi": "RSI({{period}})",
+      "macd": "MACD({{fast}}, {{slow}}, {{signal}})",
+      "line": "MACD",
+      "signal": "Tín hiệu",
+      "hist": "Hist"
+    }
   }
 }
