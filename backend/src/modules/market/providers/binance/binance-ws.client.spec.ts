@@ -1,4 +1,5 @@
-import type { AddressInfo } from 'node:net';
+import type { AddressInfo, Socket } from 'node:net';
+import { Logger } from '@nestjs/common';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { PriceBus } from '../../price-bus';
 import type { Candle, Interval } from '../../market.types';
@@ -145,6 +146,87 @@ describe('BinanceWsClient (fake upstream server)', () => {
     client = new BinanceWsClient(up.url, { onMessage: () => undefined, onStatus: () => undefined, onReopen: () => undefined }, { lifetimeMs: 200 });
     client.start();
     await waitFor(() => up.sockets.length >= 2 && client!.connected, 3000);
+  });
+
+  it('retries when the upstream accepts TCP but never completes the WebSocket handshake', async () => {
+    const net = await import('node:net');
+    let accepted = 0;
+    const held: Socket[] = [];
+    const hung = net.createServer((sock) => {
+      accepted++;
+      held.push(sock);
+      sock.on('error', () => undefined); // never answers the HTTP upgrade
+    });
+    await new Promise<void>((r) => hung.listen(0, '127.0.0.1', () => r()));
+    const port = (hung.address() as AddressInfo).port;
+    try {
+      client = new BinanceWsClient(
+        `ws://127.0.0.1:${port}`,
+        { onMessage: () => undefined, onStatus: () => undefined, onReopen: () => undefined },
+        { watchdogMs: 150, random: noJitterMin },
+      );
+      client.start();
+      await waitFor(() => accepted >= 2, 4000); // 1st attempt times out after 150 ms, retry ~800 ms later
+      expect(client.connected).toBe(false);
+    } finally {
+      client?.stop();
+      client = null;
+      for (const sock of held) sock.destroy();
+      await new Promise((r) => hung.close(() => r(null)));
+    }
+  });
+
+  describe('reconnect backoff', () => {
+    const retryDelays = (spy: jest.SpyInstance): number[] =>
+      spy.mock.calls.map((c) => /retry in (\d+) ms/.exec(String(c[0]))?.[1]).filter(Boolean).map(Number);
+
+    it('grows 1 s → 2 s → 4 s across consecutive failures', async () => {
+      const warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
+      jest.useFakeTimers({ doNotFake: ['setImmediate', 'nextTick'] });
+      try {
+        // Port 1 refuses every connection at once, so each attempt fails and schedules the next retry.
+        client = new BinanceWsClient(
+          'ws://127.0.0.1:1',
+          { onMessage: () => undefined, onStatus: () => undefined, onReopen: () => undefined },
+          { random: () => 0.5 },
+        );
+        client.start();
+        for (const expected of [1000, 2000, 4000]) {
+          const before = retryDelays(warn).length;
+          for (let i = 0; i < 5000 && retryDelays(warn).length === before; i++) await new Promise((r) => setImmediate(r));
+          expect(retryDelays(warn).at(-1)).toBe(expected);
+          jest.advanceTimersByTime(expected);
+        }
+        expect(retryDelays(warn).slice(0, 3)).toEqual([1000, 2000, 4000]);
+      } finally {
+        client?.stop();
+        client = null;
+        jest.useRealTimers();
+        warn.mockRestore();
+      }
+    });
+
+    it('resets to ~1 s once a connection stayed healthy past healthyResetMs', async () => {
+      const warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
+      try {
+        client = new BinanceWsClient(
+          up.url,
+          { onMessage: () => undefined, onStatus: () => undefined, onReopen: () => undefined },
+          { random: () => 0.5, healthyResetMs: 200 },
+        );
+        client.start();
+        await waitFor(() => client!.connected);
+        up.current.terminate(); // dropped at once: not healthy → 1 s, next step is 2 s
+        await waitFor(() => retryDelays(warn).length === 1);
+        await waitFor(() => up.sockets.length === 2 && client!.connected, 3000);
+        await new Promise((r) => setTimeout(r, 400)); // healthy longer than healthyResetMs → attempt back to 0
+        up.current.terminate();
+        await waitFor(() => retryDelays(warn).length === 2);
+        expect(retryDelays(warn)).toEqual([1000, 1000]); // without the reset the second delay would be 2000
+      } finally {
+        warn.mockRestore();
+      }
+    });
   });
 });
 
