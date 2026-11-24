@@ -54,10 +54,10 @@
 | AC-RT-05 | 3 | realtime.spec.ts | AC-RT-05 browser reconnect banner and resync | passing | |
 | AC-RT-06 | 3 | realtime.spec.ts | AC-RT-06 upstream disconnect badge and recovery | passing | |
 | AC-IND-01 | 4 | indicators.spec.ts | AC-IND-01 default MA lines | pending | Test added (green locally); unit: lib.test.ts, oracle.test.ts vs technicalindicators |
-| AC-IND-02 | 4 | indicators.spec.ts | AC-IND-02 toggle and change MA period persists | pending | |
-| AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | pending | |
-| AC-IND-04 | 4 | indicators.spec.ts | AC-IND-04 RSI pane | pending | |
-| AC-IND-05 | 4 | indicators.spec.ts | AC-IND-05 MACD pane | pending | |
+| AC-IND-02 | 4 | indicators.spec.ts | AC-IND-02 toggle and change MA period persists | pending | Test added (green locally); unit: settings.test.ts |
+| AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | pending | Test added (green locally); unit: settings.test.ts |
+| AC-IND-04 | 4 | indicators.spec.ts | AC-IND-04 RSI pane | pending | Test added (green locally) |
+| AC-IND-05 | 4 | indicators.spec.ts | AC-IND-05 MACD pane | pending | Test added (green locally) |
 | AC-IND-06 | 4 | indicators.spec.ts | AC-IND-06 values match golden file | pending | |
 | AC-IND-07 | 4 | indicators.spec.ts | AC-IND-07 indicators update live | pending | |
 | AC-WL-01 | 5 | watchlist.spec.ts | AC-WL-01 star adds pair to watchlist | pending | |

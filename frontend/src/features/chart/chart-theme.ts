@@ -34,7 +34,7 @@ export function readChartColors(): ChartColors {
 /** Options that depend on the theme; used both at creation and when the theme changes. */
 export function chartThemeOptions(c: ChartColors) {
   return {
-    layout: { background: { color: c.background }, textColor: c.text },
+    layout: { background: { color: c.background }, textColor: c.text, panes: { separatorColor: c.border, separatorHoverColor: c.grid } },
     grid: { vertLines: { color: c.grid }, horzLines: { color: c.grid } },
     crosshair: { vertLine: { color: c.crosshair }, horzLine: { color: c.crosshair } },
     rightPriceScale: { borderColor: c.border },

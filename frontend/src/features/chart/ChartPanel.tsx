@@ -7,7 +7,7 @@ import { errorText } from '../../shared/i18n/errorText';
 import { useKlines, useSymbols, useTickers } from '../../shared/market/queries';
 import { useLiveKlines } from '../../shared/market/useLiveMarket';
 import { useConnection } from '../../shared/socket/connection.store';
-import { useIndicatorData, useIndicatorSettings } from '../indicators';
+import { IndicatorMenu, useIndicatorData, useIndicatorSettings } from '../indicators';
 import { CandleChart } from './CandleChart';
 import { ChartLegend } from './ChartLegend';
 import { parseInterval, TimeframeBar } from './TimeframeBar';
@@ -70,7 +70,7 @@ export function ChartPanel() {
         <span data-testid="chart-change" className={`text-body ${DIRECTION_CLASS[dir]}`}>
           {ticker ? fmt.percent(ticker.priceChangePercent) : '—'}
         </span>
-        <div className="ml-auto">
+        <div className="ml-auto flex flex-wrap items-center gap-2">
           <TimeframeBar
             active={interval}
             onChange={(i) =>
@@ -81,6 +81,7 @@ export function ChartPanel() {
               })
             }
           />
+          <IndicatorMenu />
         </div>
       </div>
       <div className="relative min-h-0 flex-1">
