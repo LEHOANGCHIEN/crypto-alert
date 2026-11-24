@@ -58,8 +58,8 @@
 | AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | pending | Test added (green locally); unit: settings.test.ts |
 | AC-IND-04 | 4 | indicators.spec.ts | AC-IND-04 RSI pane | pending | Test added (green locally) |
 | AC-IND-05 | 4 | indicators.spec.ts | AC-IND-05 MACD pane | pending | Test added (green locally) |
-| AC-IND-06 | 4 | indicators.spec.ts | AC-IND-06 values match golden file | pending | |
-| AC-IND-07 | 4 | indicators.spec.ts | AC-IND-07 indicators update live | pending | |
+| AC-IND-06 | 4 | indicators.spec.ts | AC-IND-06 values match golden file | pending | Test added (green locally); golden from e2e/scripts/generate-indicators-golden.mjs (technicalindicators oracle, BTCUSDT-1h fixture, index 998) |
+| AC-IND-07 | 4 | indicators.spec.ts | AC-IND-07 indicators update live | pending | Test added (green locally); incremental update unit-tested in lib.test.ts |
 | AC-WL-01 | 5 | watchlist.spec.ts | AC-WL-01 star adds pair to watchlist | pending | |
 | AC-WL-02 | 5 | watchlist.spec.ts | AC-WL-02 remove from watchlist | pending | |
 | AC-WL-03 | 5 | watchlist.spec.ts | AC-WL-03 watchlist persists across reload and browsers | pending | |
