@@ -11,8 +11,8 @@ export function randomWalk(length: number, seed = 42, start = 30_000): number[] 
   const out: number[] = [];
   let p = start;
   for (let i = 0; i < length; i++) {
-    p = Math.max(1, p * (1 + (rnd() - 0.5) * 0.02));
-    out.push(Math.round(p * 100) / 100);
+    p *= 1 + (rnd() - 0.5) * 0.02;
+    out.push(Number(p.toPrecision(8)));
   }
   return out;
 }
