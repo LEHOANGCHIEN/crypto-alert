@@ -66,10 +66,12 @@ export function CandleChart({ candles, precision, tickSize, onHover, liveKey }: 
     });
     chartRef.current = chart;
     seriesRef.current = series;
+    shownRef.current = []; // a new chart has no data yet: the data effect must call setData
     return () => {
       chart.remove();
       chartRef.current = null;
       seriesRef.current = null;
+      shownRef.current = [];
     };
   }, []);
 
