@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 24 · failing 0 · pending 52 · last CI run: green on phase-1-auth (2026-11-24)
+**Summary:** 76 ACs · passing 27 · failing 0 · pending 49 · last CI run: green on phase-1-auth (2026-11-24)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -30,9 +30,9 @@
 | AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
 | AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
 | AC-THEME-03 | 1 | theme.spec.ts | AC-THEME-03 theme persists for guest and account | passing | |
-| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | pending | |
-| AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | pending | |
-| AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | pending | |
+| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | |
+| AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | passing | |
+| AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | passing | |
 | AC-MKT-05 | 2 | market.spec.ts | AC-MKT-05 row click opens chart | pending | |
 | AC-MKT-06 | 2 | market.spec.ts | AC-MKT-06 unknown pair shows not found | pending | |
 | AC-CHART-01 | 2 | chart.spec.ts | AC-CHART-01 chart renders with attribution logo | pending | |

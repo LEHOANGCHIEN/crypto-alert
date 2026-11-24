@@ -50,3 +50,12 @@ export function formatDateTime(epochMs: number, locale: FormatLocale, timeZone: 
   );
   return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}`;
 }
+
+export type PriceDirection = 'up' | 'down' | 'flat';
+
+/** Direction of a 24h change as displayed: a change that rounds to 0.00 % is flat (neutral color, no sign). */
+export function priceDirection(percent: number): PriceDirection {
+  const rounded = Number(Math.abs(percent).toFixed(2));
+  if (rounded === 0) return 'flat';
+  return percent > 0 ? 'up' : 'down';
+}

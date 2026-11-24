@@ -140,5 +140,20 @@
       "markets": "Market list",
       "chart": "Price chart"
     }
+  },
+  "market": {
+    "list": "Trading pairs list",
+    "search": {
+      "label": "Search trading pairs",
+      "placeholder": "Search pairs, e.g. ETH"
+    },
+    "columns": {
+      "pair": "Pair",
+      "price": "Last price",
+      "change": "24h change",
+      "volume": "24h volume"
+    },
+    "empty": "No trading pairs found.",
+    "retry": "Retry"
   }
 }

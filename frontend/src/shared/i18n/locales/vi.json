@@ -140,5 +140,20 @@
       "markets": "Danh sách thị trường",
       "chart": "Biểu đồ giá"
     }
+  },
+  "market": {
+    "list": "Danh sách cặp giao dịch",
+    "search": {
+      "label": "Tìm cặp giao dịch",
+      "placeholder": "Tìm cặp, ví dụ ETH"
+    },
+    "columns": {
+      "pair": "Cặp",
+      "price": "Giá gần nhất",
+      "change": "Thay đổi 24h",
+      "volume": "Khối lượng 24h"
+    },
+    "empty": "Không tìm thấy cặp giao dịch nào.",
+    "retry": "Thử lại"
   }
 }
