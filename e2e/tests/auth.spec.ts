@@ -30,6 +30,10 @@ test('AC-AUTH-03 register validation errors', async ({ page, request }) => {
   await page.getByTestId('field-displayName').fill('A');
   await page.getByTestId('field-password').fill('abcdefgh');
   await page.getByTestId('field-confirmPassword').fill('different1');
+  // errors already show after leaving the fields, before any submit
+  await expect(page.getByTestId('error-email')).toHaveText('Email không hợp lệ.');
+  await expect(page.getByTestId('error-password')).toHaveText('Mật khẩu phải có ít nhất một chữ cái và một chữ số.');
+  expect(registerCalls).toBe(0);
   await page.getByTestId('submit-register').click();
   await expect(page.getByTestId('error-email')).toHaveText('Email không hợp lệ.');
   await expect(page.getByTestId('error-displayName')).toHaveText('Phải có ít nhất 2 ký tự.');
