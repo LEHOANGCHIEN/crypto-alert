@@ -10,7 +10,7 @@
 |---|---|---|---|---|---|
 | 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | done |
 | 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | done |
-| 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
+| 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | built — awaiting review |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | not started |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | not started |
@@ -100,10 +100,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
 - [x] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
 - [x] Chart theme from tokens, re-applied on theme toggle
-- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [x] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-2-review.decision.md; paste into the builder: Read reviews/phase-2-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-24 · Sonnet 5.5 + Medium · Phase 2 complete: SymbolRegistry + Binance REST client, TickerStore, CandleCacheService (DB window cache, 2-candle fast path) with GET /market/symbols|tickers|klines, full MockProvider (8 USDT + 2 filtered pairs, BTCUSDT-1h fixture of 1000 real candles via scripts/fetch-btc-fixture.mjs, seeded PRNG, REST counters, GET /test/market/stats), dashboard (3 columns / mobile tab bar), virtualised market list with search, Lightweight Charts v5 candlestick chart (attribution on, timeframe bar synced with ?tf=, legend, pair-not-found), locale/timezone-aware formatting, chart theme re-applied from tokens; 16 Phase-2 AC Playwright tests + backend unit/integration tests; checked live against Binance locally (symbols, tickers, klines 1000, health ok). Existing tests scoped to the header Login link (the side panel now also has one). No doc contract changes (API.md/DATABASE.md/ARCHITECTURE.md/SPEC.md untouched). Deps: lightweight-charts 5.3, @tanstack/react-virtual · last code commit 8f7b41e · CI green (run 45402260421)
 
 ---
 
