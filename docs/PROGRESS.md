@@ -12,7 +12,7 @@
 | 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | done |
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | done |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | done |
-| 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | in review |
+| 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | not started |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | not started |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
@@ -149,7 +149,8 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-4-review.decision.md; paste into the builder: Read reviews/phase-4-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
 - 2026-11-25 · Opus 5.5 + High · Phase 4 built: pure `sma`/`ema`/`rsi`/`macd` (SPEC §4.1, Wilder RSI, SMA-seeded EMA) + incremental last-candle update; Vitest hand-computed cases, incremental == full recompute, and oracle `technicalindicators` 3.1.0 (devDep frontend + e2e) within 0.01 % after 250 warm-up (oracle RSI rounds to 2 decimals, so the oracle value is rebuilt from its unrounded AverageGain/AverageLoss); `e2e/scripts/generate-indicators-golden.mjs` (`npm run golden -w e2e`) → `e2e/fixtures/indicators.golden.json` (BTCUSDT-1h fixture, index 998); MA×3 on price pane (7/25/99, token colors), RSI pane with dashed 70/30, MACD pane (line, signal, histogram up/down), pane separators themed; Indicators menu (toggles, periods 2–200 with translated error, localStorage `crypto-alert.indicators`); legend values for hovered/latest candle, live recompute on `kline:update`; 7 Playwright ACs (AC-IND-01…07). Item 8 (owner TradingView check) left for the owner. Commit 3ee1a97 holds only the AC-IND-06/07 tests (hover legend + live recompute code shipped in 8569804). No doc contract changes (SPEC/API/DATABASE/ARCHITECTURE untouched) · last code commit 3ee1a97 · CI green (run 45467268251)
-- 2026-11-25 · Sonnet 5.5 + Medium · Phase 4 review PASS (2 Minor) → decision applied: AC-IND-05 now also asserts both MACD histogram colours via new `data-hist-up-color` / `data-hist-down-color` on chart root (indicator-layers.ts `publish`); item 8 ticked (owner-confirmed); review + decision files added; Minor #2 (`feat:` commit holding only tests) accepted, no history rewrite · no doc contract changes · CI pending
+- 2026-11-25 · Sonnet 5.5 + Medium · Phase 4 review PASS (2 Minor) → decision applied: AC-IND-05 now also asserts both MACD histogram colours via new `data-hist-up-color` / `data-hist-down-color` on chart root (indicator-layers.ts `publish`); item 8 ticked (owner-confirmed); review + decision files added; Minor #2 (`feat:` commit holding only tests) accepted, no history rewrite · no doc contract changes · also fixed flaky `binance-ws.client.spec.ts` reconnect test (waits for resubscribe) · CI green
+- 2026-11-25 · MERGED into main · merge 263f7b2 · tag v0.4 · CI green · deployed
 
 ---
 
