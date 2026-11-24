@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 52 · failing 0 · pending 24 · last CI run: green on phase-4-indicators (2026-11-25)
+**Summary:** 76 ACs · passing 59 · failing 0 · pending 17 · last CI run: green on phase-4-indicators (2026-11-25)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -60,13 +60,13 @@
 | AC-IND-05 | 4 | indicators.spec.ts | AC-IND-05 MACD pane | passing | |
 | AC-IND-06 | 4 | indicators.spec.ts | AC-IND-06 values match golden file | passing | golden from e2e/scripts/generate-indicators-golden.mjs (technicalindicators oracle, BTCUSDT-1h fixture, index 998) |
 | AC-IND-07 | 4 | indicators.spec.ts | AC-IND-07 indicators update live | passing | incremental update unit-tested in lib.test.ts |
-| AC-WL-01 | 5 | watchlist.spec.ts | AC-WL-01 star adds pair to watchlist | pending | |
-| AC-WL-02 | 5 | watchlist.spec.ts | AC-WL-02 remove from watchlist | pending | |
-| AC-WL-03 | 5 | watchlist.spec.ts | AC-WL-03 watchlist persists across reload and browsers | pending | |
-| AC-WL-04 | 5 | watchlist.spec.ts | AC-WL-04 watchlist prices update live | pending | |
-| AC-WL-05 | 5 | watchlist.spec.ts | AC-WL-05 watchlist row opens chart | pending | |
-| AC-WL-06 | 5 | watchlist.spec.ts | AC-WL-06 guest sees login prompt | pending | |
-| AC-WL-07 | 5 | watchlist.spec.ts | AC-WL-07 isolation, no duplicates, limit 50 | pending | |
+| AC-WL-01 | 5 | watchlist.spec.ts | AC-WL-01 star adds pair to watchlist | passing | integration: watchlist.int-spec.ts; chart header star uses testid `chart-star-<SYMBOL>` (market row keeps `star-<SYMBOL>`) |
+| AC-WL-02 | 5 | watchlist.spec.ts | AC-WL-02 remove from watchlist | passing | |
+| AC-WL-03 | 5 | watchlist.spec.ts | AC-WL-03 watchlist persists across reload and browsers | passing | |
+| AC-WL-04 | 5 | watchlist.spec.ts | AC-WL-04 watchlist prices update live | passing | |
+| AC-WL-05 | 5 | watchlist.spec.ts | AC-WL-05 watchlist row opens chart | passing | |
+| AC-WL-06 | 5 | watchlist.spec.ts | AC-WL-06 guest sees login prompt | passing | |
+| AC-WL-07 | 5 | watchlist.spec.ts | AC-WL-07 isolation, no duplicates, limit 50 | passing | limit case fills the test DB directly (e2e/helpers/watchlist.ts) because the mock has only 8 pairs |
 | AC-ALERT-01 | 6 | alerts.spec.ts | AC-ALERT-01 create alert | pending | |
 | AC-ALERT-02 | 6 | alerts.spec.ts | AC-ALERT-02 alert validation and already-met | pending | |
 | AC-ALERT-03 | 6 | alerts.spec.ts | AC-ALERT-03 above alert triggers toast within 5s | pending | |
