@@ -180,6 +180,12 @@ describe('auth + users (real test DB)', () => {
     expect(bad.body.error.details).toEqual([{ field: 'displayName', code: 'TOO_LONG', params: { max: 50 } }]);
     const s = await http().patch('/api/v1/users/me/settings').set(auth).send({ locale: 'en', timezone: 'UTC' }).expect(200);
     expect(s.body.data).toEqual({ locale: 'en', theme: 'dark', timezone: 'UTC' });
+    await http().patch('/api/v1/users/me/settings').set(auth).send({ timezone: 'Asia/Ho_Chi_Minh' }).expect(200);
+    const full = await http().patch('/api/v1/users/me/settings').set(auth).send({ locale: 'en', theme: 'light', timezone: 'Asia/Ho_Chi_Minh' }).expect(200);
+    expect(full.body.data).toEqual({ locale: 'en', theme: 'light', timezone: 'Asia/Ho_Chi_Minh' });
+    const badTz = await http().patch('/api/v1/users/me/settings').set(auth).send({ timezone: 'Mars/Base' }).expect(400);
+    expect(badTz.body.error.code).toBe('VALIDATION_ERROR');
+    expect(badTz.body.error.details).toEqual([{ field: 'timezone', code: 'INVALID_TIMEZONE' }]);
     const e = await http().patch('/api/v1/users/me/settings').set(auth).send({}).expect(400);
     expect(e.body.error.code).toBe('VALIDATION_ERROR');
     const en = await http().patch('/api/v1/users/me/settings').set(auth).send({ theme: 'blue' }).expect(400);

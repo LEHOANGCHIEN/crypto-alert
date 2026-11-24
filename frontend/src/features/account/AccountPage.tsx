@@ -11,7 +11,8 @@ import { useAuth } from '../auth/auth.store';
 import { errorText, issueText } from '../auth/messages';
 import { usePreferenceActions } from '../../app/usePreferenceActions';
 
-const TIMEZONES = [...new Set(['UTC', ...Intl.supportedValuesOf('timeZone')])].sort();
+const timezoneOptions = (current: string) =>
+  [...new Set(['UTC', 'Asia/Ho_Chi_Minh', current, ...Intl.supportedValuesOf('timeZone')])].sort();
 
 function ProfileForm() {
   const { t } = useTranslation();
@@ -140,7 +141,7 @@ function PreferencesForm() {
       <div className="flex flex-col gap-1">
         <label htmlFor="pref-timezone" className="text-meta font-medium text-text-muted">{t('fields.timezone')}</label>
         <select id="pref-timezone" data-testid="pref-timezone" className={selectClass} value={draft.timezone} onChange={(e) => setDraft({ ...draft, timezone: e.target.value })}>
-          {TIMEZONES.map((tz) => (
+          {timezoneOptions(draft.timezone).map((tz) => (
             <option key={tz} value={tz}>{tz}</option>
           ))}
         </select>

@@ -39,9 +39,15 @@ export const PasswordField = () =>
 export const OptionalEnum = (values: readonly string[]) =>
   applyDecorators(IsIn(values as string[], { context: { code: 'INVALID_ENUM' } }), IsString(), IsOptional());
 
-const TIMEZONES = new Set<string>([...Intl.supportedValuesOf('timeZone'), 'UTC']);
+/** Any IANA name the runtime knows, including aliases such as Asia/Ho_Chi_Minh and UTC. */
 export function isValidTimezone(v: unknown): boolean {
-  return typeof v === 'string' && TIMEZONES.has(v);
+  if (typeof v !== 'string' || v.length < 1 || v.length > 64) return false;
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: v });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function IsTimezone() {

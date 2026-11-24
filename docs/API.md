@@ -80,7 +80,7 @@ Examples:
 | `TOO_MANY_DECIMALS` | More than 8 decimals |
 | `INVALID_ENUM` | Not one of the allowed values |
 | `INVALID_SYMBOL_FORMAT` | Does not match `^[A-Z0-9]{2,20}$` |
-| `INVALID_TIMEZONE` | Not an IANA timezone (`Intl.supportedValuesOf('timeZone')`) |
+| `INVALID_TIMEZONE` | Not a valid IANA timezone name (rejected by `Intl.DateTimeFormat`; aliases such as `Asia/Ho_Chi_Minh` and `UTC` are valid) |
 | `UNKNOWN_FIELD` | Field not allowed in this body |
 
 ## 2. Canonical types
