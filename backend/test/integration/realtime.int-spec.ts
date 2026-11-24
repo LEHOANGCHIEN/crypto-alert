@@ -4,6 +4,10 @@ import type { AddressInfo } from 'node:net';
 import { io, type Socket } from 'socket.io-client';
 import { SubscriptionManager, MAX_UPSTREAM_KLINE_STREAMS } from '../../src/modules/market/subscription-manager';
 import { RealtimeService } from '../../src/modules/realtime/realtime.service';
+import { RealtimeRelay } from '../../src/modules/realtime/realtime.relay';
+import { PriceBus } from '../../src/modules/market/price-bus';
+import { PrismaService } from '../../src/prisma/prisma.service';
+import type { Candle, Ticker } from '../../src/modules/market/market.types';
 import { createTestApp } from '../helpers/app';
 
 type Ack = { success: boolean; data?: unknown; error?: { code: string; details?: { field: string; code: string }[] } };
@@ -21,6 +25,7 @@ describe('Socket.IO gateway (API.md §4)', () => {
   afterEach(() => {
     for (const s of sockets.splice(0)) s.disconnect();
     app.get(SubscriptionManager).reset();
+    app.get(RealtimeRelay).reset();
   });
   afterAll(async () => {
     await app.close();
@@ -136,5 +141,71 @@ describe('Socket.IO gateway (API.md §4)', () => {
     const start = Date.now();
     while (sm.socketCount(id) !== 0 && Date.now() - start < 3000) await new Promise((r) => setTimeout(r, 20));
     expect(sm.socketCount(id)).toBe(0);
+  });
+
+  describe('PriceBus relay', () => {
+    const ticker = (symbol: string, lastPrice: number): Ticker => ({
+      symbol, lastPrice, openPrice: 100, highPrice: 200, lowPrice: 50, priceChangePercent: lastPrice - 100, volume: 1, quoteVolume: 1000, eventTime: Date.now(),
+    });
+
+    it('tickers:update reaches only the tickers room, batched per second', async () => {
+      const listener = connect();
+      const other = connect();
+      await Promise.all([connected(listener), connected(other)]);
+      await listener.emitWithAck('tickers:subscribe', {});
+      const batches: { tickers: Ticker[] }[] = [];
+      let otherGot = 0;
+      listener.on('tickers:update', (p: { tickers: Ticker[] }) => batches.push(p));
+      other.on('tickers:update', () => otherGot++);
+
+      const bus = app.get(PriceBus);
+      bus.emit('ticker', ticker('ETHUSDT', 101));
+      bus.emit('ticker', ticker('SOLUSDT', 102));
+      bus.emit('ticker', ticker('ETHUSDT', 103));
+      const start = Date.now();
+      while (batches.length === 0 && Date.now() - start < 2000) await new Promise((r) => setTimeout(r, 10));
+      expect(batches[0].tickers.map((t) => [t.symbol, t.lastPrice])).toEqual([
+        ['ETHUSDT', 103],
+        ['SOLUSDT', 102],
+      ]);
+      expect(otherGot).toBe(0);
+    });
+
+    it('kline:update reaches the kline room; closed candles are upserted into the cache', async () => {
+      const s = connect();
+      await connected(s);
+      await s.emitWithAck('kline:subscribe', { symbol: 'LINKUSDT', interval: '1m' });
+      const openTime = Date.UTC(2020, 0, 1, 0, 0);
+      const candle: Candle = { openTime, closeTime: openTime + 59_999, open: 1, high: 3, low: 0.5, close: 2, volume: 10, quoteVolume: 20, isClosed: true };
+      const got = new Promise<unknown>((resolve) => s.once('kline:update', resolve));
+      app.get(PriceBus).emit('kline', { symbol: 'LINKUSDT', interval: '1m', candle });
+      expect(await got).toEqual({ symbol: 'LINKUSDT', interval: '1m', candle });
+
+      const prisma = app.get(PrismaService);
+      const start = Date.now();
+      let row = null;
+      while (!row && Date.now() - start < 2000) {
+        row = await prisma.candle.findFirst({ where: { symbol: 'LINKUSDT', interval: '1m', openTime: new Date(openTime) } });
+      }
+      expect(row?.close.toNumber()).toBe(2);
+      await prisma.candle.deleteMany({ where: { symbol: 'LINKUSDT', interval: '1m' } });
+    });
+
+    it('market:status is broadcast to every socket', async () => {
+      const a = connect();
+      const b = connect();
+      await Promise.all([connected(a), connected(b)]);
+      // Wait for the broadcast value (the per-connection 'connected' status may still be in flight).
+      const both = Promise.all(
+        [a, b].map(
+          (x) =>
+            new Promise<{ status: string }>((resolve) =>
+              x.on('market:status', (p: { status: string }) => p.status === 'reconnecting' && resolve(p)),
+            ),
+        ),
+      );
+      app.get(PriceBus).emit('status', { status: 'reconnecting', at: Date.now() });
+      expect((await both).map((x) => x.status)).toEqual(['reconnecting', 'reconnecting']);
+    });
   });
 });
