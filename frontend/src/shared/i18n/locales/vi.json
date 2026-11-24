@@ -154,7 +154,11 @@
       "volume": "Khối lượng 24h"
     },
     "empty": "Không tìm thấy cặp giao dịch nào.",
-    "retry": "Thử lại"
+    "retry": "Thử lại",
+    "status": {
+      "connected": "Dữ liệu thị trường trực tiếp",
+      "reconnecting": "Dữ liệu thị trường bị trễ"
+    }
   },
   "chart": {
     "timeframes": "Khung thời gian",
@@ -169,5 +173,8 @@
       "description": "Cặp bạn mở không tồn tại hoặc không được hỗ trợ.",
       "link": "Mở BTC/USDT"
     }
+  },
+  "connection": {
+    "reconnecting": "Mất kết nối, đang kết nối lại…"
   }
 }

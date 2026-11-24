@@ -5,6 +5,7 @@ import type { Locale } from '../../shared/i18n';
 import { useTheme } from '../../shared/theme/ThemeProvider';
 import { usePreferenceActions } from '../usePreferenceActions';
 import { UserMenu } from './UserMenu';
+import { MarketStatusBadge } from './MarketStatusBadge';
 
 const LOCALES: Locale[] = ['vi', 'en'];
 
@@ -20,6 +21,7 @@ export function Header() {
         {t('app.name')}
       </Link>
       <div className="flex-1" />
+      <MarketStatusBadge />
       <div data-testid="lang-switcher" role="group" aria-label={t('language.label')} className="flex gap-1">
         {LOCALES.map((l) => (
           <button
