@@ -4,6 +4,7 @@ import type { Env } from '../../config/env';
 import { PriceBus } from './price-bus';
 import { SymbolRegistry } from './symbol-registry';
 import { TickerStore } from './ticker-store';
+import { CandleCacheService } from './candle-cache.service';
 import { MarketController } from './market.controller';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from './providers/market-data-provider.interface';
 import { BinanceProvider } from './providers/binance/binance.provider';
@@ -16,6 +17,7 @@ import { MockProvider } from './providers/mock/mock.provider';
     PriceBus,
     SymbolRegistry,
     TickerStore,
+    CandleCacheService,
     {
       provide: MARKET_DATA_PROVIDER,
       inject: [ConfigService, PriceBus],

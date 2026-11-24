@@ -3,7 +3,8 @@ import { parseExchangeInfo, parseTickers } from '../binance/binance-rest';
 import type { MarketDataProvider, ProviderStatus } from '../market-data-provider.interface';
 import type { Candle, Interval, SymbolInfo, Ticker } from '../../market.types';
 import type { PriceBus } from '../../price-bus';
-import { fixtureCandles, generateCandles, INTERVAL_MS, loadBtcFixture, MOCK_SYMBOLS } from './mock-data';
+import { INTERVAL_MS } from '../../intervals';
+import { fixtureCandles, generateCandles, loadBtcFixture, MOCK_SYMBOLS } from './mock-data';
 
 const HEARTBEAT_MS = 10_000;
 

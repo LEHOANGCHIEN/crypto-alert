@@ -1,15 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { INTERVAL_MS } from '../../intervals';
 import type { Candle, Interval } from '../../market.types';
-
-export const INTERVAL_MS: Record<Interval, number> = {
-  '1m': 60_000,
-  '5m': 300_000,
-  '15m': 900_000,
-  '1h': 3_600_000,
-  '4h': 14_400_000,
-  '1d': 86_400_000,
-};
 
 /** ARCHITECTURE §8 symbols. ETHBTC and BTCUSDC are NOT USDT pairs and must be filtered out by the app. */
 type MockSymbol = { symbol: string; base: string; quote: string; tick: string; last: number; open24h: number; quoteVolume: number };
