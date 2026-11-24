@@ -66,3 +66,5 @@ export type Candle = {
   quoteVolume: number;
   isClosed: boolean;
 };
+
+export type MarketStatus = 'connected' | 'reconnecting';

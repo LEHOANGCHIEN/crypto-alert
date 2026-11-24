@@ -10,6 +10,7 @@ import {
   type UTCTimestamp,
 } from 'lightweight-charts';
 import type { Candle } from '../../shared/api/types';
+import { liveChangedIndices } from '../../shared/market/live';
 import { useFormat } from '../../shared/format/useFormat';
 import { useTheme } from '../../shared/theme/ThemeProvider';
 import { candleThemeOptions, chartThemeOptions, publishChartColors, readChartColors } from './chart-theme';
@@ -20,17 +21,28 @@ type Props = {
   tickSize: number;
   /** open time (epoch ms) of the candle under the crosshair, null when the pointer leaves the chart */
   onHover: (openTime: number | null) => void;
+  /** `SYMBOL:interval` while live updates are subscribed (test hook `data-live`), '' otherwise */
+  liveKey: string;
 };
+
+const toBar = (k: Candle): CandlestickData<UTCTimestamp> => ({
+  time: Math.floor(k.openTime / 1000) as UTCTimestamp,
+  open: k.open,
+  high: k.high,
+  low: k.low,
+  close: k.close,
+});
 
 const VISIBLE_BARS = 120;
 
 /** Lightweight Charts v5 candlestick chart. Times are UTC seconds; display timezone is applied by the formatters. */
-export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
+export function CandleChart({ candles, precision, tickSize, onHover, liveKey }: Props) {
   const fmt = useFormat();
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
+  const shownRef = useRef<Candle[]>([]);
   const hoverRef = useRef(onHover);
   useEffect(() => {
     hoverRef.current = onHover;
@@ -54,10 +66,12 @@ export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
     });
     chartRef.current = chart;
     seriesRef.current = series;
+    shownRef.current = []; // a new chart has no data yet: the data effect must call setData
     return () => {
       chart.remove();
       chartRef.current = null;
       seriesRef.current = null;
+      shownRef.current = [];
     };
   }, []);
 
@@ -88,24 +102,28 @@ export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
     });
   }, [precision, tickSize, fmt]);
 
-  // Data: setData on load (live updates arrive in Phase 3).
+  // Data: setData on load / reload; series.update() for live steps (open candle moved or a new candle opened).
   useEffect(() => {
     const chart = chartRef.current;
     const series = seriesRef.current;
     const el = containerRef.current;
     if (!chart || !series || !el) return;
-    const data: CandlestickData<UTCTimestamp>[] = candles.map((k) => ({
-      time: Math.floor(k.openTime / 1000) as UTCTimestamp,
-      open: k.open,
-      high: k.high,
-      low: k.low,
-      close: k.close,
-    }));
-    series.setData(data);
-    if (data.length > 0) chart.timeScale().setVisibleLogicalRange({ from: data.length - VISIBLE_BARS, to: data.length + 3 });
+    const changed = liveChangedIndices(shownRef.current, candles);
+    if (changed) {
+      const last = candles.length - 1;
+      for (const i of changed) series.update(toBar(candles[i]), i < last);
+    } else {
+      series.setData(candles.map(toBar));
+      if (candles.length > 0) chart.timeScale().setVisibleLogicalRange({ from: candles.length - VISIBLE_BARS, to: candles.length + 3 });
+    }
+    shownRef.current = candles;
+    const lastCandle = candles[candles.length - 1];
+    const prev = candles[candles.length - 2];
     el.dataset.candleCount = String(candles.length);
-    el.dataset.lastOpenTime = String(candles.length ? candles[candles.length - 1].openTime : '');
+    el.dataset.lastOpenTime = String(lastCandle ? lastCandle.openTime : '');
+    el.dataset.lastClose = String(lastCandle ? lastCandle.close : '');
+    el.dataset.prevCandle = prev ? [prev.open, prev.high, prev.low, prev.close].join(',') : '';
   }, [candles]);
 
-  return <div ref={containerRef} data-testid="chart-root" data-candle-count="0" className="absolute inset-0" />;
+  return <div ref={containerRef} data-testid="chart-root" data-candle-count="0" data-live={liveKey} className="absolute inset-0" />;
 }

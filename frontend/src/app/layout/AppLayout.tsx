@@ -3,6 +3,8 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { Toaster } from '../../shared/ui/toast';
 import { PreferencesSync } from '../PreferencesSync';
+import { RealtimeConnection } from '../RealtimeConnection';
+import { ConnBanner } from './ConnBanner';
 
 export function AppLayout() {
   // The dashboard uses the full area; other pages are padded and scrollable.
@@ -10,12 +12,14 @@ export function AppLayout() {
   return (
     <div className="flex h-full flex-col bg-bg text-text">
       <Header />
+      <ConnBanner />
       <main className={`min-h-0 flex-1 ${isDashboard ? 'overflow-hidden' : 'overflow-auto p-4'}`}>
         <Outlet />
       </main>
       <Footer />
       <Toaster />
       <PreferencesSync />
+      <RealtimeConnection />
     </div>
   );
 }

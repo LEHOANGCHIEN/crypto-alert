@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 38 · failing 0 · pending 38 · last CI run: green on phase-2-market-chart (2026-11-24)
+**Summary:** 76 ACs · passing 45 · failing 0 · pending 31 · last CI run: green on phase-3-realtime (2026-11-25)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -46,13 +46,13 @@
 | AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
 | AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | Header bell is built in Phase 6 (AC-NOTIF-01); checked here: logo, language, theme, login/register, footer |
 | AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
-| AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | pending | |
-| AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | pending | |
-| AC-RT-02 | 3 | realtime.spec.ts | AC-RT-02 closed candle starts a new one | pending | |
-| AC-RT-03 | 3 | realtime.spec.ts | AC-RT-03 subscriptions follow the viewed chart | pending | |
-| AC-RT-04 | 3 | realtime.spec.ts | AC-RT-04 shared upstream subscription ref-count | pending | |
-| AC-RT-05 | 3 | realtime.spec.ts | AC-RT-05 browser reconnect banner and resync | pending | |
-| AC-RT-06 | 3 | realtime.spec.ts | AC-RT-06 upstream disconnect badge and recovery | pending | |
+| AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | passing | |
+| AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | passing | Unit: backoff, send queue, upstream reconnect (fake WS), SubscriptionManager + caps, ticker batcher; integration: realtime.int-spec.ts |
+| AC-RT-02 | 3 | realtime.spec.ts | AC-RT-02 closed candle starts a new one | passing | |
+| AC-RT-03 | 3 | realtime.spec.ts | AC-RT-03 subscriptions follow the viewed chart | passing | |
+| AC-RT-04 | 3 | realtime.spec.ts | AC-RT-04 shared upstream subscription ref-count | passing | Samples stats for 7 s after closing one tab (past the 5 s grace) |
+| AC-RT-05 | 3 | realtime.spec.ts | AC-RT-05 browser reconnect banner and resync | passing | |
+| AC-RT-06 | 3 | realtime.spec.ts | AC-RT-06 upstream disconnect badge and recovery | passing | |
 | AC-IND-01 | 4 | indicators.spec.ts | AC-IND-01 default MA lines | pending | |
 | AC-IND-02 | 4 | indicators.spec.ts | AC-IND-02 toggle and change MA period persists | pending | |
 | AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | pending | |

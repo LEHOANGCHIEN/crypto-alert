@@ -1,10 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { isWindowComplete, mergeCandles, windowBounds } from './candle-window';
 import { INTERVAL_MS } from './intervals';
 import type { Candle, Interval } from './market.types';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from './providers/market-data-provider.interface';
+import { PriceBus } from './price-bus';
 import { SymbolRegistry } from './symbol-registry';
 
 /**
@@ -13,12 +14,29 @@ import { SymbolRegistry } from './symbol-registry';
  * fetched and its closed candles are stored. The open candle is never stored.
  */
 @Injectable()
-export class CandleCacheService {
+export class CandleCacheService implements OnModuleInit, OnApplicationShutdown {
+  private readonly logger = new Logger('CandleCache');
+  private offBus: (() => void) | null = null;
+
   constructor(
     private readonly prisma: PrismaService,
     @Inject(MARKET_DATA_PROVIDER) private readonly provider: MarketDataProvider,
     private readonly registry: SymbolRegistry,
+    private readonly bus: PriceBus,
   ) {}
+
+  /** Live closed candles (upstream `kline` with isClosed) are upserted into the cache (ARCHITECTURE §3.2 step 4). */
+  onModuleInit(): void {
+    this.offBus = this.bus.on('kline', ({ symbol, interval, candle }) => {
+      if (!candle.isClosed) return;
+      this.storeClosed(symbol, interval, [candle]).catch((e: unknown) => this.logger.warn(`closed candle upsert failed: ${(e as Error).message}`));
+    });
+  }
+
+  onApplicationShutdown(): void {
+    this.offBus?.();
+    this.offBus = null;
+  }
 
   async getKlines(symbol: string, interval: Interval, limit: number, now = Date.now()): Promise<Candle[]> {
     await this.registry.require(symbol);

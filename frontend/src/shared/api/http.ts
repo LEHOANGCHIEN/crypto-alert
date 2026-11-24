@@ -16,10 +16,18 @@ export class ApiError extends Error {
 let accessToken: string | null = null;
 let authFailureHandler: (() => void) | null = null;
 let refreshing: Promise<RefreshResult | null> | null = null;
+const tokenListeners = new Set<(token: string | null) => void>();
 
-/** The access token lives in memory only (ADR-11). */
+/** The access token lives in memory only (ADR-11). Listeners (the socket client) hear every change. */
 export const setAccessToken = (t: string | null): void => {
+  if (t === accessToken) return;
   accessToken = t;
+  for (const fn of tokenListeners) fn(t);
+};
+/** Subscribe to access-token changes (login, logout, refresh). Returns the unsubscribe function. */
+export const onAccessTokenChange = (fn: (token: string | null) => void): (() => void) => {
+  tokenListeners.add(fn);
+  return () => tokenListeners.delete(fn);
 };
 export const getAccessToken = (): string | null => accessToken;
 /** Called when the session cannot be refreshed any more (user must log in again). */
@@ -58,12 +66,12 @@ export function refreshSession(): Promise<RefreshResult | null> {
   refreshing ??= send('POST', '/auth/refresh', undefined, false)
     .then((d) => {
       const r = d as RefreshResult;
-      accessToken = r.accessToken;
+      setAccessToken(r.accessToken);
       return r;
     })
     .catch((e: unknown) => {
       if (e instanceof ApiError && e.code === 'REFRESH_TOKEN_INVALID') {
-        accessToken = null;
+        setAccessToken(null);
         return null;
       }
       throw e; // network trouble is not a logout

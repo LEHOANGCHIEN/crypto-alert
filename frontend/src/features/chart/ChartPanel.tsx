@@ -5,6 +5,8 @@ import { priceDirection } from '../../shared/format';
 import { useFormat } from '../../shared/format/useFormat';
 import { errorText } from '../../shared/i18n/errorText';
 import { useKlines, useSymbols, useTickers } from '../../shared/market/queries';
+import { useLiveKlines } from '../../shared/market/useLiveMarket';
+import { useConnection } from '../../shared/socket/connection.store';
 import { CandleChart } from './CandleChart';
 import { ChartLegend } from './ChartLegend';
 import { parseInterval, TimeframeBar } from './TimeframeBar';
@@ -25,6 +27,8 @@ export function ChartPanel() {
   const info = symbols.data?.find((s) => s.symbol === symbol);
   const unknown = symbols.isSuccess && !info;
   const klines = useKlines(symbol, interval, Boolean(info));
+  useLiveKlines(symbol, interval, Boolean(info));
+  const live = useConnection((st) => st.klineLive === `${symbol}:${interval}`);
   const ticker = tickers.data?.find((x) => x.symbol === symbol);
 
   const candles = klines.data;
@@ -75,7 +79,13 @@ export function ChartPanel() {
       </div>
       <div className="relative min-h-0 flex-1">
         {info && candles && (
-          <CandleChart candles={candles} precision={info.pricePrecision} tickSize={info.tickSize} onHover={setHoveredTime} />
+          <CandleChart
+            candles={candles}
+            precision={info.pricePrecision}
+            tickSize={info.tickSize}
+            onHover={setHoveredTime}
+            liveKey={live ? `${symbol}:${interval}` : ''}
+          />
         )}
         {info && candles && <ChartLegend candle={shown} hovered={hoveredTime !== null} precision={info.pricePrecision} />}
         {fail ? (

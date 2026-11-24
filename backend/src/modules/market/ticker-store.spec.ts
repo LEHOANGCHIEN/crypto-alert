@@ -1,4 +1,5 @@
 import { TickerStore } from './ticker-store';
+import { PriceBus } from './price-bus';
 import type { MarketDataProvider } from './providers/market-data-provider.interface';
 import type { SymbolRegistry } from './symbol-registry';
 import type { Ticker } from './market.types';
@@ -7,9 +8,9 @@ const t = (symbol: string, quoteVolume: number): Ticker => ({
   symbol, lastPrice: 1, openPrice: 1, highPrice: 1, lowPrice: 1, priceChangePercent: 0, volume: 1, quoteVolume, eventTime: 1,
 });
 
-function store(get24hTickers: () => Promise<Ticker[]>) {
+function store(get24hTickers: () => Promise<Ticker[]>, bus = new PriceBus()) {
   const registry = { list: async () => [{ symbol: 'AAAUSDT' }, { symbol: 'BBBUSDT' }] } as unknown as SymbolRegistry;
-  return new TickerStore({ get24hTickers } as unknown as MarketDataProvider, registry);
+  return new TickerStore({ get24hTickers } as unknown as MarketDataProvider, registry, bus);
 }
 
 describe('TickerStore', () => {
@@ -37,5 +38,18 @@ describe('TickerStore', () => {
     fail = true;
     await expect(s.refresh()).rejects.toThrow('down');
     expect(await s.list()).toHaveLength(1);
+  });
+
+  it('applies live PriceBus tickers for known symbols only', async () => {
+    const bus = new PriceBus();
+    const s = store(async () => [t('AAAUSDT', 5)], bus);
+    s.onModuleInit();
+    await s.list();
+    bus.emit('ticker', { ...t('AAAUSDT', 77), lastPrice: 2 });
+    bus.emit('ticker', t('ZZZUSDT', 999));
+    expect((await s.get('AAAUSDT'))?.lastPrice).toBe(2);
+    expect((await s.get('AAAUSDT'))?.quoteVolume).toBe(77);
+    expect(await s.get('ZZZUSDT')).toBeUndefined();
+    s.onApplicationShutdown();
   });
 });
