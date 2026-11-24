@@ -69,6 +69,8 @@ test('AC-THEME-02 toggle applies to page and chart', async ({ page }) => {
   expect(hexToRgb((await root.getAttribute('data-chart-background'))!)).toBe('rgb(22, 26, 32)');
   expect(await root.getAttribute('data-chart-grid')).toBe(await token('--color-chart-grid'));
   await expect.poll(() => paneBackgroundPixel(page)).toBe('rgb(22, 26, 32)');
+  expect(await root.getAttribute('data-chart-text')).toBe(await token('--color-text-muted'));
+  const darkText = await root.getAttribute('data-chart-text');
   const darkUp = await root.getAttribute('data-chart-up');
   const darkDown = await root.getAttribute('data-chart-down');
 
@@ -82,6 +84,9 @@ test('AC-THEME-02 toggle applies to page and chart', async ({ page }) => {
   // The values the chart uses are exactly the page tokens.
   expect(await root.getAttribute('data-chart-background')).toBe(await token('--color-surface'));
   expect(await root.getAttribute('data-chart-grid')).toBe(await token('--color-chart-grid'));
+
+  await expect.poll(async () => root.getAttribute('data-chart-text')).toBe(await token('--color-text-muted'));
+  expect(await root.getAttribute('data-chart-text')).not.toBe(darkText);
 
   // Up/down stay the green/red tokens (hue check: green channel dominates up, red channel dominates down).
   const lightUp = (await root.getAttribute('data-chart-up'))!;
@@ -101,4 +106,5 @@ test('AC-THEME-02 toggle applies to page and chart', async ({ page }) => {
   await page.getByTestId('theme-toggle').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect.poll(() => paneBackgroundPixel(page)).toBe('rgb(22, 26, 32)');
+  await expect.poll(async () => root.getAttribute('data-chart-text')).toBe(darkText);
 });

@@ -41,6 +41,7 @@ export function candleThemeOptions(c: ChartColors) {
 /** Exposes the applied colors for end-to-end tests (the chart itself is a canvas). */
 export function publishChartColors(el: HTMLElement, c: ChartColors): void {
   el.dataset.chartBackground = c.background;
+  el.dataset.chartText = c.text;
   el.dataset.chartGrid = c.grid;
   el.dataset.chartUp = c.up;
   el.dataset.chartDown = c.down;
