@@ -13,7 +13,7 @@
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | done |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | done |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
-| 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | not started |
+| 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | built, awaiting review |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | not started |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
 | — | Buffer for slips | — | — | Dec 8–10 | — |
@@ -158,14 +158,15 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=5)
 **ACs:** AC-WL-01…07
 
-- [ ] `GET /watchlist`, `PUT|DELETE /watchlist/:symbol` per API.md §3.4 (idempotent, limit 50, symbol check)
-- [ ] Integration tests (limit, idempotency, isolation between users)
-- [ ] Star buttons (market row + chart header), Watchlist panel with live prices, remove, click → chart
-- [ ] Guest prompt; optimistic updates with rollback on error
-- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [x] `GET /watchlist`, `PUT|DELETE /watchlist/:symbol` per API.md §3.4 (idempotent, limit 50, symbol check)
+- [x] Integration tests (limit, idempotency, isolation between users)
+- [x] Star buttons (market row + chart header), Watchlist panel with live prices, remove, click → chart
+- [x] Guest prompt; optimistic updates with rollback on error
+- [x] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-5-review.decision.md; paste into the builder: Read reviews/phase-5-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-25 · Sonnet 5.5 + Medium · Phase 5 built: `GET /watchlist`, `PUT|DELETE /watchlist/:symbol` (idempotent, limit 50, symbol check via SymbolRegistry), 7 integration tests, FE star buttons (market row `star-<SYMBOL>`, chart header `chart-star-<SYMBOL>` so ids stay unique), live Watchlist panel (price + change % from the tickers cache), optimistic add/remove with rollback + translated toast, guest login prompt, cache cleared on user change; 7 Playwright ACs (AC-WL-01…07). AC-WL-07 limit case inserts filler rows into the test DB (`e2e/helpers/watchlist.ts`, devDependency `@prisma/client` in e2e) because the mock has only 8 pairs. No doc contract changes (SPEC/API/DATABASE/ARCHITECTURE untouched) · last code commit cd95b35 · CI CISTATUS
 
 ---
 
