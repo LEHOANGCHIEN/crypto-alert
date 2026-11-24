@@ -106,6 +106,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Log:**
 - 2026-11-24 · Sonnet 5.5 + Medium · Phase 2 complete: SymbolRegistry + Binance REST client, TickerStore, CandleCacheService (DB window cache, 2-candle fast path) with GET /market/symbols|tickers|klines, full MockProvider (8 USDT + 2 filtered pairs, BTCUSDT-1h fixture of 1000 real candles via scripts/fetch-btc-fixture.mjs, seeded PRNG, REST counters, GET /test/market/stats), dashboard (3 columns / mobile tab bar), virtualised market list with search, Lightweight Charts v5 candlestick chart (attribution on, timeframe bar synced with ?tf=, legend, pair-not-found), locale/timezone-aware formatting, chart theme re-applied from tokens; 16 Phase-2 AC Playwright tests + backend unit/integration tests; checked live against Binance locally (symbols, tickers, klines 1000, health ok). Existing tests scoped to the header Login link (the side panel now also has one). No doc contract changes (API.md/DATABASE.md/ARCHITECTURE.md/SPEC.md untouched). Deps: lightweight-charts 5.3, @tanstack/react-virtual · last code commit 8f7b41e · CI green (run 45402260421)
 - 2026-11-24 · Sonnet 5.5 + Medium · Phase 2 review fixes: 0.1 row select always navigates to ?tf=<current tf> (AC-MKT-05 test extended), 0.2 chart-root data-timezone asserted in AC-CHART-06 and AC-PROF-05, 0.3 data-chart-text asserted in AC-THEME-02, 0.4 klines throttle added to Phase 7 checklist. No doc contract changes.
+- 2026-11-24 · MERGED into main · merge 9fdc879 · tag v0.2 · CI green · deployed
 
 ---
 
@@ -198,4 +199,3 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-7-review.decision.md; paste into the builder: Read reviews/phase-7-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
-- 2026-11-24 · MERGED into main · merge 9fdc879 · tag v0.2 · CI green · deployed
