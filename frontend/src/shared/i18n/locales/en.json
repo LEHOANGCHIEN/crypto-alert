@@ -176,5 +176,24 @@
   },
   "connection": {
     "reconnecting": "Reconnecting…"
+  },
+  "indicators": {
+    "button": "Indicators",
+    "title": "Technical indicators",
+    "close": "Close",
+    "maSlot": "MA #{{n}}",
+    "show": "Show MA #{{n}}",
+    "period": "MA #{{n}} period",
+    "rsi": "RSI ({{period}})",
+    "macd": "MACD ({{fast}}, {{slow}}, {{signal}})",
+    "periodError": "Period must be a whole number from {{min}} to {{max}}.",
+    "legend": {
+      "ma": "MA({{period}})",
+      "rsi": "RSI({{period}})",
+      "macd": "MACD({{fast}}, {{slow}}, {{signal}})",
+      "line": "MACD",
+      "signal": "Signal",
+      "hist": "Hist"
+    }
   }
 }

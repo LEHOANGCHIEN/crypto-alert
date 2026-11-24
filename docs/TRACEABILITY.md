@@ -53,7 +53,7 @@
 | AC-RT-04 | 3 | realtime.spec.ts | AC-RT-04 shared upstream subscription ref-count | passing | Samples stats for 7 s after closing one tab (past the 5 s grace) |
 | AC-RT-05 | 3 | realtime.spec.ts | AC-RT-05 browser reconnect banner and resync | passing | |
 | AC-RT-06 | 3 | realtime.spec.ts | AC-RT-06 upstream disconnect badge and recovery | passing | |
-| AC-IND-01 | 4 | indicators.spec.ts | AC-IND-01 default MA lines | pending | |
+| AC-IND-01 | 4 | indicators.spec.ts | AC-IND-01 default MA lines | pending | Test added (green locally); unit: lib.test.ts, oracle.test.ts vs technicalindicators |
 | AC-IND-02 | 4 | indicators.spec.ts | AC-IND-02 toggle and change MA period persists | pending | |
 | AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | pending | |
 | AC-IND-04 | 4 | indicators.spec.ts | AC-IND-04 RSI pane | pending | |

@@ -7,6 +7,10 @@ export type ChartColors = {
   border: string;
   up: string;
   down: string;
+  ma: string[];
+  rsi: string;
+  macd: string;
+  signal: string;
 };
 
 const cssVar = (name: string): string => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -20,6 +24,10 @@ export function readChartColors(): ChartColors {
     border: cssVar('--color-border'),
     up: cssVar('--color-up'),
     down: cssVar('--color-down'),
+    ma: [cssVar('--color-ind-1'), cssVar('--color-ind-2'), cssVar('--color-ind-3')],
+    rsi: cssVar('--color-ind-rsi'),
+    macd: cssVar('--color-ind-macd'),
+    signal: cssVar('--color-ind-signal'),
   };
 }
 

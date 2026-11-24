@@ -7,6 +7,7 @@ import { errorText } from '../../shared/i18n/errorText';
 import { useKlines, useSymbols, useTickers } from '../../shared/market/queries';
 import { useLiveKlines } from '../../shared/market/useLiveMarket';
 import { useConnection } from '../../shared/socket/connection.store';
+import { useIndicatorData, useIndicatorSettings } from '../indicators';
 import { CandleChart } from './CandleChart';
 import { ChartLegend } from './ChartLegend';
 import { parseInterval, TimeframeBar } from './TimeframeBar';
@@ -32,10 +33,15 @@ export function ChartPanel() {
   const ticker = tickers.data?.find((x) => x.symbol === symbol);
 
   const candles = klines.data;
-  const shown = useMemo(() => {
-    if (!candles?.length) return undefined;
-    return (hoveredTime !== null ? candles.find((c) => c.openTime === hoveredTime) : undefined) ?? candles[candles.length - 1];
+  const indicatorSettings = useIndicatorSettings((s) => s.settings);
+  const maPeriods = useMemo(() => indicatorSettings.ma.map((m) => m.period), [indicatorSettings]);
+  const indicators = useIndicatorData(candles, maPeriods);
+  const shownIndex = useMemo(() => {
+    if (!candles?.length) return -1;
+    const i = hoveredTime !== null ? candles.findIndex((c) => c.openTime === hoveredTime) : -1;
+    return i >= 0 ? i : candles.length - 1;
   }, [candles, hoveredTime]);
+  const shown = candles?.[shownIndex];
 
   if (unknown || (klines.error as { code?: string } | null)?.code === 'SYMBOL_NOT_FOUND') {
     return (
@@ -85,9 +91,20 @@ export function ChartPanel() {
             tickSize={info.tickSize}
             onHover={setHoveredTime}
             liveKey={live ? `${symbol}:${interval}` : ''}
+            indicators={indicators}
+            settings={indicatorSettings}
           />
         )}
-        {info && candles && <ChartLegend candle={shown} hovered={hoveredTime !== null} precision={info.pricePrecision} />}
+        {info && candles && (
+          <ChartLegend
+            candle={shown}
+            index={shownIndex}
+            hovered={hoveredTime !== null}
+            precision={info.pricePrecision}
+            indicators={indicators}
+            settings={indicatorSettings}
+          />
+        )}
         {fail ? (
           <div data-testid="chart-error" className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-text-muted">
             <p>{errorText(t, fail)}</p>
