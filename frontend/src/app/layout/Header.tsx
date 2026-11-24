@@ -16,7 +16,7 @@ export function Header() {
 
   return (
     <header className="flex h-header shrink-0 items-center gap-4 border-b border-border bg-surface px-4">
-      <Link to="/" className="text-section font-semibold text-text">
+      <Link to="/" data-testid="logo" className="text-section font-semibold text-text">
         {t('app.name')}
       </Link>
       <div className="flex-1" />

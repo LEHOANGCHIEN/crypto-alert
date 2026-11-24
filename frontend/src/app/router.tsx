@@ -5,13 +5,13 @@ import { AccountPage } from '../features/account/AccountPage';
 import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
 import { GuestOnly, RequireAuth } from '../features/auth/RequireAuth';
-import { PlaceholderPage } from './pages/PlaceholderPage';
+import { TradePage } from './pages/TradePage';
 
 /** `/trade/btcusdt` → `/trade/BTCUSDT` (SPEC §4) */
 function TradeRoute() {
   const { symbol = '' } = useParams();
   if (symbol !== symbol.toUpperCase()) return <Navigate to={`/trade/${symbol.toUpperCase()}${location.search}`} replace />;
-  return <PlaceholderPage page="trade" />;
+  return <TradePage />;
 }
 
 export const router = createBrowserRouter([

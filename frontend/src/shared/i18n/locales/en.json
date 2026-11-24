@@ -121,5 +121,53 @@
       "localeVi": "Vietnamese",
       "localeEn": "English"
     }
+  },
+  "dashboard": {
+    "tabs": {
+      "label": "Dashboard navigation",
+      "markets": "Markets",
+      "chart": "Chart",
+      "watchlist": "Watchlist",
+      "alerts": "Alerts"
+    },
+    "side": {
+      "label": "Right panel",
+      "loginRequired": "Log in to use this.",
+      "login": "Log in",
+      "comingSoon": "This feature arrives in later phases."
+    },
+    "panels": {
+      "markets": "Market list",
+      "chart": "Price chart"
+    }
+  },
+  "market": {
+    "list": "Trading pairs list",
+    "search": {
+      "label": "Search trading pairs",
+      "placeholder": "Search pairs, e.g. ETH"
+    },
+    "columns": {
+      "pair": "Pair",
+      "price": "Last price",
+      "change": "24h change",
+      "volume": "24h volume"
+    },
+    "empty": "No trading pairs found.",
+    "retry": "Retry"
+  },
+  "chart": {
+    "timeframes": "Timeframe",
+    "legend": {
+      "open": "O",
+      "high": "H",
+      "low": "L",
+      "close": "C"
+    },
+    "notFound": {
+      "title": "Pair not found",
+      "description": "The pair you opened does not exist or is not supported.",
+      "link": "Open BTC/USDT"
+    }
   }
 }

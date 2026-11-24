@@ -35,3 +35,67 @@ test('AC-UI-04 unknown route shows 404', async ({ page }) => {
   await page.getByRole('link', { name: 'Về trang chủ' }).click();
   await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
 });
+
+test.describe('dashboard layout', () => {
+  test('AC-UI-01 desktop three-column layout', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/trade/BTCUSDT');
+
+    const market = page.getByTestId('panel-market');
+    const chart = page.getByTestId('panel-chart');
+    const side = page.getByTestId('panel-side');
+    await expect(market).toBeVisible();
+    await expect(chart).toBeVisible();
+    await expect(side).toBeVisible();
+
+    const m = (await market.boundingBox())!;
+    const c = (await chart.boundingBox())!;
+    const s = (await side.boundingBox())!;
+    // Left → center → right, same row, widths 320 / flex / 340 (ARCHITECTURE §11.1).
+    expect(m.x).toBeLessThan(c.x);
+    expect(c.x).toBeLessThan(s.x);
+    expect(Math.abs(m.y - c.y)).toBeLessThan(2);
+    expect(Math.abs(c.y - s.y)).toBeLessThan(2);
+    expect(Math.round(m.width)).toBe(320);
+    expect(Math.round(s.width)).toBe(340);
+    expect(c.width).toBeGreaterThan(m.width);
+
+    // Right panel has Watchlist / Alerts tabs; no mobile tab bar on desktop.
+    await expect(page.getByTestId('side-tab-watchlist')).toBeVisible();
+    await expect(page.getByTestId('side-tab-alerts')).toBeVisible();
+    await expect(page.getByTestId('mobile-tabs')).toBeHidden();
+
+    // Header: logo, language switcher, theme toggle, login/register for a guest; footer visible.
+    await expect(page.getByTestId('logo')).toBeVisible();
+    await expect(page.getByTestId('lang-switcher')).toBeVisible();
+    await expect(page.getByTestId('theme-toggle')).toBeVisible();
+    await expect(page.locator('header').getByRole('link', { name: 'Đăng nhập' })).toBeVisible();
+    await expect(page.locator('header').getByRole('link', { name: 'Đăng ký' })).toBeVisible();
+    await expect(page.getByTestId('footer-title')).toBeVisible();
+  });
+
+  test('AC-UI-02 mobile bottom tabs', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/trade/BTCUSDT');
+
+    const tabs = page.getByTestId('mobile-tabs');
+    await expect(tabs).toBeVisible();
+    await expect(tabs.getByRole('button')).toHaveText(['Thị trường', 'Biểu đồ', 'Theo dõi', 'Cảnh báo']);
+
+    const panels = { markets: 'panel-market', chart: 'panel-chart', watchlist: 'panel-side', alerts: 'panel-side' } as const;
+    for (const tab of ['markets', 'chart', 'watchlist', 'alerts'] as const) {
+      await page.getByTestId(`tab-${tab}`).click();
+      for (const id of new Set(Object.values(panels))) {
+        if (id === panels[tab]) await expect(page.getByTestId(id)).toBeVisible();
+        else await expect(page.getByTestId(id)).toBeHidden();
+      }
+      if (tab === 'watchlist') await expect(page.getByTestId('side-content-watchlist')).toBeVisible();
+      if (tab === 'alerts') await expect(page.getByTestId('side-content-alerts')).toBeVisible();
+      // No horizontal page scroll in any tab.
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
+    // Desktop side tabs are not shown on mobile.
+    await expect(page.getByTestId('side-tab-watchlist')).toBeHidden();
+  });
+});

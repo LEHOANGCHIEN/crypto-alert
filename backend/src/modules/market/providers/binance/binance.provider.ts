@@ -1,9 +1,9 @@
 import { Logger } from '@nestjs/common';
 import WebSocket from 'ws';
-import { AppError } from '../../../../common/app-error';
 import type { MarketDataProvider, ProviderStatus } from '../market-data-provider.interface';
 import type { Candle, Interval, SymbolInfo, Ticker } from '../../market.types';
 import type { PriceBus } from '../../price-bus';
+import { BinanceRestClient } from './binance-rest';
 
 const MIN_BACKOFF_MS = 1_000;
 const MAX_BACKOFF_MS = 30_000;
@@ -20,12 +20,16 @@ export class BinanceProvider implements MarketDataProvider {
   private lastMessageAt: number | null = null;
   private backoff = MIN_BACKOFF_MS;
   private reconnectTimer: NodeJS.Timeout | null = null;
+  private readonly rest: BinanceRestClient;
+  private symbolSet: Set<string> | null = null;
 
   constructor(
     private readonly bus: PriceBus,
     private readonly restBaseUrl: string,
     private readonly wsBaseUrl: string,
-  ) {}
+  ) {
+    this.rest = new BinanceRestClient(restBaseUrl);
+  }
 
   async start(): Promise<void> {
     this.stopped = false;
@@ -80,14 +84,17 @@ export class BinanceProvider implements MarketDataProvider {
     });
   }
 
-  listSymbols(): Promise<SymbolInfo[]> {
-    throw new AppError('MARKET_DATA_UNAVAILABLE');
+  async listSymbols(): Promise<SymbolInfo[]> {
+    const symbols = await this.rest.listSymbols();
+    this.symbolSet = new Set(symbols.map((s) => s.symbol));
+    return symbols;
   }
-  get24hTickers(): Promise<Ticker[]> {
-    throw new AppError('MARKET_DATA_UNAVAILABLE');
+  async get24hTickers(): Promise<Ticker[]> {
+    if (!this.symbolSet) await this.listSymbols();
+    return this.rest.get24hTickers(this.symbolSet as Set<string>);
   }
-  getKlines(_s: string, _i: Interval, _o: { limit: number; endTime?: number }): Promise<Candle[]> {
-    throw new AppError('MARKET_DATA_UNAVAILABLE');
+  getKlines(symbol: string, interval: Interval, opts: { limit: number; endTime?: number }): Promise<Candle[]> {
+    return this.rest.getKlines(symbol, interval, opts);
   }
   subscribeKlines(): void {}
   unsubscribeKlines(): void {}

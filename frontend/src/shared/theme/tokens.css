@@ -39,6 +39,10 @@
   --radius-card: 8px;
 
   --spacing-header: 56px;
+  --spacing-tabbar: 56px;
+  --spacing-row: 32px;
+  --spacing-panel-left: 320px;
+  --spacing-panel-right: 340px;
 }
 
 :root[data-theme='light'] {

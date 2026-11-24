@@ -1,0 +1,13 @@
+import { ChartPanel } from '../../features/chart/ChartPanel';
+import { MarketList } from '../../features/market/MarketList';
+import { DashboardLayout } from '../dashboard/DashboardLayout';
+
+/** `/trade/:symbol` — market list (left), chart (center), watchlist/alerts (right). */
+export function TradePage() {
+  return (
+    <DashboardLayout
+      market={(select) => <MarketList onSelect={select} />}
+      chart={<ChartPanel />}
+    />
+  );
+}

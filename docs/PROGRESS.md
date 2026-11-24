@@ -10,7 +10,7 @@
 |---|---|---|---|---|---|
 | 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | done |
 | 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | done |
-| 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
+| 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | built — awaiting review |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | not started |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | not started |
@@ -91,19 +91,21 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=2)
 **ACs:** AC-MKT-01, 02, 04, 05, 06 · AC-CHART-01…06 · AC-PROF-05 · AC-I18N-04 · AC-THEME-02 · AC-UI-01, AC-UI-02
 
-- [ ] `SymbolRegistry` (exchangeInfo, USDT + TRADING + spot, tickSize → pricePrecision, 6 h refresh)
-- [ ] `TickerStore` snapshot via REST (startup + every 5 min); `GET /market/symbols`, `GET /market/tickers`
-- [ ] `CandleCacheService` per ARCHITECTURE §3.2; `GET /market/klines`; unit tests for window/gap logic
-- [ ] `MockProvider` full data: symbols of ARCHITECTURE §8, BTCUSDT-1h fixture (1000 real candles fetched once by a script from data-api.binance.vision and committed), seeded PRNG for others; `GET /test/market/stats` (REST call counters)
-- [ ] Dashboard layout: 3 columns desktop, bottom tabs mobile (right panel may show login prompt/placeholder)
-- [ ] Market list: virtualised, search, columns & colors per SPEC, row select → `/trade/:symbol?tf=`
-- [ ] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
-- [ ] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
-- [ ] Chart theme from tokens, re-applied on theme toggle
-- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [x] `SymbolRegistry` (exchangeInfo, USDT + TRADING + spot, tickSize → pricePrecision, 6 h refresh)
+- [x] `TickerStore` snapshot via REST (startup + every 5 min); `GET /market/symbols`, `GET /market/tickers`
+- [x] `CandleCacheService` per ARCHITECTURE §3.2; `GET /market/klines`; unit tests for window/gap logic
+- [x] `MockProvider` full data: symbols of ARCHITECTURE §8, BTCUSDT-1h fixture (1000 real candles fetched once by a script from data-api.binance.vision and committed), seeded PRNG for others; `GET /test/market/stats` (REST call counters)
+- [x] Dashboard layout: 3 columns desktop, bottom tabs mobile (right panel may show login prompt/placeholder)
+- [x] Market list: virtualised, search, columns & colors per SPEC, row select → `/trade/:symbol?tf=`
+- [x] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
+- [x] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
+- [x] Chart theme from tokens, re-applied on theme toggle
+- [x] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-2-review.decision.md; paste into the builder: Read reviews/phase-2-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-24 · Sonnet 5.5 + Medium · Phase 2 complete: SymbolRegistry + Binance REST client, TickerStore, CandleCacheService (DB window cache, 2-candle fast path) with GET /market/symbols|tickers|klines, full MockProvider (8 USDT + 2 filtered pairs, BTCUSDT-1h fixture of 1000 real candles via scripts/fetch-btc-fixture.mjs, seeded PRNG, REST counters, GET /test/market/stats), dashboard (3 columns / mobile tab bar), virtualised market list with search, Lightweight Charts v5 candlestick chart (attribution on, timeframe bar synced with ?tf=, legend, pair-not-found), locale/timezone-aware formatting, chart theme re-applied from tokens; 16 Phase-2 AC Playwright tests + backend unit/integration tests; checked live against Binance locally (symbols, tickers, klines 1000, health ok). Existing tests scoped to the header Login link (the side panel now also has one). No doc contract changes (API.md/DATABASE.md/ARCHITECTURE.md/SPEC.md untouched). Deps: lightweight-charts 5.3, @tanstack/react-virtual · last code commit 8f7b41e · CI green (run 45402260421)
+- 2026-11-24 · Sonnet 5.5 + Medium · Phase 2 review fixes: 0.1 row select always navigates to ?tf=<current tf> (AC-MKT-05 test extended), 0.2 chart-root data-timezone asserted in AC-CHART-06 and AC-PROF-05, 0.3 data-chart-text asserted in AC-THEME-02, 0.4 klines throttle added to Phase 7 checklist. No doc contract changes.
 
 ---
 
@@ -191,6 +193,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] Production deploy from this branch (`railway up`; start command runs `prisma migrate deploy`), seed demo account on production, smoke-check each feature on the live URL (the Merge Prompt redeploys from `main` afterwards)
 - [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
+- [ ] Throttle GET /market/klines per client IP (@nestjs/throttler, RATE_LIMITED + Retry-After; update API.md §3.3 errors and ARCHITECTURE security row) — from reviews/phase-2-review.decision.md R4
 - [ ] TRACEABILITY; log line (the Merge Prompt tags `v0.7` **and** `v1.0`)
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-7-review.decision.md; paste into the builder: Read reviews/phase-7-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.

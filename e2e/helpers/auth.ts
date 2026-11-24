@@ -24,7 +24,7 @@ export async function registerViaUi(page: Page, u = NEW_USER): Promise<void> {
 export async function logoutViaUi(page: Page): Promise<void> {
   await page.getByTestId('user-menu').click();
   await page.getByTestId('menu-logout').click();
-  await expect(page.getByRole('link', { name: 'Đăng nhập' }).or(page.getByRole('link', { name: 'Log in' }))).toBeVisible();
+  await expect(page.locator('header').getByRole('link', { name: 'Đăng nhập' }).or(page.locator('header').getByRole('link', { name: 'Log in' }))).toBeVisible();
 }
 
 export const VI = {

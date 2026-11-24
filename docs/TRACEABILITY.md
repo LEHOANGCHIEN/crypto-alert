@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 22 · failing 0 · pending 54 · last CI run: green on phase-1-auth (2026-11-24)
+**Summary:** 76 ACs · passing 38 · failing 0 · pending 38 · last CI run: green on phase-2-market-chart (2026-11-24)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -30,22 +30,22 @@
 | AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
 | AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
 | AC-THEME-03 | 1 | theme.spec.ts | AC-THEME-03 theme persists for guest and account | passing | |
-| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | pending | |
-| AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | pending | |
-| AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | pending | |
-| AC-MKT-05 | 2 | market.spec.ts | AC-MKT-05 row click opens chart | pending | |
-| AC-MKT-06 | 2 | market.spec.ts | AC-MKT-06 unknown pair shows not found | pending | |
-| AC-CHART-01 | 2 | chart.spec.ts | AC-CHART-01 chart renders with attribution logo | pending | |
-| AC-CHART-02 | 2 | chart.spec.ts | AC-CHART-02 timeframe switch and URL sync | pending | |
-| AC-CHART-03 | 2 | chart.spec.ts | AC-CHART-03 loads 1000 candles | pending | |
-| AC-CHART-04 | 2 | chart.spec.ts | AC-CHART-04 second load uses candle cache | pending | |
-| AC-CHART-05 | 2 | chart.spec.ts | AC-CHART-05 legend shows hovered candle | pending | |
-| AC-CHART-06 | 2 | chart.spec.ts | AC-CHART-06 times shown in user timezone | pending | |
-| AC-PROF-05 | 2 | account.spec.ts | AC-PROF-05 timezone setting changes displayed times | pending | |
-| AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | pending | |
-| AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | pending | |
-| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | pending | |
-| AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | pending | |
+| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | |
+| AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | passing | |
+| AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | passing | |
+| AC-MKT-05 | 2 | market.spec.ts | AC-MKT-05 row click opens chart | passing | |
+| AC-MKT-06 | 2 | market.spec.ts | AC-MKT-06 unknown pair shows not found | passing | |
+| AC-CHART-01 | 2 | chart.spec.ts | AC-CHART-01 chart renders with attribution logo | passing | |
+| AC-CHART-02 | 2 | chart.spec.ts | AC-CHART-02 timeframe switch and URL sync | passing | |
+| AC-CHART-03 | 2 | chart.spec.ts | AC-CHART-03 loads 1000 candles | passing | |
+| AC-CHART-04 | 2 | chart.spec.ts | AC-CHART-04 second load uses candle cache | passing | |
+| AC-CHART-05 | 2 | chart.spec.ts | AC-CHART-05 legend shows hovered candle | passing | |
+| AC-CHART-06 | 2 | chart.spec.ts | AC-CHART-06 times shown in user timezone | passing | |
+| AC-PROF-05 | 2 | account.spec.ts | AC-PROF-05 timezone setting changes displayed times | passing | |
+| AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
+| AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
+| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | Header bell is built in Phase 6 (AC-NOTIF-01); checked here: logo, language, theme, login/register, footer |
+| AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
 | AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | pending | |
 | AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | pending | |
 | AC-RT-02 | 3 | realtime.spec.ts | AC-RT-02 closed candle starts a new one | pending | |
