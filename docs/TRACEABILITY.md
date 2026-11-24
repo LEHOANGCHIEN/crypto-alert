@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 45 · failing 0 · pending 31 · last CI run: green on phase-3-realtime (2026-11-25)
+**Summary:** 76 ACs · passing 52 · failing 0 · pending 24 · last CI run: green on phase-4-indicators (2026-11-25)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -53,13 +53,13 @@
 | AC-RT-04 | 3 | realtime.spec.ts | AC-RT-04 shared upstream subscription ref-count | passing | Samples stats for 7 s after closing one tab (past the 5 s grace) |
 | AC-RT-05 | 3 | realtime.spec.ts | AC-RT-05 browser reconnect banner and resync | passing | |
 | AC-RT-06 | 3 | realtime.spec.ts | AC-RT-06 upstream disconnect badge and recovery | passing | |
-| AC-IND-01 | 4 | indicators.spec.ts | AC-IND-01 default MA lines | pending | Test added (green locally); unit: lib.test.ts, oracle.test.ts vs technicalindicators |
-| AC-IND-02 | 4 | indicators.spec.ts | AC-IND-02 toggle and change MA period persists | pending | Test added (green locally); unit: settings.test.ts |
-| AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | pending | Test added (green locally); unit: settings.test.ts |
-| AC-IND-04 | 4 | indicators.spec.ts | AC-IND-04 RSI pane | pending | Test added (green locally) |
-| AC-IND-05 | 4 | indicators.spec.ts | AC-IND-05 MACD pane | pending | Test added (green locally) |
-| AC-IND-06 | 4 | indicators.spec.ts | AC-IND-06 values match golden file | pending | Test added (green locally); golden from e2e/scripts/generate-indicators-golden.mjs (technicalindicators oracle, BTCUSDT-1h fixture, index 998) |
-| AC-IND-07 | 4 | indicators.spec.ts | AC-IND-07 indicators update live | pending | Test added (green locally); incremental update unit-tested in lib.test.ts |
+| AC-IND-01 | 4 | indicators.spec.ts | AC-IND-01 default MA lines | passing | unit: lib.test.ts, oracle.test.ts vs technicalindicators |
+| AC-IND-02 | 4 | indicators.spec.ts | AC-IND-02 toggle and change MA period persists | passing | unit: settings.test.ts |
+| AC-IND-03 | 4 | indicators.spec.ts | AC-IND-03 invalid period rejected | passing | unit: settings.test.ts |
+| AC-IND-04 | 4 | indicators.spec.ts | AC-IND-04 RSI pane | passing | |
+| AC-IND-05 | 4 | indicators.spec.ts | AC-IND-05 MACD pane | passing | |
+| AC-IND-06 | 4 | indicators.spec.ts | AC-IND-06 values match golden file | passing | golden from e2e/scripts/generate-indicators-golden.mjs (technicalindicators oracle, BTCUSDT-1h fixture, index 998) |
+| AC-IND-07 | 4 | indicators.spec.ts | AC-IND-07 indicators update live | passing | incremental update unit-tested in lib.test.ts |
 | AC-WL-01 | 5 | watchlist.spec.ts | AC-WL-01 star adds pair to watchlist | pending | |
 | AC-WL-02 | 5 | watchlist.spec.ts | AC-WL-02 remove from watchlist | pending | |
 | AC-WL-03 | 5 | watchlist.spec.ts | AC-WL-03 watchlist persists across reload and browsers | pending | |
