@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from './auth.store';
+import { useAuth } from '../../shared/auth/auth.store';
 
 export const DEFAULT_AFTER_LOGIN = '/trade/BTCUSDT';
 

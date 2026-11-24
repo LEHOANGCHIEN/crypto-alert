@@ -6,8 +6,8 @@ import { Button } from '../../shared/ui/Button';
 import { FormField } from '../../shared/ui/FormField';
 import { useForm } from '../../shared/ui/useForm';
 import { validateEmail, validateRequired, type Issue } from '../../shared/validation/rules';
-import { useAuth } from './auth.store';
-import { issueText, errorText } from './messages';
+import { useAuth } from '../../shared/auth/auth.store';
+import { issueText, errorText } from '../../shared/i18n/errorText';
 
 type Values = { email: string; password: string };
 const validate = (v: Values): Partial<Record<keyof Values, Issue>> => {

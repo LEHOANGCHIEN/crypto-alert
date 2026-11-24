@@ -7,8 +7,8 @@ import { FormField } from '../../shared/ui/FormField';
 import { toast } from '../../shared/ui/toast';
 import { useForm } from '../../shared/ui/useForm';
 import { validateConfirm, validateDisplayName, validatePassword, validateRequired, type Issue } from '../../shared/validation/rules';
-import { useAuth } from '../auth/auth.store';
-import { errorText, issueText } from '../auth/messages';
+import { useAuth } from '../../shared/auth/auth.store';
+import { errorText, issueText } from '../../shared/i18n/errorText';
 import { usePreferenceActions } from '../../app/usePreferenceActions';
 
 const timezoneOptions = (current: string) =>

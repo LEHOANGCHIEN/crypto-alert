@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../features/auth/auth.store';
+import { useAuth } from '../../shared/auth/auth.store';
 import type { Locale } from '../../shared/i18n';
 import { useTheme } from '../../shared/theme/ThemeProvider';
 import { usePreferenceActions } from '../usePreferenceActions';

@@ -8,8 +8,8 @@ import { FormField } from '../../shared/ui/FormField';
 import { useForm } from '../../shared/ui/useForm';
 import { useTheme } from '../../shared/theme/ThemeProvider';
 import { validateConfirm, validateDisplayName, validateEmail, validatePassword, type Issue } from '../../shared/validation/rules';
-import { useAuth } from './auth.store';
-import { errorText, issueText } from './messages';
+import { useAuth } from '../../shared/auth/auth.store';
+import { errorText, issueText } from '../../shared/i18n/errorText';
 
 type Values = { email: string; displayName: string; password: string; confirmPassword: string };
 const validate = (v: Values): Partial<Record<keyof Values, Issue>> => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../features/auth/auth.store';
+import { useAuth } from '../../shared/auth/auth.store';
 
 /** Avatar button + dropdown (account link, logout). */
 export function UserMenu() {

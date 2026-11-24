@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAuth } from '../features/auth/auth.store';
+import { useAuth } from '../shared/auth/auth.store';
 import { setLocale } from '../shared/i18n';
 import { useTheme } from '../shared/theme/ThemeProvider';
 

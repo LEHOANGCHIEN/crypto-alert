@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { refreshSession, request, setAccessToken, setAuthFailureHandler } from '../../shared/api/http';
-import type { AuthResult, Locale, Theme, UserMe, UserSettings } from '../../shared/api/types';
+import { refreshSession, request, setAccessToken, setAuthFailureHandler } from '../api/http';
+import type { AuthResult, Locale, Theme, UserMe, UserSettings } from '../api/types';
 
 type Status = 'loading' | 'authenticated' | 'guest';
 

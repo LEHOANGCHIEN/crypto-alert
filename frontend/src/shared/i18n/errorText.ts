@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next';
-import { ApiError } from '../../shared/api/http';
-import type { Issue } from '../../shared/validation/rules';
+import { ApiError } from '../api/http';
+import type { Issue } from '../validation/rules';
 
 /** Field issue (client or server) → translated text. */
 export function issueText(t: TFunction, issue: Issue | undefined): string | undefined {
