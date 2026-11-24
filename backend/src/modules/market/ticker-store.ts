@@ -2,12 +2,13 @@ import { Inject, Injectable, Logger, OnApplicationShutdown, OnModuleInit } from 
 import { AppError } from '../../common/app-error';
 import type { Ticker } from './market.types';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from './providers/market-data-provider.interface';
+import { PriceBus } from './price-bus';
 import { SymbolRegistry } from './symbol-registry';
 
 export const TICKER_REFRESH_MS = 5 * 60 * 1000;
 const RETRY_MS = 10_000;
 
-/** Latest 24h ticker per USDT symbol (ARCHITECTURE §2). REST snapshot at startup and every 5 min. */
+/** Latest 24h ticker per USDT symbol (ARCHITECTURE §2). REST snapshot at startup and every 5 min; live PriceBus `ticker` events in between. */
 @Injectable()
 export class TickerStore implements OnModuleInit, OnApplicationShutdown {
   private readonly logger = new Logger('TickerStore');
@@ -15,13 +16,16 @@ export class TickerStore implements OnModuleInit, OnApplicationShutdown {
   private loaded = false;
   private loading: Promise<void> | null = null;
   private timer: NodeJS.Timeout | null = null;
+  private offBus: (() => void) | null = null;
 
   constructor(
     @Inject(MARKET_DATA_PROVIDER) private readonly provider: MarketDataProvider,
     private readonly registry: SymbolRegistry,
+    private readonly bus: PriceBus,
   ) {}
 
   onModuleInit(): void {
+    this.offBus = this.bus.on('ticker', (t) => this.apply(t));
     void this.refresh().catch(() => this.scheduleRetry());
     this.timer = setInterval(() => void this.refresh().catch(() => undefined), TICKER_REFRESH_MS);
     this.timer.unref();
@@ -30,6 +34,8 @@ export class TickerStore implements OnModuleInit, OnApplicationShutdown {
   onApplicationShutdown(): void {
     if (this.timer) clearInterval(this.timer);
     this.timer = null;
+    this.offBus?.();
+    this.offBus = null;
   }
 
   private scheduleRetry(): void {
@@ -58,6 +64,11 @@ export class TickerStore implements OnModuleInit, OnApplicationShutdown {
       }
     })();
     return this.loading;
+  }
+
+  /** Live update; only symbols of the current snapshot (USDT pairs from the registry) are kept. */
+  apply(ticker: Ticker): void {
+    if (this.tickers.has(ticker.symbol)) this.tickers.set(ticker.symbol, ticker);
   }
 
   private async ensureLoaded(): Promise<void> {
