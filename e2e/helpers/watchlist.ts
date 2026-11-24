@@ -8,6 +8,9 @@ const TEST_DB = process.env.TEST_DATABASE_URL ?? 'postgresql://app:app@localhost
  * (the mock only knows 8 USDT pairs, so 50 real pairs cannot be added through the API).
  */
 export async function fillWatchlist(email: string, total: number): Promise<void> {
+  if (!new URL(TEST_DB).pathname.endsWith('_test')) {
+    throw new Error('fillWatchlist only runs against a database whose name ends with _test');
+  }
   const prisma = new PrismaClient({ datasources: { db: { url: TEST_DB } } });
   try {
     const user = await prisma.user.findUniqueOrThrow({ where: { email } });
