@@ -9,7 +9,7 @@
 | Phase | Name | Branch | Settings | Target dates | State |
 |---|---|---|---|---|---|
 | 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | done |
-| 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | awaiting review |
+| 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | done |
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | not started |
@@ -83,6 +83,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - 2026-11-24 · Sonnet 5.5 + Medium · Phase 1 complete: argon2id auth + rotating refresh tokens, users/settings API, throttler, FE http client with single-flight refresh, login/register/account pages, preference sync, vi/en error+validation translations, 18 integration + 17 Playwright-AC tests. Doc changes (owner-approved, resolving SPEC AC-PROF-04 vs DATABASE.md reuse rule): DATABASE.md §refresh_tokens and API.md §3.1 (+ ARCHITECTURE §6 for consistency) now say reuse detection revokes all tokens ONLY for a rotated token presented after the 10 s window; logout/change-password-revoked tokens → REFRESH_TOKEN_INVALID only. Deps: @nestjs/jwt pinned 11.0.2 (12 is ESM-only) · last commit 71a4ca2 · CI green (run 45250344267)
 - 2026-11-24 · Sonnet 5.5 + Medium · Local-dev fix (found in manual testing): backend scripts start:dev, db:migrate, db:seed switched from dotenvx syntax `dotenv run -f` to dotenv-cli `dotenv -e ../.env --` (no other occurrences in repo); verified db:migrate, db:seed ("seed OK: demo@example.com"), dev server + /api/v1/health db up · commit 9afda24 · CI run 45388656060 green · no doc contract changes
 - 2026-11-24 · Sonnet 5.5 + Medium · Applied reviews/phase-1-review.decision.md (items 1–7): timezone validation via Intl.DateTimeFormat (accepts Asia/Ho_Chi_Minh, UTC) + account select options + unit/integration tests; AC-AUTH-03 and AC-AUTH-07 tests strengthened; auth store/error texts moved to shared/. Doc change: API.md §1.3 INVALID_TIMEZONE row (authorized). Railway vars set on web: COOKIE_SECURE, TRUST_PROXY_HOPS (names only); live /health OK. Last code commit dc836fa; branch head 02f8a20; CI green (run 45382300129).
+- 2026-11-24 · MERGED into main · merge 48427f0 · tag v0.1 · CI green · deployed
 
 ---
 
