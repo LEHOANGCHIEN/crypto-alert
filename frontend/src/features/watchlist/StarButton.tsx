@@ -4,7 +4,8 @@ import { useWatchlistPrompt } from "./loginPrompt.store";
 import { useWatchlist, useWatchlistMutations } from "./useWatchlist";
 
 /** Star toggle for a pair (market row + chart header). Guests get the login prompt and nothing is saved. */
-export function StarButton({ symbol }: { symbol: string }) {
+/** `testId` defaults to `star-<SYMBOL>`; the chart header passes its own so ids stay unique on one page. */
+export function StarButton({ symbol, testId }: { symbol: string; testId?: string }) {
   const { t } = useTranslation();
   const authed = useAuth((s) => s.status === "authenticated");
   const showPrompt = useWatchlistPrompt((s) => s.show);
@@ -15,7 +16,7 @@ export function StarButton({ symbol }: { symbol: string }) {
   return (
     <button
       type="button"
-      data-testid={`star-${symbol}`}
+      data-testid={testId ?? `star-${symbol}`}
       aria-pressed={filled}
       aria-label={t(filled ? "watchlist.star.remove" : "watchlist.star.add", {
         symbol,

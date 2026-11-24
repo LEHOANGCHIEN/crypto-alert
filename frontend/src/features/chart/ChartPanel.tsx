@@ -65,7 +65,7 @@ export function ChartPanel() {
         <h1 data-testid="chart-symbol" className="text-section font-semibold">
           {info ? `${info.baseAsset}/${info.quoteAsset}` : symbol}
         </h1>
-        {info && <StarButton symbol={symbol} />}
+        {info && <StarButton symbol={symbol} testId={`chart-star-${symbol}`} />}
         <span data-testid="chart-price" className={`text-price font-semibold ${DIRECTION_CLASS[dir]}`}>
           {ticker && info ? fmt.price(ticker.lastPrice, info.pricePrecision) : '—'}
         </span>
