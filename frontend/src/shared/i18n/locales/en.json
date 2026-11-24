@@ -121,5 +121,24 @@
       "localeVi": "Vietnamese",
       "localeEn": "English"
     }
+  },
+  "dashboard": {
+    "tabs": {
+      "label": "Dashboard navigation",
+      "markets": "Markets",
+      "chart": "Chart",
+      "watchlist": "Watchlist",
+      "alerts": "Alerts"
+    },
+    "side": {
+      "label": "Right panel",
+      "loginRequired": "Log in to use this.",
+      "login": "Log in",
+      "comingSoon": "This feature arrives in later phases."
+    },
+    "panels": {
+      "markets": "Market list",
+      "chart": "Price chart"
+    }
   }
 }

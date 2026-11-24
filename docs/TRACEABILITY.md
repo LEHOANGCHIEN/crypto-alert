@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 22 · failing 0 · pending 54 · last CI run: green on phase-1-auth (2026-11-24)
+**Summary:** 76 ACs · passing 24 · failing 0 · pending 52 · last CI run: green on phase-1-auth (2026-11-24)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -44,8 +44,8 @@
 | AC-PROF-05 | 2 | account.spec.ts | AC-PROF-05 timezone setting changes displayed times | pending | |
 | AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | pending | |
 | AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | pending | |
-| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | pending | |
-| AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | pending | |
+| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | Header bell is built in Phase 6 (AC-NOTIF-01); checked here: logo, language, theme, login/register, footer |
+| AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
 | AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | pending | |
 | AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | pending | |
 | AC-RT-02 | 3 | realtime.spec.ts | AC-RT-02 closed candle starts a new one | pending | |

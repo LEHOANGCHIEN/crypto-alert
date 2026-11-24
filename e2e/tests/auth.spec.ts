@@ -105,7 +105,7 @@ test('AC-AUTH-07 logout', async ({ page }) => {
   await loginViaUi(page);
   await logoutViaUi(page);
   await expect(page.getByTestId('user-menu')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: 'Đăng nhập' })).toBeVisible();
+  await expect(page.locator('header').getByRole('link', { name: 'Đăng nhập' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Đăng ký' })).toBeVisible();
   await page.goto('/account');
   await expect(page).toHaveURL(/\/login$/);

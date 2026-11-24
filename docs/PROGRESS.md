@@ -91,11 +91,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=2)
 **ACs:** AC-MKT-01, 02, 04, 05, 06 · AC-CHART-01…06 · AC-PROF-05 · AC-I18N-04 · AC-THEME-02 · AC-UI-01, AC-UI-02
 
-- [ ] `SymbolRegistry` (exchangeInfo, USDT + TRADING + spot, tickSize → pricePrecision, 6 h refresh)
-- [ ] `TickerStore` snapshot via REST (startup + every 5 min); `GET /market/symbols`, `GET /market/tickers`
-- [ ] `CandleCacheService` per ARCHITECTURE §3.2; `GET /market/klines`; unit tests for window/gap logic
-- [ ] `MockProvider` full data: symbols of ARCHITECTURE §8, BTCUSDT-1h fixture (1000 real candles fetched once by a script from data-api.binance.vision and committed), seeded PRNG for others; `GET /test/market/stats` (REST call counters)
-- [ ] Dashboard layout: 3 columns desktop, bottom tabs mobile (right panel may show login prompt/placeholder)
+- [x] `SymbolRegistry` (exchangeInfo, USDT + TRADING + spot, tickSize → pricePrecision, 6 h refresh)
+- [x] `TickerStore` snapshot via REST (startup + every 5 min); `GET /market/symbols`, `GET /market/tickers`
+- [x] `CandleCacheService` per ARCHITECTURE §3.2; `GET /market/klines`; unit tests for window/gap logic
+- [x] `MockProvider` full data: symbols of ARCHITECTURE §8, BTCUSDT-1h fixture (1000 real candles fetched once by a script from data-api.binance.vision and committed), seeded PRNG for others; `GET /test/market/stats` (REST call counters)
+- [x] Dashboard layout: 3 columns desktop, bottom tabs mobile (right panel may show login prompt/placeholder)
 - [ ] Market list: virtualised, search, columns & colors per SPEC, row select → `/trade/:symbol?tf=`
 - [ ] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
 - [ ] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone

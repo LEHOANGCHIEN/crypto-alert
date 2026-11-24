@@ -121,5 +121,24 @@
       "localeVi": "Tiếng Việt",
       "localeEn": "English"
     }
+  },
+  "dashboard": {
+    "tabs": {
+      "label": "Điều hướng bảng điều khiển",
+      "markets": "Thị trường",
+      "chart": "Biểu đồ",
+      "watchlist": "Theo dõi",
+      "alerts": "Cảnh báo"
+    },
+    "side": {
+      "label": "Bảng bên phải",
+      "loginRequired": "Đăng nhập để sử dụng chức năng này.",
+      "login": "Đăng nhập",
+      "comingSoon": "Chức năng này sẽ có ở các giai đoạn sau."
+    },
+    "panels": {
+      "markets": "Danh sách thị trường",
+      "chart": "Biểu đồ giá"
+    }
   }
 }
