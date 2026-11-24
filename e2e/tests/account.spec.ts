@@ -92,15 +92,16 @@ test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => 
     const m = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/.exec(s)!;
     return Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]);
   };
-  const legendNow = async () => {
+  const legendNow = async (timezone: string) => {
     await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
+    await expect(page.getByTestId('chart-root')).toHaveAttribute('data-timezone', timezone);
     const legend = page.getByTestId('chart-legend');
     return { openTime: await legend.getAttribute('data-time'), text: (await page.getByTestId('legend-time').textContent())! };
   };
 
   await loginViaUi(page); // demo user: Asia/Ho_Chi_Minh
   await page.goto('/trade/BTCUSDT');
-  const before = await legendNow();
+  const before = await legendNow('Asia/Ho_Chi_Minh');
 
   await page.goto('/account');
   await expect(page.getByTestId('pref-timezone')).toHaveValue('Asia/Ho_Chi_Minh');
@@ -109,7 +110,7 @@ test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => 
   await expect(page.getByTestId('toast')).toBeVisible();
 
   await page.goto('/trade/BTCUSDT');
-  const after = await legendNow();
+  const after = await legendNow('UTC');
   expect(after.openTime).toBe(before.openTime); // same candle
   expect(toMs(before.text) - toMs(after.text)).toBe(7 * 3_600_000); // UTC shows it 7 h earlier
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-timezone', 'UTC'); // time axis too
