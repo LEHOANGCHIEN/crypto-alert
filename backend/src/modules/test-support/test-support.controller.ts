@@ -1,4 +1,5 @@
-import { Controller, Inject, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Post } from '@nestjs/common';
+import { AppError } from '../../common/app-error';
 import { PrismaService } from '../../prisma/prisma.service';
 import { seedDemo } from '../../seed/seed-demo';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from '../market/providers/market-data-provider.interface';
@@ -21,5 +22,11 @@ export class TestSupportController {
     if (this.provider instanceof MockProvider) this.provider.reset();
     this.throttler.reset();
     return { ok: true };
+  }
+
+  @Get('market/stats')
+  stats() {
+    if (!(this.provider instanceof MockProvider)) throw new AppError('NOT_FOUND');
+    return this.provider.getStats();
   }
 }
