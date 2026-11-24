@@ -105,7 +105,7 @@ export class BinanceWsClient {
   }
 
   private open(): void {
-    const ws = new WebSocket(`${this.baseUrl}/stream?streams=${ALL_MARKET_TICKER_STREAM}`);
+    const ws = new WebSocket(`${this.baseUrl}/stream?streams=${ALL_MARKET_TICKER_STREAM}`, { handshakeTimeout: this.watchdogMs });
     this.ws = ws;
     this.queue = new SendQueue((m) => {
       if (ws.readyState === WebSocket.OPEN) ws.send(m);
