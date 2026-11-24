@@ -65,6 +65,12 @@ test('AC-MKT-04 change colors and signs', async ({ page }) => {
 });
 
 test('AC-MKT-05 row click opens chart', async ({ page }) => {
+  // Without ?tf= the current timeframe (default 1h) is written into the URL.
+  await page.goto('/trade/BTCUSDT');
+  await expect(page.getByTestId('market-row-BTCUSDT')).toHaveAttribute('aria-selected', 'true');
+  await page.getByTestId('market-row-ETHUSDT').click();
+  await expect(page).toHaveURL(/\/trade\/ETHUSDT\?tf=1h$/);
+
   await page.goto('/trade/BTCUSDT?tf=15m');
   await expect(page.getByTestId('market-row-BTCUSDT')).toHaveAttribute('aria-selected', 'true');
 

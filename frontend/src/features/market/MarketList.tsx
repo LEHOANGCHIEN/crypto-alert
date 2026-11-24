@@ -5,6 +5,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { priceDirection } from '../../shared/format';
 import { useFormat } from '../../shared/format/useFormat';
 import { errorText } from '../../shared/i18n/errorText';
+import { parseInterval } from '../chart/TimeframeBar';
 import { useSymbols, useTickers } from '../../shared/market/queries';
 
 const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;
@@ -41,8 +42,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
   const loading = symbols.isPending || tickers.isPending;
 
   const open = (symbol: string) => {
-    const tf = params.get('tf');
-    navigate(`/trade/${symbol}${tf ? `?tf=${encodeURIComponent(tf)}` : ''}`);
+    navigate(`/trade/${symbol}?tf=${parseInterval(params.get('tf'))}`);
     onSelect?.();
   };
 
