@@ -114,8 +114,8 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Opus 5.5 + High · Plan mode ON · *Phase Start Prompt* (N=3) · near the weekly quota limit → Sonnet 5.5 + Medium
 **ACs:** AC-MKT-03 · AC-RT-01…06
 
-- [ ] `PriceBus`; BinanceProvider WS per ARCHITECTURE §4 (combined stream, subscribe queue ≤ 4 msg/s, backoff + jitter, 30 s watchdog, 23 h reconnect, resubscribe, gap recovery)
-- [ ] Unit tests: backoff schedule, subscribe queue, resubscribe after reconnect (fake WS server)
+- [x] `PriceBus`; BinanceProvider WS per ARCHITECTURE §4 (combined stream, subscribe queue ≤ 4 msg/s, backoff + jitter, 30 s watchdog, 23 h reconnect, resubscribe, gap recovery)
+- [x] Unit tests: backoff schedule, subscribe queue, resubscribe after reconnect (fake WS server)
 - [ ] `SubscriptionManager` ref-count with 5 s grace; unit tests
 - [ ] Subscription caps (≤ 2 kline subscriptions per socket → `SUBSCRIPTION_LIMIT_REACHED`; ≤ 200 upstream kline streams → `MARKET_DATA_UNAVAILABLE`) with unit tests for both caps
 - [ ] `RealtimeGateway`: handshake auth per API.md §4.1, rooms, events of API.md §4.2–4.3, acks in envelope format
