@@ -106,12 +106,12 @@ test('AC-WL-06 guest sees login prompt', async ({ page }) => {
 });
 
 test('AC-WL-07 isolation, no duplicates, limit 50', async ({ page, request, browser }) => {
-  // Duplicate PUT keeps one row (API), seen from the UI as one row.
+  // Adding a new pair twice keeps one row (API), seen from the UI as one row.
   const login = await request.post('/api/v1/auth/login', { data: { email: DEMO.email, password: DEMO.password } });
   const token = ((await login.json()) as { data: { accessToken: string } }).data.accessToken;
   const auth = { Authorization: `Bearer ${token}` };
-  expect((await request.put('/api/v1/watchlist/ETHUSDT', { headers: auth })).ok()).toBe(true);
-  expect((await request.put('/api/v1/watchlist/ETHUSDT', { headers: auth })).ok()).toBe(true);
+  expect((await request.put('/api/v1/watchlist/XRPUSDT', { headers: auth })).ok()).toBe(true);
+  expect((await request.put('/api/v1/watchlist/XRPUSDT', { headers: auth })).ok()).toBe(true);
 
   // User B does not see user A's watchlist.
   const ctxB = await browser.newContext();
@@ -121,18 +121,18 @@ test('AC-WL-07 isolation, no duplicates, limit 50', async ({ page, request, brow
   await expect(pageB.getByTestId('star-BTCUSDT')).toHaveAttribute('aria-pressed', 'false');
   await ctxB.close();
 
-  // User A (demo): still one ETHUSDT row.
+  // User A (demo): still exactly one XRPUSDT row (a pair that is not in the demo seed).
   await loginViaUi(page);
   await expect(page.getByTestId('watchlist-row-SOLUSDT')).toBeVisible();
-  await expect(page.locator('[data-testid="watchlist-row-ETHUSDT"]')).toHaveCount(1);
-  expect(await panelSymbols(page)).toEqual(['BTCUSDT', 'ETHUSDT', 'SOLUSDT']);
+  await expect(page.locator('[data-testid="watchlist-row-XRPUSDT"]')).toHaveCount(1);
+  expect(await panelSymbols(page)).toEqual(['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT']);
 
   // 51st item → translated WATCHLIST_LIMIT_REACHED, nothing added.
   await fillWatchlist(DEMO.email, 50);
   await page.reload();
   await expect(page.getByTestId('watchlist-row-SOLUSDT')).toBeVisible();
-  await page.getByTestId('star-XRPUSDT').click();
+  await page.getByTestId('star-DOGEUSDT').click();
   await expect(page.getByTestId('toast')).toHaveText('Danh sách theo dõi đã đạt tối đa 50 cặp.');
-  await expect(page.getByTestId('star-XRPUSDT')).toHaveAttribute('aria-pressed', 'false');
-  await expect(page.getByTestId('watchlist-row-XRPUSDT')).toHaveCount(0);
+  await expect(page.getByTestId('star-DOGEUSDT')).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.getByTestId('watchlist-row-DOGEUSDT')).toHaveCount(0);
 });
