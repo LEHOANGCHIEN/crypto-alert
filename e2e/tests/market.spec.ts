@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
+import { left, pushTick } from '../helpers/market';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -100,4 +101,34 @@ test('AC-MKT-06 unknown pair shows not found', async ({ page }) => {
   await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
   await expect(page.getByTestId('chart-root')).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('AC-MKT-03 live ticker updates row', async ({ page, request }) => {
+  await page.goto('/trade/BTCUSDT');
+  const price = page.getByTestId('market-price-ETHUSDT');
+  await expect(price).toHaveText('3.510,25');
+  // Wait until the page is subscribed to live tickers, so the push below cannot be missed.
+  await expect(page.getByTestId('market-list')).toHaveAttribute('data-live', 'true');
+
+  // Up: ETHUSDT 24h open is 3400 in the mock → change = (3600 − 3400) / 3400 = +5.88 %.
+  let deadline = Date.now() + 2_000;
+  await pushTick(request, 'ETHUSDT', 3600, 500_000_000);
+  await expect(price).toHaveText('3.600,00', { timeout: left(deadline) });
+  await expect(page.getByTestId('market-change-ETHUSDT')).toHaveText('+5,88%', { timeout: left(deadline) });
+  await expect(page.getByTestId('market-volume-ETHUSDT')).toHaveText(
+    new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 }).format(500_000_000),
+    { timeout: left(deadline) },
+  );
+  await expect(price).toHaveAttribute('data-flash', 'up', { timeout: left(deadline) });
+  await expect(price).toHaveClass(/bg-up\/20/);
+
+  // Down: lower price → red flash, change recomputed (+2.94 %).
+  deadline = Date.now() + 2_000;
+  await pushTick(request, 'ETHUSDT', 3500);
+  await expect(price).toHaveText('3.500,00', { timeout: left(deadline) });
+  await expect(page.getByTestId('market-change-ETHUSDT')).toHaveText('+2,94%', { timeout: left(deadline) });
+  await expect(price).toHaveAttribute('data-flash', 'down', { timeout: left(deadline) });
+  await expect(price).toHaveClass(/bg-down\/20/);
+  // The flash is brief: it goes away by itself.
+  await expect(price).not.toHaveAttribute('data-flash', /.+/);
 });
