@@ -68,3 +68,5 @@ export type Candle = {
 };
 
 export type MarketStatus = 'connected' | 'reconnecting';
+
+export type WatchlistItem = { symbol: string; createdAt: string };
