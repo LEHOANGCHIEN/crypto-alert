@@ -119,3 +119,21 @@ test('AC-CHART-05 legend shows hovered candle', async ({ page, request }) => {
   await expect(legend).toHaveAttribute('data-time', String(all[999].openTime));
   await expect(page.getByTestId('legend-close')).toHaveText(viPrice(all[999].close));
 });
+
+/** "dd/MM/yyyy HH:mm" in the given timezone, built independently of the app code. */
+const viTime = (ms: number, timeZone: string) => {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(ms)
+      .map((x) => [x.type, x.value]),
+  );
+  return `${p.day}/${p.month}/${p.year} ${p.hour}:${p.minute}`;
+};
+
+test('AC-CHART-06 times shown in user timezone', async ({ page }) => {
+  const candles = await openChart(page);
+  const last = candles[candles.length - 1].openTime;
+  // Guest = Asia/Ho_Chi_Minh (UTC+7): the legend of the latest candle shows its open time in that timezone.
+  await expect(page.getByTestId('legend-time')).toHaveText(viTime(last, 'Asia/Ho_Chi_Minh'));
+  expect(viTime(last, 'Asia/Ho_Chi_Minh')).not.toBe(viTime(last, 'UTC')); // the check can tell the zones apart
+});

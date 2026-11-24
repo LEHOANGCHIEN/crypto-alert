@@ -98,7 +98,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] Dashboard layout: 3 columns desktop, bottom tabs mobile (right panel may show login prompt/placeholder)
 - [x] Market list: virtualised, search, columns & colors per SPEC, row select → `/trade/:symbol?tf=`
 - [x] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
-- [ ] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
+- [x] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
 - [ ] Chart theme from tokens, re-applied on theme toggle
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 

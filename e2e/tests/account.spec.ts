@@ -86,3 +86,30 @@ test('AC-PROF-04 change password logs out other sessions', async ({ page, browse
     await ctxB.close();
   }
 });
+
+test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => {
+  const toMs = (s: string) => {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/.exec(s)!;
+    return Date.UTC(+m[3], +m[2] - 1, +m[1], +m[4], +m[5]);
+  };
+  const legendNow = async () => {
+    await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
+    const legend = page.getByTestId('chart-legend');
+    return { openTime: await legend.getAttribute('data-time'), text: (await page.getByTestId('legend-time').textContent())! };
+  };
+
+  await loginViaUi(page); // demo user: Asia/Ho_Chi_Minh
+  await page.goto('/trade/BTCUSDT');
+  const before = await legendNow();
+
+  await page.goto('/account');
+  await expect(page.getByTestId('pref-timezone')).toHaveValue('Asia/Ho_Chi_Minh');
+  await page.getByTestId('pref-timezone').selectOption('UTC');
+  await page.getByTestId('save-preferences').click();
+  await expect(page.getByTestId('toast')).toBeVisible();
+
+  await page.goto('/trade/BTCUSDT');
+  const after = await legendNow();
+  expect(after.openTime).toBe(before.openTime); // same candle
+  expect(toMs(before.text) - toMs(after.text)).toBe(7 * 3_600_000); // UTC shows it 7 h earlier
+});

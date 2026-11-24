@@ -59,3 +59,17 @@ export function priceDirection(percent: number): PriceDirection {
   if (rounded === 0) return 'flat';
   return percent > 0 ? 'up' : 'down';
 }
+
+/** Lightweight Charts tick mark kinds (TickMarkType enum values), kept numeric so this module stays chart-free. */
+export const TICK_YEAR = 0;
+export const TICK_MONTH = 1;
+export const TICK_DAY = 2;
+
+/** Time-axis label of a tick mark, in the given locale and timezone (epoch ms in, text out). */
+export function formatTickMark(epochMs: number, tickType: number, locale: FormatLocale, timeZone: string): string {
+  const intl = INTL_LOCALE[locale];
+  if (tickType === TICK_YEAR) return new Intl.DateTimeFormat(intl, { timeZone, year: 'numeric' }).format(epochMs);
+  if (tickType === TICK_MONTH) return new Intl.DateTimeFormat(intl, { timeZone, month: 'short' }).format(epochMs);
+  if (tickType === TICK_DAY) return new Intl.DateTimeFormat(intl, { timeZone, day: 'numeric' }).format(epochMs);
+  return new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(epochMs);
+}

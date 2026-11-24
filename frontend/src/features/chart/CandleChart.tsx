@@ -5,6 +5,8 @@ import {
   type IChartApi,
   type ISeriesApi,
   type CandlestickData,
+  type TickMarkType,
+  type Time,
   type UTCTimestamp,
 } from 'lightweight-charts';
 import type { Candle } from '../../shared/api/types';
@@ -71,6 +73,9 @@ export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
       localization: {
         priceFormatter: (p: number) => fmt.price(p, precision),
         timeFormatter: (t: number) => fmt.dateTime(t * 1000),
+      },
+      timeScale: {
+        tickMarkFormatter: (time: Time, tickType: TickMarkType) => fmt.tickMark((time as number) * 1000, tickType),
       },
     });
   }, [precision, tickSize, fmt]);
