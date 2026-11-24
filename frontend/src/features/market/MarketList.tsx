@@ -9,7 +9,7 @@ import { parseInterval } from '../chart/TimeframeBar';
 import { useSymbols, useTickers } from '../../shared/market/queries';
 import { useConnection } from '../../shared/socket/connection.store';
 import { StarButton } from '../watchlist';
-import { PriceCell } from './PriceCell';
+import { PriceCell } from '../../shared/ui/PriceCell';
 
 const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;
 

@@ -5,7 +5,7 @@ import { priceDirection } from "../../shared/format";
 import { useFormat } from "../../shared/format/useFormat";
 import { errorText } from "../../shared/i18n/errorText";
 import { useSymbols, useTickers } from "../../shared/market/queries";
-import { PriceCell } from "../market/PriceCell";
+import { PriceCell } from "../../shared/ui/PriceCell";
 import { useWatchlist, useWatchlistMutations } from "./useWatchlist";
 
 const DIRECTION_CLASS = {
