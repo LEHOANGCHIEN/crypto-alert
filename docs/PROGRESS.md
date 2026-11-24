@@ -11,7 +11,7 @@
 | 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | done |
 | 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | done |
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | done |
-| 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
+| 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | built, awaiting review |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | not started |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | not started |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | not started |
@@ -123,10 +123,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] Mock test endpoints: `tick`, `close-candle`, `disconnect`; stats show `upstreamStreams`
 - [x] FE socket client: reconnect with new token, resubscribe on reconnect, klines refetch, "Reconnecting…" banner, "Market data delayed" badge
 - [x] FE live updates: market list rows + flash, chart `series.update()`, header price
-- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [x] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-3-review.decision.md; paste into the builder: Read reviews/phase-3-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-25 · Opus 5.5 + High · Phase 3 complete: BinanceProvider WS relay (combined stream, ≤ 4 msg/s subscribe queue, backoff 1→30 s ±20 % jitter reset after 60 s, 30 s watchdog, 23 h reconnect, resubscribe, gap recovery; checked live against Binance), PriceBus → TickerStore live + closed-candle upsert, SubscriptionManager (ref-count, 5 s grace, caps 2/socket + 200 upstream), Socket.IO RealtimeGateway (handshake auth, rooms, envelope acks, ping 10 s/5 s), batched tickers:update (≤ 1/s, changed only), kline:update, market:status; stateful MockProvider + POST /test/market/tick|close-candle|disconnect, real upstreamStreams; /test/reset now also disconnects sockets and clears subscriptions; FE socket client (token reconnect, resubscribe, klines/tickers refetch after reconnect, offline/online), Reconnecting… banner, Market data delayed badge, live market rows with flash, chart series.update(); 7 Playwright ACs + unit (backoff, send queue, fake-WS reconnect, ref-count, caps, batcher, mock) + realtime/test-endpoint integration tests. Deps: @nestjs/websockets + @nestjs/platform-socket.io 11.2.11, socket.io + socket.io-client 4.8.4. No doc contract changes (API.md/DATABASE.md/ARCHITECTURE.md/SPEC.md untouched) · last code commit b0a80bc · CI green (run 45443985412)
 
 ---
 
