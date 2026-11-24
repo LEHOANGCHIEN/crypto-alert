@@ -5,7 +5,8 @@
   "scripts": {
     "test": "playwright test",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint \"{tests,helpers}/**/*.ts\" playwright.config.ts"
+    "lint": "eslint \"{tests,helpers}/**/*.ts\" playwright.config.ts",
+    "golden": "node scripts/generate-indicators-golden.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
