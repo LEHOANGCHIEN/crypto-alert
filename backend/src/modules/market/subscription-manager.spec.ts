@@ -1,5 +1,6 @@
 import type { MarketDataProvider } from './providers/market-data-provider.interface';
-import { SubscriptionManager, UNSUBSCRIBE_GRACE_MS } from './subscription-manager';
+import { AppError } from '../../common/app-error';
+import { MAX_UPSTREAM_KLINE_STREAMS, SubscriptionManager, UNSUBSCRIBE_GRACE_MS } from './subscription-manager';
 
 function setup() {
   const upstream: string[] = [];
@@ -97,5 +98,54 @@ describe('SubscriptionManager ref-count', () => {
     expect(sm.socketCount('a')).toBe(0);
     jest.advanceTimersByTime(UNSUBSCRIBE_GRACE_MS);
     expect(upstream).toEqual([]);
+  });
+});
+
+const codeOf = (fn: () => unknown): string | undefined => {
+  try {
+    fn();
+  } catch (e) {
+    return e instanceof AppError ? e.code : 'OTHER';
+  }
+  return undefined;
+};
+
+describe('SubscriptionManager caps', () => {
+  beforeEach(() => jest.useFakeTimers());
+  afterEach(() => jest.useRealTimers());
+
+  it('a socket may hold at most 2 kline subscriptions (3rd → SUBSCRIPTION_LIMIT_REACHED)', () => {
+    const { sm, log } = setup();
+    sm.acquire('a', 'BTCUSDT', '1h');
+    sm.acquire('a', 'ETHUSDT', '1h');
+    expect(codeOf(() => sm.acquire('a', 'SOLUSDT', '1h'))).toBe('SUBSCRIPTION_LIMIT_REACHED');
+    expect(log).toEqual(['+BTCUSDT:1h', '+ETHUSDT:1h']);
+    expect(sm.socketCount('a')).toBe(2);
+    // Re-subscribing one it already holds is still fine; other sockets are not affected.
+    expect(codeOf(() => sm.acquire('a', 'BTCUSDT', '1h'))).toBeUndefined();
+    expect(codeOf(() => sm.acquire('b', 'SOLUSDT', '1h'))).toBeUndefined();
+    // After releasing one, a new one is allowed again.
+    sm.release('a', 'BTCUSDT', '1h');
+    expect(codeOf(() => sm.acquire('a', 'SOLUSDT', '1h'))).toBeUndefined();
+  });
+
+  it('at most 200 upstream kline streams (201st new stream → MARKET_DATA_UNAVAILABLE)', () => {
+    const { sm, upstream } = setup();
+    for (let i = 0; i < MAX_UPSTREAM_KLINE_STREAMS; i++) sm.acquire(`s${i}`, `S${i}USDT`, '1m');
+    expect(sm.upstreamCount()).toBe(200);
+    expect(codeOf(() => sm.acquire('new', 'NEWUSDT', '1m'))).toBe('MARKET_DATA_UNAVAILABLE');
+    expect(upstream).toHaveLength(200);
+    expect(sm.socketCount('new')).toBe(0);
+    // Joining an existing stream does not add an upstream stream, so it is allowed.
+    expect(codeOf(() => sm.acquire('new', 'S0USDT', '1m'))).toBeUndefined();
+  });
+
+  it('streams in their grace period still count toward the global cap until unsubscribed', () => {
+    const { sm } = setup();
+    for (let i = 0; i < MAX_UPSTREAM_KLINE_STREAMS; i++) sm.acquire(`s${i}`, `S${i}USDT`, '1m');
+    sm.release('s0', 'S0USDT', '1m');
+    expect(codeOf(() => sm.acquire('new', 'NEWUSDT', '1m'))).toBe('MARKET_DATA_UNAVAILABLE');
+    jest.advanceTimersByTime(UNSUBSCRIBE_GRACE_MS);
+    expect(codeOf(() => sm.acquire('new', 'NEWUSDT', '1m'))).toBeUndefined();
   });
 });

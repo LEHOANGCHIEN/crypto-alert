@@ -1,9 +1,13 @@
 import { Inject, Injectable, OnApplicationShutdown } from '@nestjs/common';
+import { AppError } from '../../common/app-error';
 import type { Interval } from './market.types';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from './providers/market-data-provider.interface';
 
 /** A room that becomes empty keeps its upstream stream this long before UNSUBSCRIBE (ARCHITECTURE §3.2 step 5). */
 export const UNSUBSCRIBE_GRACE_MS = 5_000;
+/** ARCHITECTURE §4 "Limits". */
+export const MAX_KLINE_SUBSCRIPTIONS_PER_SOCKET = 2;
+export const MAX_UPSTREAM_KLINE_STREAMS = 200;
 
 const keyOf = (symbol: string, interval: Interval): string => `${symbol}:${interval}`;
 const parseKey = (key: string): [string, Interval] => key.split(':') as [string, Interval];
@@ -21,11 +25,16 @@ export class SubscriptionManager implements OnApplicationShutdown {
 
   constructor(@Inject(MARKET_DATA_PROVIDER) private readonly provider: MarketDataProvider) {}
 
-  /** Adds the subscription for this socket. Returns false when the socket already held it (idempotent). */
+  /**
+   * Adds the subscription for this socket. Returns false when the socket already held it (idempotent).
+   * Throws SUBSCRIPTION_LIMIT_REACHED (socket holds 2 already) or MARKET_DATA_UNAVAILABLE (200 upstream streams).
+   */
   acquire(socketId: string, symbol: string, interval: Interval): boolean {
     const key = keyOf(symbol, interval);
     const mine = this.bySocket.get(socketId) ?? new Set<string>();
     if (mine.has(key)) return false;
+    if (mine.size >= MAX_KLINE_SUBSCRIPTIONS_PER_SOCKET) throw new AppError('SUBSCRIPTION_LIMIT_REACHED');
+    if (!this.refs.has(key) && this.refs.size >= MAX_UPSTREAM_KLINE_STREAMS) throw new AppError('MARKET_DATA_UNAVAILABLE');
 
     mine.add(key);
     this.bySocket.set(socketId, mine);
