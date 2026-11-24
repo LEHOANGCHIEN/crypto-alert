@@ -3,15 +3,19 @@ import { ConfigService } from '@nestjs/config';
 import type { Env } from '../../config/env';
 import { PriceBus } from './price-bus';
 import { SymbolRegistry } from './symbol-registry';
+import { TickerStore } from './ticker-store';
+import { MarketController } from './market.controller';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from './providers/market-data-provider.interface';
 import { BinanceProvider } from './providers/binance/binance.provider';
 import { MockProvider } from './providers/mock/mock.provider';
 
 @Global()
 @Module({
+  controllers: [MarketController],
   providers: [
     PriceBus,
     SymbolRegistry,
+    TickerStore,
     {
       provide: MARKET_DATA_PROVIDER,
       inject: [ConfigService, PriceBus],
