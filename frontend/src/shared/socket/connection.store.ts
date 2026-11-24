@@ -8,6 +8,16 @@ type ConnectionState = {
   everConnected: boolean;
   /** Upstream (Binance) status from `market:status` */
   marketStatus: MarketStatus;
+  /** `tickers:subscribe` acknowledged on the current connection */
+  tickersLive: boolean;
+  /** `SYMBOL:interval` whose `kline:subscribe` was acknowledged on the current connection */
+  klineLive: string | null;
 };
 
-export const useConnection = create<ConnectionState>(() => ({ connected: false, everConnected: false, marketStatus: 'connected' }));
+export const useConnection = create<ConnectionState>(() => ({
+  connected: false,
+  everConnected: false,
+  marketStatus: 'connected',
+  tickersLive: false,
+  klineLive: null,
+}));

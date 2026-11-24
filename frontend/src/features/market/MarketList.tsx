@@ -7,6 +7,8 @@ import { useFormat } from '../../shared/format/useFormat';
 import { errorText } from '../../shared/i18n/errorText';
 import { parseInterval } from '../chart/TimeframeBar';
 import { useSymbols, useTickers } from '../../shared/market/queries';
+import { useConnection } from '../../shared/socket/connection.store';
+import { PriceCell } from './PriceCell';
 
 const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;
 
@@ -21,6 +23,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
   const symbols = useSymbols();
   const tickers = useTickers();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const live = useConnection((st) => st.tickersLive);
 
   const precision = useMemo(() => new Map((symbols.data ?? []).map((s) => [s.symbol, s])), [symbols.data]);
   const rows = useMemo(() => {
@@ -94,7 +97,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
           {t('market.empty')}
         </p>
       ) : (
-        <div ref={scrollRef} role="listbox" aria-label={t('market.list')} data-testid="market-list" className="min-h-0 flex-1 overflow-y-auto">
+        <div ref={scrollRef} role="listbox" aria-label={t('market.list')} data-testid="market-list" data-live={live} className="min-h-0 flex-1 overflow-y-auto">
           <div className="relative w-full" style={{ height: virtualizer.getTotalSize() }}>
             {virtualizer.getVirtualItems().map((v) => {
               const tk = rows[v.index];
@@ -125,9 +128,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
                     {info.baseAsset}
                     <span className="text-text-muted">/{info.quoteAsset}</span>
                   </span>
-                  <span data-testid={`market-price-${tk.symbol}`} className="text-right">
-                    {fmt.price(tk.lastPrice, info.pricePrecision)}
-                  </span>
+                  <PriceCell testId={`market-price-${tk.symbol}`} price={tk.lastPrice} text={fmt.price(tk.lastPrice, info.pricePrecision)} />
                   <span data-testid={`market-change-${tk.symbol}`} className={`text-right ${DIRECTION_CLASS[dir]}`}>
                     {fmt.percent(tk.priceChangePercent)}
                   </span>

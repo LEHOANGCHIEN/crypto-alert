@@ -16,8 +16,11 @@ const subscriptions = new Map<string, Subscription>();
 /** Set while we drop the connection ourselves to send a new token: no banner, no data refetch. */
 let tokenSwitch = false;
 
-function emitSubscribe(s: Subscription): void {
-  socket?.emit(s.subscribe, s.payload, (ack: SocketAck) => s.onAck?.(ack));
+function emitSubscribe(key: string, s: Subscription): void {
+  // A late ack for a subscription that was replaced or removed meanwhile is ignored.
+  socket?.emit(s.subscribe, s.payload, (ack: SocketAck) => {
+    if (subscriptions.get(key) === s) s.onAck?.(ack);
+  });
 }
 
 function create(): Socket {
@@ -39,7 +42,7 @@ function create(): Socket {
     const wasTokenSwitch = tokenSwitch;
     tokenSwitch = false;
     useConnection.setState({ connected: true, everConnected: true });
-    for (const sub of subscriptions.values()) emitSubscribe(sub);
+    for (const [key, sub] of subscriptions) emitSubscribe(key, sub);
     // After a real reconnect, fetch what was missed while offline (AC-RT-05).
     if (everConnected && !wasTokenSwitch) {
       void queryClient.invalidateQueries({ queryKey: ['klines'] });
@@ -48,7 +51,8 @@ function create(): Socket {
   });
 
   s.on('disconnect', () => {
-    if (!tokenSwitch) useConnection.setState({ connected: false });
+    // Subscriptions are per connection: they are acknowledged again after the next connect.
+    useConnection.setState(tokenSwitch ? { tickersLive: false, klineLive: null } : { connected: false, tickersLive: false, klineLive: null });
   });
 
   s.on('connect_error', (err: Error & { data?: { code?: string } }) => {
@@ -88,7 +92,7 @@ export function startSocket(): void {
   window.addEventListener('offline', () => {
     tokenSwitch = false;
     s.disconnect();
-    useConnection.setState({ connected: false });
+    useConnection.setState({ connected: false, tickersLive: false, klineLive: null });
   });
   window.addEventListener('online', () => {
     if (!s.connected) s.connect();
@@ -102,7 +106,7 @@ export function startSocket(): void {
  */
 export function registerSubscription(key: string, sub: Subscription): () => void {
   subscriptions.set(key, sub);
-  if (socket?.connected) emitSubscribe(sub);
+  if (socket?.connected) emitSubscribe(key, sub);
   return () => {
     if (subscriptions.get(key) !== sub) return;
     subscriptions.delete(key);
