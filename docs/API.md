@@ -259,7 +259,7 @@ Both read endpoints also emit `notification:read` to the user's other sockets (�
 
 | Method & path | Body | Success `data` | Effect |
 |---|---|---|---|
-| `POST /test/reset` | — | `{ ok: true }` | Truncate all tables, run seed, reset mock (prices, open candles, counters, disconnect state), reset rate-limit storage, reload alert worker |
+| `POST /test/reset` | — | `{ ok: true }` | Truncate all tables, run seed, reset mock (prices, open candles, counters, disconnect state), disconnect all Socket.IO clients, drop all kline subscriptions (upstream unsubscribed immediately) and the pending/last-sent `tickers:update` state, reset rate-limit storage, reload alert worker |
 | `POST /test/market/tick` | `{ symbol: string, price: number, quoteVolume?: number }` | `{ ticker: Ticker }` | Set last price; adjust 24h high/low; update the open candle (close/high/low) of every interval of that symbol; emit through PriceBus (→ `tickers:update`, `kline:update`, AlertWorker) |
 | `POST /test/market/close-candle` | `{ symbol: string, interval: Interval }` | `{ closed: Candle, opened: Candle }` | Emit current open candle with `isClosed: true` (and cache it), then open the next one (`openTime = closed.closeTime + 1`, O=H=L=C=previous close) |
 | `POST /test/market/disconnect` | `{ durationMs?: number }` (default 3000) | `{ ok: true }` | Mock goes `reconnecting` for `durationMs`, then `connected` and resumes |
