@@ -13,7 +13,7 @@
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | done |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | done |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
-| 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | built, awaiting review |
+| 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | not started |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
 | — | Buffer for slips | — | — | Dec 8–10 | — |
@@ -168,6 +168,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Log:**
 - 2026-11-25 · Sonnet 5.5 + Medium · Phase 5 built: `GET /watchlist`, `PUT|DELETE /watchlist/:symbol` (idempotent, limit 50, symbol check via SymbolRegistry), 7 integration tests, FE star buttons (market row `star-<SYMBOL>`, chart header `chart-star-<SYMBOL>` so ids stay unique), live Watchlist panel (price + change % from the tickers cache), optimistic add/remove with rollback + translated toast, guest login prompt, cache cleared on user change; 7 Playwright ACs (AC-WL-01…07). AC-WL-07 limit case inserts filler rows into the test DB (`e2e/helpers/watchlist.ts`, devDependency `@prisma/client` in e2e) because the mock has only 8 pairs. No doc contract changes (SPEC/API/DATABASE/ARCHITECTURE untouched) · last code commit cd95b35 · CI green (run 45479961868)
 - 2026-11-25 · Sonnet 5.5 + Medium · Phase 5 review fixes (verdict PASS, 8 Minor; reviews/phase-5-review.decision.md): 0.1 `PriceCell` moved to `shared/ui`; 0.2 Vitest for optimistic rollback (PUT and DELETE failing, cache restored before any refetch); 0.3 Vitest for `WatchlistSession` cache reset on user change/logout; 0.4 AC-WL-07 duplicate step now uses XRPUSDT (not in the demo seed) and the limit step uses DOGEUSDT, all assertions kept; 0.5 `fillWatchlist` refuses non-`_test` databases; 0.6 `frontend/CONTEXT.md` testid list updated (the only doc changed). Review #4 (count-then-create race) and #8 (two items in one commit) accepted with no change.
+- 2026-11-25 · MERGED into main · merge 96cfe59 · tag v0.5 · CI green · deployed
 
 ---
 
