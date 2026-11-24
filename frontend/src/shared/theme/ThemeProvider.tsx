@@ -13,17 +13,27 @@ function readStoredTheme(): Theme {
   return 'dark';
 }
 
+/** Writes the theme to <html> immediately, so code that reads CSS variables right after a change (the chart) sees the new values. */
+function applyTheme(t: Theme): void {
+  document.documentElement.dataset.theme = t;
+}
+
 type ThemeContextValue = { theme: Theme; setTheme: (t: Theme) => void; toggleTheme: () => void };
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(readStoredTheme);
+  const [theme, setThemeState] = useState<Theme>(() => {
+    const initial = readStoredTheme();
+    applyTheme(initial);
+    return initial;
+  });
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    applyTheme(theme);
   }, [theme]);
 
   const setTheme = useCallback((t: Theme) => {
+    applyTheme(t);
     setThemeState(t);
     try {
       localStorage.setItem(STORAGE_KEY, t);

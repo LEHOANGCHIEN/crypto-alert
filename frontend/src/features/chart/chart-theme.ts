@@ -22,3 +22,26 @@ export function readChartColors(): ChartColors {
     down: cssVar('--color-down'),
   };
 }
+
+/** Options that depend on the theme; used both at creation and when the theme changes. */
+export function chartThemeOptions(c: ChartColors) {
+  return {
+    layout: { background: { color: c.background }, textColor: c.text },
+    grid: { vertLines: { color: c.grid }, horzLines: { color: c.grid } },
+    crosshair: { vertLine: { color: c.crosshair }, horzLine: { color: c.crosshair } },
+    rightPriceScale: { borderColor: c.border },
+    timeScale: { borderColor: c.border },
+  };
+}
+
+export function candleThemeOptions(c: ChartColors) {
+  return { upColor: c.up, downColor: c.down, wickUpColor: c.up, wickDownColor: c.down };
+}
+
+/** Exposes the applied colors for end-to-end tests (the chart itself is a canvas). */
+export function publishChartColors(el: HTMLElement, c: ChartColors): void {
+  el.dataset.chartBackground = c.background;
+  el.dataset.chartGrid = c.grid;
+  el.dataset.chartUp = c.up;
+  el.dataset.chartDown = c.down;
+}

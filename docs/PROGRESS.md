@@ -99,7 +99,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [x] Market list: virtualised, search, columns & colors per SPEC, row select → `/trade/:symbol?tf=`
 - [x] Chart: Lightweight Charts v5 candlesticks, attribution logo on, timeframe bar synced with URL, legend on hover, "pair not found" state
 - [x] Locale + timezone aware formatting (prices with pair precision, compact volume, dates); chart time labels in user timezone
-- [ ] Chart theme from tokens, re-applied on theme toggle
+- [x] Chart theme from tokens, re-applied on theme toggle
 - [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-2-review.decision.md; paste into the builder: Read reviews/phase-2-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.

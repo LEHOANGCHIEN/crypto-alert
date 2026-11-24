@@ -11,7 +11,8 @@ import {
 } from 'lightweight-charts';
 import type { Candle } from '../../shared/api/types';
 import { useFormat } from '../../shared/format/useFormat';
-import { readChartColors } from './chart-theme';
+import { useTheme } from '../../shared/theme/ThemeProvider';
+import { candleThemeOptions, chartThemeOptions, publishChartColors, readChartColors } from './chart-theme';
 
 type Props = {
   candles: Candle[];
@@ -26,6 +27,7 @@ const VISIBLE_BARS = 120;
 /** Lightweight Charts v5 candlestick chart. Times are UTC seconds; display timezone is applied by the formatters. */
 export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
   const fmt = useFormat();
+  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
@@ -41,19 +43,12 @@ export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
     const c = readChartColors();
     const chart = createChart(el, {
       autoSize: true,
-      layout: { attributionLogo: true, background: { color: c.background }, textColor: c.text, fontFamily: 'Inter, system-ui, sans-serif' },
-      grid: { vertLines: { color: c.grid }, horzLines: { color: c.grid } },
-      crosshair: { vertLine: { color: c.crosshair }, horzLine: { color: c.crosshair } },
-      rightPriceScale: { borderColor: c.border },
-      timeScale: { borderColor: c.border, timeVisible: true, secondsVisible: false },
+      ...chartThemeOptions(c),
+      layout: { ...chartThemeOptions(c).layout, attributionLogo: true, fontFamily: 'Inter, system-ui, sans-serif' },
+      timeScale: { ...chartThemeOptions(c).timeScale, timeVisible: true, secondsVisible: false },
     });
-    const series = chart.addSeries(CandlestickSeries, {
-      upColor: c.up,
-      downColor: c.down,
-      wickUpColor: c.up,
-      wickDownColor: c.down,
-      borderVisible: false,
-    });
+    const series = chart.addSeries(CandlestickSeries, { ...candleThemeOptions(c), borderVisible: false });
+    publishChartColors(el, c);
     chart.subscribeCrosshairMove((param) => {
       hoverRef.current(param.time === undefined ? null : (param.time as number) * 1000);
     });
@@ -65,6 +60,18 @@ export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
       seriesRef.current = null;
     };
   }, []);
+
+  // Re-apply token colors when the theme is toggled (no reload; candle colors stay the up/down tokens).
+  useEffect(() => {
+    const chart = chartRef.current;
+    const series = seriesRef.current;
+    const el = containerRef.current;
+    if (!chart || !series || !el) return;
+    const c = readChartColors();
+    chart.applyOptions(chartThemeOptions(c));
+    series.applyOptions(candleThemeOptions(c));
+    publishChartColors(el, c);
+  }, [theme]);
 
   // Price precision and locale/timezone-aware labels.
   useEffect(() => {
