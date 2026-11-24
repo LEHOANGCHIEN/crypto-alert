@@ -62,7 +62,7 @@ Work on Phase <N> only.
 7. If the same bug survives 2 fix attempts, stop and tell me in Vietnamese to use the STUCK BUG PROMPT.
 8. If the session gets long, finish the current item, commit, log, and stop.
 
-Finish with the Definition of Done from CLAUDE.md: npm run check passes, CI green on the branch, docs/PROGRESS.md ticked + one dated log line (model + effort, summary, last commit hash, CI status), docs/TRACEABILITY.md updated. End with "Cách kiểm tra thủ công" in simple Vietnamese (numbered steps in the browser, what I should see), the list of AC IDs now passing, and the next step (continue this phase, or the PHASE REVIEW (section c) in the Review project).
+Finish with the Definition of Done from CLAUDE.md: npm run check passes, local smoke run passes (db:migrate, db:seed, npm run dev + /api/v1/health), CI green on the branch, docs/PROGRESS.md ticked + one dated log line (model + effort, summary, last commit hash, CI status), docs/TRACEABILITY.md updated. End with "Cách kiểm tra thủ công" in simple Vietnamese (numbered steps in the browser, what I should see), the list of AC IDs now passing, and the next step (continue this phase, or the PHASE REVIEW (section c) in the Review project).
 ```
 
 ---
@@ -78,7 +78,7 @@ Review Phase <N> of crypto-alert on branch phase-<N>-<name> (folder ~/Projects/c
 2. git diff main...phase-<N>-<name> --stat, then read the changed files and the docs diff. A change to docs/SPEC.md not authorized by a reviews/*.decision.md file, or a contract change that makes an AC easier to pass, is Major.
 3. CI: gh run list --branch phase-<N>-<name> --limit 3 (latest run green and for the latest commit). Run npm run check; if the environment blocks part of it, say which part and rely on CI.
 4. For every AC ID listed for Phase <N> in docs/PROGRESS.md: a Playwright test titled with that ID exists, really checks what SPEC.md says (no trivial, skipped or weakened assertions), and TRACEABILITY.md is correct.
-5. Contracts and rules: API.md routes/fields/events/error codes; DATABASE.md schema and migrations (no db push, no edited migrations); CLAUDE.md hard rules; no secrets committed; PROGRESS.md checklist + log line; Conventional Commits; no commit message contains "Co-Authored-By", "Generated with", or mentions Claude/AI (git log main..phase-<N>-<name> --format=%B).
+5. Contracts and rules: API.md routes/fields/events/error codes; DATABASE.md schema and migrations (no db push, no edited migrations); CLAUDE.md hard rules; no secrets committed; PROGRESS.md checklist + log line; Conventional Commits; no commit message contains "Co-Authored-By", "Generated with", or mentions Claude/AI (git log main..phase-<N>-<name> --format=%B). Scripts in the root and workspace package.json files that CLAUDE.md Commands relies on (dev, start:dev, db:migrate, db:seed, build, start) must use valid syntax for the CLI tools actually installed (check the tool's own help/source in node_modules); a broken local script is Major.
 6. Live app: GET <URL>/api/v1/health → db up, provider binance, connected true; POST <URL>/api/v1/test/reset → 404.
 7. Assess every deviation the builder declared in the PROGRESS.md log line.
 

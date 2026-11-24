@@ -76,9 +76,10 @@ If the requested work belongs to a different row than the owner said they select
 
 ## Definition of Done (every task and every session)
 1. `npm run check` passes locally (typecheck, lint, unit, integration, **all** Playwright tests).
-2. Committed, pushed, and CI green on the branch (`gh run watch` or `gh run list --branch <branch>`).
-3. `docs/PROGRESS.md`: checklist ticked + one dated log line; `docs/TRACEABILITY.md` statuses updated; other docs updated if a contract changed.
-4. The final reply ends with **"Cách kiểm tra thủ công"**: numbered steps in simple Vietnamese for a non-programmer (which URL to open, what to click, what must appear), plus the list of AC IDs now passing.
+2. Local smoke run: `npm run db:migrate`, `npm run db:seed` and `npm run dev` start without errors on a machine with the Postgres container running, and `curl http://localhost:3000/api/v1/health` returns db up (stop the dev server afterwards).
+3. Committed, pushed, and CI green on the branch (`gh run watch` or `gh run list --branch <branch>`).
+4. `docs/PROGRESS.md`: checklist ticked + one dated log line; `docs/TRACEABILITY.md` statuses updated; other docs updated if a contract changed.
+5. The final reply ends with **"Cách kiểm tra thủ công"**: numbered steps in simple Vietnamese for a non-programmer (which URL to open, what to click, what must appear), plus the list of AC IDs now passing.
 If any item is not met, state which one and why in Vietnamese. Never claim "done" otherwise.
 
 ## Session hygiene

@@ -1,12 +1,22 @@
 {
-  "app": { "name": "Crypto Alert" },
+  "app": {
+    "name": "Crypto Alert"
+  },
   "nav": {
     "login": "Log in",
     "register": "Sign up",
     "home": "Back to home"
   },
-  "language": { "label": "Language", "vi": "VI", "en": "EN" },
-  "theme": { "toggle": "Toggle dark/light theme", "dark": "Dark", "light": "Light" },
+  "language": {
+    "label": "Language",
+    "vi": "VI",
+    "en": "EN"
+  },
+  "theme": {
+    "toggle": "Toggle dark/light theme",
+    "dark": "Dark",
+    "light": "Light"
+  },
   "footer": {
     "title": "Building a Web Application for Cryptocurrency Market Tracking with Real-Time Technical Charts and Price Alerts",
     "course": "Specialized Project — UIT",
@@ -14,11 +24,102 @@
     "close": "Close footer"
   },
   "pages": {
-    "trade": { "title": "Market", "placeholder": "The chart and market list arrive in later phases." },
-    "login": { "title": "Log in", "placeholder": "Login arrives in a later phase." },
-    "register": { "title": "Sign up", "placeholder": "Registration arrives in a later phase." },
-    "account": { "title": "Account", "placeholder": "The account page arrives in a later phase." },
-    "notFound": { "title": "Page not found", "description": "The page you opened does not exist." }
+    "trade": {
+      "title": "Market",
+      "placeholder": "The chart and market list arrive in later phases."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you opened does not exist."
+    }
   },
-  "errors": { "UNKNOWN": "Something went wrong, please try again." }
+  "errors": {
+    "VALIDATION_ERROR": "Some of the entered data is invalid, please check it.",
+    "UNAUTHENTICATED": "You need to log in to continue.",
+    "TOKEN_EXPIRED": "Your session has expired, please try again.",
+    "REFRESH_TOKEN_INVALID": "Your session is no longer valid, please log in again.",
+    "INVALID_CREDENTIALS": "Incorrect email or password.",
+    "WRONG_CURRENT_PASSWORD": "The current password is incorrect.",
+    "FORBIDDEN": "You are not allowed to do this.",
+    "NOT_FOUND": "The requested content was not found.",
+    "SYMBOL_NOT_FOUND": "This trading pair was not found.",
+    "ALERT_NOT_FOUND": "This alert was not found.",
+    "NOTIFICATION_NOT_FOUND": "This notification was not found.",
+    "EMAIL_TAKEN": "This email is already registered.",
+    "WATCHLIST_LIMIT_REACHED": "Your watchlist has reached the maximum of 50 pairs.",
+    "ALERT_LIMIT_REACHED": "You have reached the maximum of 20 active alerts.",
+    "ALERT_CONDITION_ALREADY_MET": "The alert condition is already met at the current price.",
+    "RATE_LIMITED": "Too many attempts, please try again in a few minutes.",
+    "INTERNAL_ERROR": "The server ran into a problem, please try again later.",
+    "MARKET_DATA_UNAVAILABLE": "Market data is temporarily unavailable.",
+    "SUBSCRIPTION_LIMIT_REACHED": "The limit of simultaneous chart subscriptions was reached.",
+    "UNKNOWN": "Something went wrong, please try again."
+  },
+  "validation": {
+    "REQUIRED": "This field is required.",
+    "INVALID_TYPE": "Invalid value.",
+    "INVALID_EMAIL": "Invalid email address.",
+    "TOO_SHORT": "Must be at least {{min}} characters.",
+    "TOO_LONG": "Must be at most {{max}} characters.",
+    "PASSWORD_WEAK": "Password must contain at least one letter and one digit.",
+    "OUT_OF_RANGE": "Value is out of the allowed range.",
+    "TOO_MANY_DECIMALS": "At most 8 decimal places.",
+    "INVALID_ENUM": "Value is not one of the allowed options.",
+    "INVALID_SYMBOL_FORMAT": "Invalid trading pair symbol.",
+    "INVALID_TIMEZONE": "Invalid timezone.",
+    "UNKNOWN_FIELD": "This field is not allowed.",
+    "PASSWORD_MISMATCH": "The confirmation does not match the password."
+  },
+  "fields": {
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display name",
+    "confirmPassword": "Confirm password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "locale": "Language",
+    "theme": "Theme",
+    "timezone": "Timezone"
+  },
+  "common": {
+    "loading": "Loading…"
+  },
+  "menu": {
+    "user": "Account menu",
+    "account": "Account",
+    "logout": "Log out"
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "toRegister": "Sign up"
+    },
+    "register": {
+      "title": "Sign up",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "toLogin": "Log in"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "save": "Save",
+    "profile": {
+      "title": "Profile",
+      "saved": "Profile saved."
+    },
+    "password": {
+      "title": "Change password",
+      "submit": "Change password",
+      "changed": "Password changed."
+    },
+    "preferences": {
+      "title": "Preferences",
+      "saved": "Preferences saved.",
+      "localeVi": "Vietnamese",
+      "localeEn": "English"
+    }
+  }
 }

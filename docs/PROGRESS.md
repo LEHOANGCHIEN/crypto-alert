@@ -9,7 +9,7 @@
 | Phase | Name | Branch | Settings | Target dates | State |
 |---|---|---|---|---|---|
 | 0 | Scaffold, i18n, tokens, DB, CI, e2e, smoke deploy | `phase-0-scaffold` | Sonnet 5.5 + Medium | Nov 24–25 | done |
-| 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | not started |
+| 1 | Auth & account | `phase-1-auth` | Sonnet 5.5 + Medium | Nov 26–27 | awaiting review |
 | 2 | Market list + chart (REST) | `phase-2-market-chart` | Sonnet 5.5 + Medium | Nov 28–29 | not started |
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | not started |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | not started |
@@ -66,20 +66,23 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=1)
 **ACs:** AC-AUTH-01…10, AC-PROF-01…04, AC-I18N-03, AC-I18N-05, AC-THEME-03
 
-- [ ] `PasswordService` (argon2id); `RefreshTokenService` (hash, rotation, reuse detection, revoke-others)
-- [ ] `POST /auth/register|login|refresh|logout|change-password` exactly per API.md §3.1; cookie flags per API.md §1
-- [ ] JWT access guard + `@CurrentUser()`; throttler on login/register (`LOGIN_RATE_LIMIT_PER_MINUTE`); test reset clears throttler storage
-- [ ] `GET/PATCH /users/me`, `PATCH /users/me/settings` (timezone validation)
-- [ ] Integration tests (real test DB): register, duplicate email, login, refresh rotation, reuse detection, logout, change password revokes others, no hash in responses. Reuse detection covers both cases explicitly: (a) a rotated token presented again within 10 s → new tokens issued, no other tokens revoked; (b) presented after 10 s → all tokens of that user revoked. Never remove the 10 s grace window to make a test pass.
-- [ ] FE http client: envelope unwrap, `ApiError(code, details)`, single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`, session restore on app start
-- [ ] FE auth store, `RequireAuth` with return-to, Login & Register pages with client validation (same rules as API.md)
-- [ ] Account page: profile, change password, preferences (language, theme, timezone select)
-- [ ] Preferences sync: guest localStorage ↔ account settings (account wins after login)
-- [ ] Translations for **all** error codes (`errors.*`) and field codes (`validation.*`) in vi + en
-- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [x] `PasswordService` (argon2id); `RefreshTokenService` (hash, rotation, reuse detection, revoke-others)
+- [x] `POST /auth/register|login|refresh|logout|change-password` exactly per API.md §3.1; cookie flags per API.md §1
+- [x] JWT access guard + `@CurrentUser()`; throttler on login/register (`LOGIN_RATE_LIMIT_PER_MINUTE`); test reset clears throttler storage
+- [x] `GET/PATCH /users/me`, `PATCH /users/me/settings` (timezone validation)
+- [x] Integration tests (real test DB): register, duplicate email, login, refresh rotation, reuse detection, logout, change password revokes others, no hash in responses. Reuse detection covers both cases explicitly: (a) a rotated token presented again within 10 s → new tokens issued, no other tokens revoked; (b) presented after 10 s → all tokens of that user revoked. Never remove the 10 s grace window to make a test pass.
+- [x] FE http client: envelope unwrap, `ApiError(code, details)`, single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`, session restore on app start
+- [x] FE auth store, `RequireAuth` with return-to, Login & Register pages with client validation (same rules as API.md)
+- [x] Account page: profile, change password, preferences (language, theme, timezone select)
+- [x] Preferences sync: guest localStorage ↔ account settings (account wins after login)
+- [x] Translations for **all** error codes (`errors.*`) and field codes (`validation.*`) in vi + en
+- [x] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-1-review.decision.md; paste into the builder: Read reviews/phase-1-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-24 · Sonnet 5.5 + Medium · Phase 1 complete: argon2id auth + rotating refresh tokens, users/settings API, throttler, FE http client with single-flight refresh, login/register/account pages, preference sync, vi/en error+validation translations, 18 integration + 17 Playwright-AC tests. Doc changes (owner-approved, resolving SPEC AC-PROF-04 vs DATABASE.md reuse rule): DATABASE.md §refresh_tokens and API.md §3.1 (+ ARCHITECTURE §6 for consistency) now say reuse detection revokes all tokens ONLY for a rotated token presented after the 10 s window; logout/change-password-revoked tokens → REFRESH_TOKEN_INVALID only. Deps: @nestjs/jwt pinned 11.0.2 (12 is ESM-only) · last commit 71a4ca2 · CI green (run 45250344267)
+- 2026-11-24 · Sonnet 5.5 + Medium · Local-dev fix (found in manual testing): backend scripts start:dev, db:migrate, db:seed switched from dotenvx syntax `dotenv run -f` to dotenv-cli `dotenv -e ../.env --` (no other occurrences in repo); verified db:migrate, db:seed ("seed OK: demo@example.com"), dev server + /api/v1/health db up · commit 9afda24 · CI run 45388656060 green · no doc contract changes
+- 2026-11-24 · Sonnet 5.5 + Medium · Applied reviews/phase-1-review.decision.md (items 1–7): timezone validation via Intl.DateTimeFormat (accepts Asia/Ho_Chi_Minh, UTC) + account select options + unit/integration tests; AC-AUTH-03 and AC-AUTH-07 tests strengthened; auth store/error texts moved to shared/. Doc change: API.md §1.3 INVALID_TIMEZONE row (authorized). Railway vars set on web: COOKIE_SECURE, TRUST_PROXY_HOPS (names only); live /health OK. Last code commit dc836fa; branch head 02f8a20; CI green (run 45382300129).
 
 ---
 

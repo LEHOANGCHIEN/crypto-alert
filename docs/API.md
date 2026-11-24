@@ -80,7 +80,7 @@ Examples:
 | `TOO_MANY_DECIMALS` | More than 8 decimals |
 | `INVALID_ENUM` | Not one of the allowed values |
 | `INVALID_SYMBOL_FORMAT` | Does not match `^[A-Z0-9]{2,20}$` |
-| `INVALID_TIMEZONE` | Not an IANA timezone (`Intl.supportedValuesOf('timeZone')`) |
+| `INVALID_TIMEZONE` | Not a valid IANA timezone name (rejected by `Intl.DateTimeFormat`; aliases such as `Asia/Ho_Chi_Minh` and `UTC` are valid) |
 | `UNKNOWN_FIELD` | Field not allowed in this body |
 
 ## 2. Canonical types
@@ -203,7 +203,7 @@ Auth column: **public** = no token needed; **user** = valid access token require
 
 Validation: `email` valid, ≤ 254, trimmed + lower-cased; `password`/`newPassword` 8–72 chars + ≥1 letter + ≥1 digit (`TOO_SHORT`/`TOO_LONG`/`PASSWORD_WEAK`); `displayName` trimmed 2–50. Confirm-password is **client-only**. Login does not validate password strength (only `REQUIRED`). Rate limit: `LOGIN_RATE_LIMIT_PER_MINUTE` requests per client IP per minute, shared by `register` and `login`; the client IP is `req.ip`, which trusts `X-Forwarded-For` only for `TRUST_PROXY_HOPS` proxy hops (0 = never; 1 on Railway).
 
-Refresh rotation grace window: a refresh token that was rotated less than 10 seconds ago and is presented again (e.g. two tabs refreshing at once) is **not** treated as reuse — the server issues a new refresh token + access token for that user and revokes nothing else. Reuse detection (revoke all of the user's tokens → `REFRESH_TOKEN_INVALID`) applies only after this 10 s window.
+Refresh rotation grace window: a refresh token that was rotated less than 10 seconds ago and is presented again (e.g. two tabs refreshing at once) is **not** treated as reuse — the server issues a new refresh token + access token for that user and revokes nothing else. Reuse detection (revoke all of the user's tokens → `REFRESH_TOKEN_INVALID`) applies only to a *rotated* token presented after this 10 s window. A token revoked by logout or change-password (never rotated) → `REFRESH_TOKEN_INVALID`, cookie cleared, nothing else revoked.
 
 ### 3.2 Users — `/api/v1/users`
 

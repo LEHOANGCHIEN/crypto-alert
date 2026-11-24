@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 5 · failing 0 · pending 71 · last CI run: green on phase-0-scaffold (2026-11-23)
+**Summary:** 76 ACs · passing 22 · failing 0 · pending 54 · last CI run: green on phase-1-auth (2026-11-24)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -13,23 +13,23 @@
 | AC-THEME-01 | 0 | theme.spec.ts | AC-THEME-01 dark theme by default | passing | |
 | AC-UI-03 | 0 | layout.spec.ts | AC-UI-03 footer shows translated texts and can be closed | passing | |
 | AC-UI-04 | 0 | layout.spec.ts | AC-UI-04 unknown route shows 404 | passing | |
-| AC-AUTH-01 | 1 | auth.spec.ts | AC-AUTH-01 register success | pending | |
-| AC-AUTH-02 | 1 | auth.spec.ts | AC-AUTH-02 duplicate email rejected | pending | |
-| AC-AUTH-03 | 1 | auth.spec.ts | AC-AUTH-03 register validation errors | pending | |
-| AC-AUTH-04 | 1 | auth.spec.ts | AC-AUTH-04 login success with return-to | pending | |
-| AC-AUTH-05 | 1 | auth.spec.ts | AC-AUTH-05 wrong credentials message | pending | |
-| AC-AUTH-06 | 1 | auth.spec.ts | AC-AUTH-06 session survives reload and token expiry | pending | |
-| AC-AUTH-07 | 1 | auth.spec.ts | AC-AUTH-07 logout | pending | |
-| AC-AUTH-08 | 1 | auth.spec.ts | AC-AUTH-08 protected route redirects to login | pending | |
-| AC-AUTH-09 | 1 | auth.spec.ts | AC-AUTH-09 no password hash in responses | pending | |
-| AC-AUTH-10 | 1 | auth.spec.ts | AC-AUTH-10 login rate limit | pending | |
-| AC-PROF-01 | 1 | account.spec.ts | AC-PROF-01 update display name | pending | |
-| AC-PROF-02 | 1 | account.spec.ts | AC-PROF-02 display name validation | pending | |
-| AC-PROF-03 | 1 | account.spec.ts | AC-PROF-03 change password | pending | |
-| AC-PROF-04 | 1 | account.spec.ts | AC-PROF-04 change password logs out other sessions | pending | |
-| AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | pending | |
-| AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | pending | |
-| AC-THEME-03 | 1 | theme.spec.ts | AC-THEME-03 theme persists for guest and account | pending | |
+| AC-AUTH-01 | 1 | auth.spec.ts | AC-AUTH-01 register success | passing | |
+| AC-AUTH-02 | 1 | auth.spec.ts | AC-AUTH-02 duplicate email rejected | passing | |
+| AC-AUTH-03 | 1 | auth.spec.ts | AC-AUTH-03 register validation errors | passing | |
+| AC-AUTH-04 | 1 | auth.spec.ts | AC-AUTH-04 login success with return-to | passing | |
+| AC-AUTH-05 | 1 | auth.spec.ts | AC-AUTH-05 wrong credentials message | passing | |
+| AC-AUTH-06 | 1 | auth.spec.ts | AC-AUTH-06 session survives reload and token expiry | passing | |
+| AC-AUTH-07 | 1 | auth.spec.ts | AC-AUTH-07 logout | passing | |
+| AC-AUTH-08 | 1 | auth.spec.ts | AC-AUTH-08 protected route redirects to login | passing | |
+| AC-AUTH-09 | 1 | auth.spec.ts | AC-AUTH-09 no password hash in responses | passing | |
+| AC-AUTH-10 | 1 | auth.spec.ts | AC-AUTH-10 login rate limit | passing | |
+| AC-PROF-01 | 1 | account.spec.ts | AC-PROF-01 update display name | passing | |
+| AC-PROF-02 | 1 | account.spec.ts | AC-PROF-02 display name validation | passing | |
+| AC-PROF-03 | 1 | account.spec.ts | AC-PROF-03 change password | passing | |
+| AC-PROF-04 | 1 | account.spec.ts | AC-PROF-04 change password logs out other sessions | passing | |
+| AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
+| AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
+| AC-THEME-03 | 1 | theme.spec.ts | AC-THEME-03 theme persists for guest and account | passing | |
 | AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | pending | |
 | AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | pending | |
 | AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | pending | |

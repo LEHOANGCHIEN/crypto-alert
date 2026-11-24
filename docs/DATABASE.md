@@ -48,7 +48,7 @@
 | replaced_by_id | integer | NULL; id of the token issued on rotation (no FK) |
 | created_at | timestamptz(3) | NOT NULL, default now() |
 
-Valid token = `revoked_at IS NULL AND expires_at > now()`. Presenting a token that was **rotated** (`replaced_by_id` set) less than 10 s ago (`revoked_at > now() − 10 s`) is not reuse: issue a new token for that user and revoke nothing else (multi-tab grace window). Presenting any other revoked token, or a rotated one after the 10 s window → revoke all of that user's tokens (reuse detection). Uses existing columns only.
+Valid token = `revoked_at IS NULL AND expires_at > now()`. Presenting a token that was **rotated** (`replaced_by_id` set) less than 10 s ago (`revoked_at > now() − 10 s`) is not reuse: issue a new token for that user and revoke nothing else (multi-tab grace window). Reuse detection (revoke ALL of that user's tokens) applies **only** to a rotated token (`replaced_by_id IS NOT NULL`) presented after the 10 s window. A token revoked by logout or change-password (`replaced_by_id IS NULL`) → `REFRESH_TOKEN_INVALID` (cookie cleared) and nothing else is revoked, so other sessions of the user stay valid. Uses existing columns only.
 
 ### watchlist_items
 | Column | Type | Constraints |

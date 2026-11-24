@@ -8,3 +8,5 @@ process.env.MARKET_DATA_PROVIDER = 'mock';
 process.env.ENABLE_TEST_ENDPOINTS = 'true';
 process.env.SERVE_FRONTEND = 'false';
 process.env.LOG_LEVEL = 'error';
+process.env.JWT_ACCESS_TTL_SECONDS = '5';
+process.env.LOGIN_RATE_LIMIT_PER_MINUTE = '5';
