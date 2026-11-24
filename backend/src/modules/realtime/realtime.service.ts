@@ -19,7 +19,7 @@ export class RealtimeService {
     this.server?.emit(event, payload);
   }
 
-  /** Test support: drop every client connection (clients reconnect on their own). */
+  /** Test support: drop every client connection (the client reconnects itself after a server-side disconnect, see frontend socket.ts). */
   disconnectAll(): void {
     this.server?.disconnectSockets(true);
   }

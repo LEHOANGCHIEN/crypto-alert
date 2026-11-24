@@ -50,7 +50,9 @@ function create(): Socket {
     }
   });
 
-  s.on('disconnect', () => {
+  s.on('disconnect', (reason) => {
+    // The server dropped us on purpose: Socket.IO does not retry by itself in that case.
+    if (reason === 'io server disconnect' && navigator.onLine) s.connect();
     // Subscriptions are per connection: they are acknowledged again after the next connect.
     useConnection.setState(tokenSwitch ? { tickersLive: false, klineLive: null } : { connected: false, tickersLive: false, klineLive: null });
   });
