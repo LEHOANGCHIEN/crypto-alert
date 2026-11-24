@@ -148,5 +148,8 @@ export class IndicatorLayers {
     el.dataset.macdSeries = this.macd ? 'macd,signal,hist' : '';
     const lastHist = this.macd?.hist.data().at(-1) as HistogramData<UTCTimestamp> | undefined;
     el.dataset.histLastColor = lastHist?.color ?? '';
+    const hist = (this.macd?.hist.data() ?? []) as HistogramData<UTCTimestamp>[];
+    el.dataset.histUpColor = hist.filter((b) => b.value >= 0).at(-1)?.color ?? '';
+    el.dataset.histDownColor = hist.filter((b) => b.value < 0).at(-1)?.color ?? '';
   }
 }

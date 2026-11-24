@@ -145,6 +145,9 @@ test('AC-IND-05 MACD pane', async ({ page }) => {
   const text = (await hist.textContent()) ?? '';
   expect(sign).toBe(text.startsWith('-') ? 'down' : 'up');
   await expect(root).toHaveAttribute('data-hist-last-color', await cssVar(page, sign === 'up' ? '--color-up' : '--color-down'));
+  // Both branches: the most recent non-negative bar is up-coloured, the most recent negative bar down-coloured.
+  await expect(root).toHaveAttribute('data-hist-up-color', await cssVar(page, '--color-up'));
+  await expect(root).toHaveAttribute('data-hist-down-color', await cssVar(page, '--color-down'));
 
   // With RSI too: three panes; then remove MACD → its pane is removed.
   await page.getByTestId('ind-rsi-toggle').check();
