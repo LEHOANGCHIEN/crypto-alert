@@ -135,5 +135,6 @@ test('AC-CHART-06 times shown in user timezone', async ({ page }) => {
   const last = candles[candles.length - 1].openTime;
   // Guest = Asia/Ho_Chi_Minh (UTC+7): the legend of the latest candle shows its open time in that timezone.
   await expect(page.getByTestId('legend-time')).toHaveText(viTime(last, 'Asia/Ho_Chi_Minh'));
+  await expect(page.getByTestId('chart-root')).toHaveAttribute('data-timezone', 'Asia/Ho_Chi_Minh'); // time axis uses the same zone
   expect(viTime(last, 'Asia/Ho_Chi_Minh')).not.toBe(viTime(last, 'UTC')); // the check can tell the zones apart
 });

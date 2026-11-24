@@ -75,6 +75,7 @@ export function CandleChart({ candles, precision, tickSize, onHover }: Props) {
 
   // Price precision and locale/timezone-aware labels.
   useEffect(() => {
+    if (containerRef.current) containerRef.current.dataset.timezone = fmt.timeZone;
     seriesRef.current?.applyOptions({ priceFormat: { type: 'price', precision, minMove: tickSize } });
     chartRef.current?.applyOptions({
       localization: {

@@ -112,4 +112,5 @@ test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => 
   const after = await legendNow();
   expect(after.openTime).toBe(before.openTime); // same candle
   expect(toMs(before.text) - toMs(after.text)).toBe(7 * 3_600_000); // UTC shows it 7 h earlier
+  await expect(page.getByTestId('chart-root')).toHaveAttribute('data-timezone', 'UTC'); // time axis too
 });
