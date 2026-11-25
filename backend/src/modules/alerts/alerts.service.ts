@@ -4,6 +4,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { SymbolRegistry } from '../market/symbol-registry';
 import { TickerStore } from '../market/ticker-store';
 import { isConditionMet, type AlertCondition, type AlertStatus } from './alert-match';
+import { AlertWorker } from './alert-worker.service';
 
 export const ACTIVE_ALERT_LIMIT = 20;
 
@@ -25,6 +26,7 @@ export class AlertsService {
     private readonly prisma: PrismaService,
     private readonly symbols: SymbolRegistry,
     private readonly tickers: TickerStore,
+    private readonly worker: AlertWorker,
   ) {}
 
   list(userId: number, status?: AlertStatus) {
@@ -44,16 +46,19 @@ export class AlertsService {
     const ticker = await this.tickers.get(input.symbol);
     if (!ticker) throw new AppError('MARKET_DATA_UNAVAILABLE');
     if (isConditionMet(input.condition, input.targetPrice, ticker.lastPrice)) throw new AppError('ALERT_CONDITION_ALREADY_MET');
-    return this.prisma.alert.create({
+    const alert = await this.prisma.alert.create({
       data: { userId, symbol: input.symbol, condition: input.condition, targetPrice: input.targetPrice },
       select: alertSelect,
     });
+    this.worker.add({ id: alert.id, userId, symbol: alert.symbol, condition: alert.condition, targetPrice: alert.targetPrice.toNumber() });
+    return alert;
   }
 
   /** ACTIVE or TRIGGERED; another user's alert is reported exactly like a missing one. */
   async remove(userId: number, id: number) {
     const { count } = await this.prisma.alert.deleteMany({ where: { id, userId } });
     if (count === 0) throw new AppError('ALERT_NOT_FOUND');
+    this.worker.remove(id);
     return { id };
   }
 }
