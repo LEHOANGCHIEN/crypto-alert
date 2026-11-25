@@ -79,7 +79,8 @@
     "newPassword": "Mật khẩu mới",
     "locale": "Ngôn ngữ",
     "theme": "Giao diện",
-    "timezone": "Múi giờ"
+    "timezone": "Múi giờ",
+    "targetPrice": "Giá mục tiêu"
   },
   "common": {
     "loading": "Đang tải…"
@@ -133,8 +134,7 @@
     "side": {
       "label": "Bảng bên phải",
       "loginRequired": "Đăng nhập để sử dụng chức năng này.",
-      "login": "Đăng nhập",
-      "comingSoon": "Chức năng này sẽ có ở các giai đoạn sau."
+      "login": "Đăng nhập"
     },
     "panels": {
       "markets": "Danh sách thị trường",
@@ -209,5 +209,26 @@
       "login": "Đăng nhập",
       "cancel": "Để sau"
     }
+  },
+  "alerts": {
+    "form": {
+      "title": "Tạo cảnh báo giá",
+      "symbol": "Cặp giao dịch",
+      "condition": "Điều kiện",
+      "submit": "Tạo cảnh báo"
+    },
+    "condition": {
+      "ABOVE": "Vượt lên trên",
+      "BELOW": "Giảm xuống dưới"
+    },
+    "active": "Đang hoạt động",
+    "triggered": "Đã kích hoạt",
+    "empty": {
+      "active": "Chưa có cảnh báo đang hoạt động.",
+      "triggered": "Chưa có cảnh báo nào được kích hoạt."
+    },
+    "createdAt": "Tạo lúc",
+    "triggeredPrice": "Kích hoạt ở giá",
+    "delete": "Xóa cảnh báo {{symbol}}"
   }
 }

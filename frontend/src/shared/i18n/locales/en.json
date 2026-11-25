@@ -79,7 +79,8 @@
     "newPassword": "New password",
     "locale": "Language",
     "theme": "Theme",
-    "timezone": "Timezone"
+    "timezone": "Timezone",
+    "targetPrice": "Target price"
   },
   "common": {
     "loading": "Loading…"
@@ -133,8 +134,7 @@
     "side": {
       "label": "Right panel",
       "loginRequired": "Log in to use this.",
-      "login": "Log in",
-      "comingSoon": "This feature arrives in later phases."
+      "login": "Log in"
     },
     "panels": {
       "markets": "Market list",
@@ -209,5 +209,26 @@
       "login": "Log in",
       "cancel": "Not now"
     }
+  },
+  "alerts": {
+    "form": {
+      "title": "Create price alert",
+      "symbol": "Pair",
+      "condition": "Condition",
+      "submit": "Create alert"
+    },
+    "condition": {
+      "ABOVE": "Above",
+      "BELOW": "Below"
+    },
+    "active": "Active",
+    "triggered": "Triggered",
+    "empty": {
+      "active": "No active alerts yet.",
+      "triggered": "No triggered alerts yet."
+    },
+    "createdAt": "Created",
+    "triggeredPrice": "Triggered at",
+    "delete": "Delete {{symbol}} alert"
   }
 }

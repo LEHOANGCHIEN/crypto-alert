@@ -6,6 +6,7 @@ import { PreferencesSync } from '../PreferencesSync';
 import { RealtimeConnection } from '../RealtimeConnection';
 import { ConnBanner } from './ConnBanner';
 import { WatchlistLoginPrompt, WatchlistSession } from '../../features/watchlist';
+import { AlertSession } from '../../features/alerts';
 
 export function AppLayout() {
   // The dashboard uses the full area; other pages are padded and scrollable.
@@ -22,6 +23,7 @@ export function AppLayout() {
       <PreferencesSync />
       <RealtimeConnection />
       <WatchlistSession />
+      <AlertSession />
       <WatchlistLoginPrompt />
     </div>
   );
