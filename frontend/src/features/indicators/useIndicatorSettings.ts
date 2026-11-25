@@ -23,6 +23,7 @@ type Store = {
   setMaPeriod: (slot: number, period: number) => void;
   setRsi: (enabled: boolean) => void;
   setMacd: (enabled: boolean) => void;
+  setVolume: (enabled: boolean) => void;
 };
 
 /** Indicator settings of this browser (localStorage `crypto-alert.indicators`). */
@@ -43,5 +44,6 @@ export const useIndicatorSettings = create<Store>((set, get) => {
     },
     setRsi: (rsi) => update({ ...get().settings, rsi }),
     setMacd: (macd) => update({ ...get().settings, macd }),
+    setVolume: (volume) => update({ ...get().settings, volume }),
   };
 });

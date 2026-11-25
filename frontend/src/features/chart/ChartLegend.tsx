@@ -42,6 +42,12 @@ export function ChartLegend({ candle, index, hovered, precision, indicators, set
             <span data-testid={`legend-${key}`}>{fmt.price(value, precision)}</span>
           </span>
         ))}
+        {settings.volume && (
+          <span className="text-text">
+            <span className="text-text-muted">{t('chart.legend.volume')} </span>
+            <span data-testid="legend-volume">{fmt.compact(candle.volume)}</span>
+          </span>
+        )}
       </div>
       {indicators && <IndicatorLegend data={indicators} index={index} settings={settings} precision={precision} />}
     </div>

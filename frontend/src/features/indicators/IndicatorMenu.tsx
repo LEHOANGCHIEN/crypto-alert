@@ -85,6 +85,7 @@ export function IndicatorMenu() {
   const settings = useIndicatorSettings((s) => s.settings);
   const setRsi = useIndicatorSettings((s) => s.setRsi);
   const setMacd = useIndicatorSettings((s) => s.setMacd);
+  const setVolume = useIndicatorSettings((s) => s.setVolume);
 
   useEffect(() => {
     if (!open) return;
@@ -137,6 +138,7 @@ export function IndicatorMenu() {
           {settings.ma.map((_, i) => (
             <MaRow key={i} slot={i} />
           ))}
+          <Toggle id="ind-volume-toggle" label={t('indicators.volume')} checked={settings.volume} onChange={setVolume} />
           <Toggle id="ind-rsi-toggle" label={t('indicators.rsi', { period: RSI_PERIOD })} checked={settings.rsi} onChange={setRsi} />
           <Toggle
             id="ind-macd-toggle"

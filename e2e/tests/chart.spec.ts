@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
-import { left, pushTick } from '../helpers/market';
+import { closeCandle, left, pinOpenCandle, openLiveChart, pushTick } from '../helpers/market';
+import { cssVar, hoverCandle } from '../helpers/chart';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -177,4 +178,126 @@ test('AC-CHART-09 chart header shows coin name and 24h stats', async ({ page, re
   await pushTick(request, 'BTCUSDT', price);
   await expect(page.getByTestId('chart-high')).toHaveText(viPrice(price), { timeout: left(deadline) });
   await expect(page.getByTestId('chart-price')).toHaveText(viPrice(price), { timeout: left(deadline) });
+});
+
+test('AC-CHART-07 chart type menu switches the price series', async ({ page, request }) => {
+  const candles = await openChart(page);
+  const root = page.getByTestId('chart-root');
+  const lastClose = String(candles.at(-1)!.close);
+  const up = await cssVar(page, '--color-up');
+  const down = await cssVar(page, '--color-down');
+  const accent = await cssVar(page, '--color-accent');
+
+  // Default Candles, drawn with the up/down tokens.
+  await expect(root).toHaveAttribute('data-chart-type', 'candles');
+  await expect(root).toHaveAttribute('data-series-color', up);
+  await expect(root).toHaveAttribute('data-series-down-color', down);
+  await expect(page.getByTestId('chart-type-menu')).toHaveText('Nến');
+
+  // Translated menu with the four types.
+  await page.getByTestId('chart-type-menu').click();
+  await expect(page.getByRole('menuitemradio')).toHaveText(['Nến', 'Thanh OHLC', 'Đường', 'Vùng']);
+
+  // Bars (OHLC): up/down colors.
+  await page.getByTestId('chart-type-bars').click();
+  await expect(root).toHaveAttribute('data-chart-type', 'bars');
+  await expect(root).toHaveAttribute('data-series-color', up);
+  await expect(root).toHaveAttribute('data-series-down-color', down);
+  await expect(root).toHaveAttribute('data-series-last-value', lastClose);
+
+  // Line: close prices in the accent color; indicators, legend and live updates keep working.
+  await page.getByTestId('chart-type-menu').click();
+  await page.getByTestId('chart-type-line').click();
+  await expect(root).toHaveAttribute('data-chart-type', 'line');
+  await expect(root).toHaveAttribute('data-series-color', accent);
+  await expect(root).toHaveAttribute('data-series-last-value', lastClose);
+  await expect(root).toHaveAttribute('data-ma-series', '7,25,99');
+  await expect(page.getByTestId('chart-legend')).toBeVisible();
+  await expect(page.getByTestId('legend-ma-1-value')).not.toHaveText('—');
+  const price = Math.round((candles.at(-1)!.close + 77) * 100) / 100;
+  const deadline = Date.now() + 2_000;
+  await pushTick(request, 'BTCUSDT', price);
+  await expect(root).toHaveAttribute('data-series-last-value', String(price), { timeout: left(deadline) });
+  await expect(root).toHaveAttribute('data-last-close', String(price));
+
+  // Timeframe switching keeps the type and shows the new timeframe's close prices.
+  await page.getByTestId('tf-15m').click();
+  await expect(page).toHaveURL(/tf=15m/);
+  await expect(root).toHaveAttribute('data-chart-type', 'line');
+  await expect(root).toHaveAttribute('data-candle-count', '1000');
+  await expect.poll(async () => (await root.getAttribute('data-series-last-value')) === (await root.getAttribute('data-last-close'))).toBe(true);
+
+  // Reload → still Line (localStorage crypto-alert.chart-type).
+  expect(await page.evaluate(() => localStorage.getItem('crypto-alert.chart-type'))).toBe('line');
+  await page.reload();
+  await expect(root).toHaveAttribute('data-candle-count', '1000');
+  await expect(root).toHaveAttribute('data-chart-type', 'line');
+  await expect(page.getByTestId('chart-type-menu')).toHaveText('Đường');
+
+  // Area: accent too; back to candles: up/down colors again.
+  await page.getByTestId('chart-type-menu').click();
+  await page.getByTestId('chart-type-area').click();
+  await expect(root).toHaveAttribute('data-chart-type', 'area');
+  await expect(root).toHaveAttribute('data-series-color', accent);
+  await page.getByTestId('chart-type-menu').click();
+  await page.getByTestId('chart-type-candles').click();
+  await expect(root).toHaveAttribute('data-chart-type', 'candles');
+  await expect(root).toHaveAttribute('data-series-color', up);
+});
+
+test('AC-CHART-08 volume bars overlay on the price pane', async ({ page, request }) => {
+  await pinOpenCandle(request, 'BTCUSDT');
+  const candles = await openLiveChart(page, '/trade/BTCUSDT', 'BTCUSDT:1h');
+  const root = page.getByTestId('chart-root');
+  const upVol = await cssVar(page, '--color-up-volume');
+  const downVol = await cssVar(page, '--color-down-volume');
+  const last = candles.at(-1) as Candle & { volume: number };
+  const vol = (c: unknown) => (c as { volume: number }).volume;
+  const colorOf = (c: Candle) => (c.close >= c.open ? upVol : downVol);
+
+  // On by default: one bar per candle on the price pane's lowest ~20 %, colored by the candle's direction.
+  await expect(root).toHaveAttribute('data-volume-count', String(candles.length));
+  await expect(root).toHaveAttribute('data-volume-scale-top', '0.8');
+  await expect(root).toHaveAttribute('data-panes', '1');
+  await expect(root).toHaveAttribute('data-volume-up-color', upVol);
+  await expect(root).toHaveAttribute('data-volume-down-color', downVol);
+  await expect(root).toHaveAttribute('data-volume-last-color', colorOf(last));
+  await expect(root).toHaveAttribute('data-volume-last-value', String(vol(last)));
+
+  // Legend: `Vol` with the latest candle's base volume (compact locale format), and the hovered candle's when hovering.
+  const viCompact = (v: number) => new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 }).format(v);
+  await expect(page.getByTestId('chart-legend')).toContainText('Vol');
+  await expect(page.getByTestId('legend-volume')).toHaveText(viCompact(vol(last)));
+  const target = candles[candles.length - 60];
+  await hoverCandle(page, candles, target.openTime);
+  await expect(page.getByTestId('legend-volume')).toHaveText(viCompact(vol(target)));
+  await page.mouse.move(2, 2);
+
+  // Live: a tick below the open candle's open flips the last bar's color; closing the candle adds a new bar (volume 0).
+  const below = Math.round((last.open - 10) * 100) / 100;
+  const above = Math.round((last.open + 10) * 100) / 100;
+  let deadline = Date.now() + 2_000;
+  await pushTick(request, 'BTCUSDT', below);
+  await expect(root).toHaveAttribute('data-volume-last-color', downVol, { timeout: left(deadline) });
+  deadline = Date.now() + 2_000;
+  await pushTick(request, 'BTCUSDT', above);
+  await expect(root).toHaveAttribute('data-volume-last-color', upVol, { timeout: left(deadline) });
+  const { opened } = await closeCandle(request, 'BTCUSDT', '1h');
+  deadline = Date.now() + 2_000;
+  await expect(root).toHaveAttribute('data-volume-count', String(candles.length + 1), { timeout: left(deadline) });
+  await expect(root).toHaveAttribute('data-volume-last-time', String(Math.floor(opened.openTime / 1000)));
+  await expect(root).toHaveAttribute('data-volume-last-value', '0');
+
+  // Toggle "Volume" off in the Indicators menu → bars and legend entry disappear; kept after reload.
+  await page.getByTestId('indicators-button').click();
+  await expect(page.getByTestId('ind-volume-toggle')).toBeChecked();
+  await page.getByTestId('ind-volume-toggle').uncheck();
+  await expect(root).toHaveAttribute('data-volume-count', '0');
+  await expect(page.getByTestId('legend-volume')).toHaveCount(0);
+  await page.reload();
+  await expect(root).toHaveAttribute('data-candle-count', /\d+/);
+  await expect(root).toHaveAttribute('data-volume-count', '0');
+  await expect(page.getByTestId('legend-volume')).toHaveCount(0);
+  await page.getByTestId('indicators-button').click();
+  await expect(page.getByTestId('ind-volume-toggle')).not.toBeChecked();
 });

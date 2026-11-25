@@ -7,6 +7,11 @@ export type ChartColors = {
   border: string;
   up: string;
   down: string;
+  accent: string;
+  upVolume: string;
+  downVolume: string;
+  accentSoft: string;
+  accentClear: string;
   ma: string[];
   rsi: string;
   macd: string;
@@ -24,6 +29,11 @@ export function readChartColors(): ChartColors {
     border: cssVar('--color-border'),
     up: cssVar('--color-up'),
     down: cssVar('--color-down'),
+    accent: cssVar('--color-accent'),
+    upVolume: cssVar('--color-up-volume'),
+    downVolume: cssVar('--color-down-volume'),
+    accentSoft: cssVar('--color-accent-soft'),
+    accentClear: cssVar('--color-accent-clear'),
     ma: [cssVar('--color-ind-1'), cssVar('--color-ind-2'), cssVar('--color-ind-3')],
     rsi: cssVar('--color-ind-rsi'),
     macd: cssVar('--color-ind-macd'),

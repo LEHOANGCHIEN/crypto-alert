@@ -1,6 +1,6 @@
 /** Indicator settings (SPEC §4.1, A3): stored per browser in localStorage, never in the DB. */
 export type MaSetting = { period: number; enabled: boolean };
-export type IndicatorSettings = { ma: MaSetting[]; rsi: boolean; macd: boolean };
+export type IndicatorSettings = { ma: MaSetting[]; rsi: boolean; macd: boolean; /** volume bars overlay on the price pane (AC-CHART-08) */ volume: boolean };
 
 export const MA_SLOTS = 3;
 export const PERIOD_MIN = 2;
@@ -15,6 +15,7 @@ export const DEFAULT_INDICATOR_SETTINGS: IndicatorSettings = {
   ],
   rsi: false,
   macd: false,
+  volume: true,
 };
 
 /** A period typed by the user: an integer 2–200 (digits only), else null. */
@@ -44,5 +45,6 @@ export function parseSettings(raw: string | null): IndicatorSettings {
     }),
     rsi: typeof o.rsi === 'boolean' ? o.rsi : DEFAULT_INDICATOR_SETTINGS.rsi,
     macd: typeof o.macd === 'boolean' ? o.macd : DEFAULT_INDICATOR_SETTINGS.macd,
+    volume: typeof o.volume === 'boolean' ? o.volume : DEFAULT_INDICATOR_SETTINGS.volume,
   };
 }

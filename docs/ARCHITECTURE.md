@@ -285,6 +285,8 @@ Visual reference: owner's mockup `docs/design/mockup-trading-terminal.png` (layo
 | `--color-up` | `#37C99A` | `#0A7F6F` | price up, bullish candle, MACD hist ≥ 0 |
 | `--color-down` | `#EF7381` | `#D32F2F` | price down, bearish candle, MACD hist < 0 |
 | `--color-up-soft` / `--color-down-soft` | up / down at 15 % opacity | same | flash, volume bars (40 %), area fill |
+| `--color-accent-soft` / `--color-accent-clear` | accent at 25 % / 0 % | same | area-series fill (top / bottom) |
+| `--color-up-volume` / `--color-down-volume` | up / down at 40 % | same | volume bars |
 | `--color-chart-grid` | `#161B22` | `#EEF0F3` | chart grid |
 | `--color-chart-crosshair` | `#5B6472` | `#9AA3AF` | crosshair |
 | `--color-ind-1/2/3` | `#F59E0B` / `#A855F7` / `#38BDF8` | `#D97706` / `#9333EA` / `#0284C7` | MA lines 1–3 |

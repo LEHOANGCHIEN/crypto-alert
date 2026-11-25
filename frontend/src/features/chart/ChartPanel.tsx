@@ -8,6 +8,8 @@ import { useConnection } from '../../shared/socket/connection.store';
 import { IndicatorMenu, useIndicatorData, useIndicatorSettings } from '../indicators';
 import { CandleChart } from './CandleChart';
 import { ChartHeaderStats } from './ChartHeaderStats';
+import { useChartType } from './chart-type.store';
+import { ChartTypeMenu } from './ChartTypeMenu';
 import { ChartLegend } from './ChartLegend';
 import { parseInterval, TimeframeBar } from './TimeframeBar';
 
@@ -18,6 +20,7 @@ export function ChartPanel() {
   const [params, setParams] = useSearchParams();
   const interval = parseInterval(params.get('tf'));
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
+  const chartType = useChartType((s) => s.type);
 
   const symbols = useSymbols();
   const tickers = useTickers();
@@ -67,6 +70,7 @@ export function ChartPanel() {
             })
           }
         />
+        <ChartTypeMenu />
         <IndicatorMenu />
       </div>
       <div className="relative min-h-0 flex-1">
@@ -79,6 +83,7 @@ export function ChartPanel() {
             liveKey={live ? `${symbol}:${interval}` : ''}
             indicators={indicators}
             settings={indicatorSettings}
+            chartType={chartType}
           />
         )}
         {info && candles && (

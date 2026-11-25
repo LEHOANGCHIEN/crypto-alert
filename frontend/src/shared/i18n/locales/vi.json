@@ -174,7 +174,8 @@
       "open": "O",
       "high": "H",
       "low": "L",
-      "close": "C"
+      "close": "C",
+      "volume": "Vol"
     },
     "notFound": {
       "title": "Không tìm thấy cặp giao dịch",
@@ -187,6 +188,13 @@
       "low": "Thấp nhất 24h",
       "volBase": "KL 24h ({{asset}})",
       "volQuote": "KL 24h (USDT)"
+    },
+    "type": {
+      "label": "Kiểu biểu đồ",
+      "candles": "Nến",
+      "bars": "Thanh OHLC",
+      "line": "Đường",
+      "area": "Vùng"
     }
   },
   "connection": {
@@ -209,7 +217,8 @@
       "line": "MACD",
       "signal": "Tín hiệu",
       "hist": "Hist"
-    }
+    },
+    "volume": "Khối lượng"
   },
   "watchlist": {
     "star": {
