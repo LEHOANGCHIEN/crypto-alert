@@ -97,8 +97,11 @@ test('AC-NOTIF-03 mark read and mark all read', async ({ page, request }) => {
   await expect(item(page, seeded.id)).toHaveAttribute('data-unread', 'false');
   await expect(item(page, btcN.id)).toHaveAttribute('data-unread', 'true');
 
-  // Mark all → badge hidden.
+  // Mark all → badge hidden. The e2e access token lives 5 s, so the first request may get a 401 and be retried
+  // after the silent refresh: wait for the final (non-401) response, then for the UI state.
+  const markedAll = page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/notifications/read-all') && r.status() !== 401);
   await page.getByTestId('notifications-mark-all').click();
+  expect((await markedAll).ok()).toBe(true);
   await expect(badge(page)).toHaveCount(0);
   await expect(item(page, btcN.id)).toHaveAttribute('data-unread', 'false');
 
