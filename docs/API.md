@@ -247,7 +247,7 @@ Check order for `POST /alerts`: validation → symbol exists → active-alert li
 | `POST /notifications/:id/read` | — | **200** `Notification` (idempotent) | `NOTIFICATION_NOT_FOUND` |
 | `POST /notifications/read-all` | — | **200** `{ updated: number }` | — |
 
-Both read endpoints also emit `notification:read` to the user's other sockets (§4.3).
+Both read endpoints also emit `notification:read` to room `user:{id}` — all of the user's sockets, as in the §4.3 table; the tab that made the request applies it idempotently — whenever at least one notification became read (§4.3).
 
 ### 3.7 Health — `/api/v1/health` (public)
 
