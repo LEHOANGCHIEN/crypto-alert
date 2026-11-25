@@ -14,7 +14,7 @@
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | done |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
-| 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | built, awaiting review |
+| 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
 | — | Buffer for slips | — | — | Dec 8–10 | — |
 
@@ -190,6 +190,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Log:**
 - 2026-11-25 · Opus 5.5 + High · Phase 6 built: alerts REST API (GET/POST/DELETE, check order validation → symbol → limit 20 → price → already met, `PriceField` with TOO_MANY_DECIMALS), AlertWorker (in-memory index, boot load, sync on create/delete, one-shot conditional UPDATE + notification INSERT in one transaction, in-flight guard), NotificationChannel + NOTIFICATION_CHANNELS + InAppChannel + NotificationsService, notifications API (list/read/read-all) with `notification:new` / `notification:read`, POST /test/worker/reload (and /test/reset now reloads the worker, as API.md §3.8 already said); 25 new integration tests (alerts, worker trigger incl. 20-tick burst and concurrent transactions, notifications + socket isolation); FE Alerts tab (prefilled form, client validation, Active/Triggered lists, delete), header bell (badge 9+), notifications panel, toasts, cross-tab read sync, unread summary toast after login/app start, missed-notification re-sync on socket connect; 15 Playwright ACs (AC-ALERT-01…10, AC-NOTIF-01…05) + AC-UI-01 extended with the logged-in header bell (reviews/phase-2-ui-01-bell.decision.md). Existing toast assertions in account/auth/watchlist specs now exclude notification toasts (`data-kind="notification"`; same texts and counts). Doc changes: API.md §3.5 `targetPrice` OUT_OF_RANGE also > 1e15 (DECIMAL(24,8) limit); API.md §3.6 `notification:read` goes to room `user:{id}` (matches the §4.3 table); frontend/CONTEXT.md testid list; TRACEABILITY. SPEC/DATABASE/ARCHITECTURE untouched · npm run check green (unit 107 BE + 98 FE, integration 90, Playwright 74) · smoke run OK (health db up, provider binance) · last code commit abc9673 · CI green (run 45638142138)
 - 2026-11-25 · Sonnet 5.5 + Medium · Phase 6 review PASS (reviews/phase-6-review.md) + decision applied (reviews/phase-6-review.decision.md): frontend/CONTEXT.md Testing hooks now lists all Phase 6 testids (alert-row-*, alert-*-at/price, alerts-loading/error, notification-* fields, side-content-<tab>). Docs changed: frontend/CONTEXT.md, PROGRESS.md; added review + decision files.
+- 2026-11-26 · MERGED into main · merge 0c3f837 · tag v0.6 (on a529f8d) · CI green (CI on the merge commit was red, run 45652317813: AC-ALERT-08 saw the first 401 before the silent token refresh; fixed forward in a529f8d `test(e2e): wait for the final response after silent token refresh`, test-only, CI green run 45656271040) · deployed (live: health ok/binance/connected, /alerts and /notifications 401 UNAUTHENTICATED, POST /test/reset 404)
 
 ---
 
