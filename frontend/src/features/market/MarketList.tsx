@@ -89,14 +89,12 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
       </div>
       <div data-testid="market-columns" className={`${ROW_GRID} shrink-0 border-b border-border px-3 py-1 text-meta text-text-faint`}>
         <div aria-hidden="true" />
-        <div className="flex min-w-0 gap-1 truncate">
-          <span>{t('market.columns.pair')}</span>
-          <i aria-hidden="true">/</i>
-          <span>{t('market.columns.volume')}</span>
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate">{t('market.columns.pair')}</span>
+          <span className="truncate">{t('market.columns.volume')}</span>
         </div>
-        <div className="flex justify-end gap-1 text-right">
+        <div className="flex flex-col items-end">
           <span>{t('market.columns.price')}</span>
-          <i aria-hidden="true">/</i>
           <span>{t('market.columns.change')}</span>
         </div>
       </div>
