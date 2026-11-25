@@ -85,7 +85,8 @@ export async function createAlertViaUi(page: Page, condition: 'ABOVE' | 'BELOW',
   if (symbol) await page.getByTestId('alert-symbol').selectOption(symbol);
   await page.getByTestId('alert-condition').selectOption(condition);
   await page.getByTestId('field-targetPrice').fill(String(target));
-  const created = page.waitForResponse((r) => r.url().endsWith('/api/v1/alerts') && r.request().method() === 'POST');
+  // The app silently refreshes an expired token (JWT_ACCESS_TTL_SECONDS=5 in e2e) and resends: ignore the 401 and wait for the final response.
+  const created = page.waitForResponse((r) => r.url().endsWith('/api/v1/alerts') && r.request().method() === 'POST' && r.status() !== 401);
   await page.getByTestId('alert-submit').click();
   const res = await created;
   expect(res.status()).toBe(201);

@@ -94,7 +94,8 @@ test('AC-ALERT-02 alert validation and already-met', async ({ page, request }) =
   ] as const) {
     await page.getByTestId('alert-condition').selectOption(condition);
     await input.fill(String(target));
-    const res = page.waitForResponse((r) => r.url().endsWith('/api/v1/alerts') && r.request().method() === 'POST');
+    // The app silently refreshes an expired token (JWT_ACCESS_TTL_SECONDS=5 in e2e) and resends: ignore the 401 and wait for the final response.
+    const res = page.waitForResponse((r) => r.url().endsWith('/api/v1/alerts') && r.request().method() === 'POST' && r.status() !== 401);
     await page.getByTestId('alert-submit').click();
     expect((await res).status()).toBe(422);
     await expect(page.getByTestId('alert-form-error')).toHaveText(VI_TEXT.ALREADY_MET);
@@ -222,7 +223,8 @@ test('AC-ALERT-07 active alert limit 20', async ({ page, request }) => {
   await expect(page.getByTestId('alerts-active').locator('li')).toHaveCount(20);
 
   await page.getByTestId('field-targetPrice').fill(String(round(price + 1000)));
-  const res = page.waitForResponse((r) => r.url().endsWith('/api/v1/alerts') && r.request().method() === 'POST');
+  // The app silently refreshes an expired token (JWT_ACCESS_TTL_SECONDS=5 in e2e) and resends: ignore the 401 and wait for the final response.
+  const res = page.waitForResponse((r) => r.url().endsWith('/api/v1/alerts') && r.request().method() === 'POST' && r.status() !== 401);
   await page.getByTestId('alert-submit').click();
   expect((await res).status()).toBe(409);
   await expect(page.getByTestId('alert-form-error')).toHaveText(VI_TEXT.LIMIT);

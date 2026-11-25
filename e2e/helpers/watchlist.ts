@@ -27,7 +27,8 @@ export const panelSymbols = (page: Page) =>
 
 /** Clicks a star and waits for the PUT/DELETE to be answered. */
 export async function clickStar(page: Page, testId: string, method: 'PUT' | 'DELETE'): Promise<void> {
-  const done = page.waitForResponse((r) => r.request().method() === method && /\/api\/v1\/watchlist\//.test(r.url()));
+  // The app silently refreshes an expired token (JWT_ACCESS_TTL_SECONDS=5 in e2e) and resends: ignore the 401 and wait for the final response.
+  const done = page.waitForResponse((r) => r.request().method() === method && /\/api\/v1\/watchlist\//.test(r.url()) && r.status() !== 401);
   await page.getByTestId(testId).click();
   expect((await done).ok()).toBe(true);
 }

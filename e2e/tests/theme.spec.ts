@@ -24,7 +24,8 @@ test('AC-THEME-03 theme persists for guest and account', async ({ page, browser,
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
   // logged-in choice is saved to the account
-  const saved = page.waitForResponse((r) => r.url().endsWith('/api/v1/users/me/settings') && r.request().method() === 'PATCH');
+  // The app silently refreshes an expired token (JWT_ACCESS_TTL_SECONDS=5 in e2e) and resends: ignore the 401 and wait for the final response.
+  const saved = page.waitForResponse((r) => r.url().endsWith('/api/v1/users/me/settings') && r.request().method() === 'PATCH' && r.status() !== 401);
   await page.getByTestId('theme-toggle').click();
   expect((await saved).ok()).toBe(true);
 
