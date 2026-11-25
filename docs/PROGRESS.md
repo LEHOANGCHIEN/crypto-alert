@@ -15,7 +15,7 @@
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
-| 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | in progress |
+| 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | built, awaiting review |
 | 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | not started |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 8–9 | not started |
 | — | Buffer for slips | — | — | Dec 10–11 | — |
@@ -208,10 +208,11 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 - [x] Chart header stats + coin names (AC-CHART-09)
 - [x] Chart types + volume overlay (AC-CHART-07, AC-CHART-08)
 - [x] Screenshot + maximize (AC-CHART-10)
-- [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
+- [x] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6a-review.decision.md; paste into the builder: Read reviews/phase-6a-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-26 · Sonnet 5.5 + Medium · Phase 6a built: §3 doc edits (SPEC §1 + A10 + routes + 17 new ACs incl. F13, ARCHITECTURE §11/§12, PROGRESS 6a/6b + Phase 7 dates, TRACEABILITY 93 ACs, CONTEXT testids); new tokens + Inter/Roboto Mono (@fontsource/roboto-mono) and denser restyle; resizable/collapsible side columns (`crypto-alert.layout`, separators with keyboard + double-click, rails ≤ 24 px); market pulse bar + status bar; two-line market rows + All/Watchlist tabs; chart header stats + 18 coin names; chart types (candles/bars/line/area, `crypto-alert.chart-type`) + volume overlay (indicator setting `volume`); screenshot (`takeScreenshot` PNG) + CSS maximize. Tests: 9 new AC tests (AC-MKT-07, AC-UI-05…08, AC-CHART-07…10) + AC-CHART-09 + rewritten AC-MKT-01/AC-UI-01; theme/market tests updated to the new token values and `bg-*-soft` flash classes (same strictness). `npm run check` green (BE 107 + FE 106 unit, 90 integration, 83 Playwright); smoke run OK (migrate, seed, dev, health db up/binance connected). Doc changes: SPEC.md (decision §3.1 only), ARCHITECTURE §11/§12 (+ tokens accent-soft/-clear, up/down-volume; `--color-text-faint` dark = #7D8997 instead of the mockup's #697685 because that fails the 4.5:1 contrast rule of SPEC §6), PROGRESS, TRACEABILITY, frontend/CONTEXT.md; API.md/DATABASE.md untouched. Note: the mock tick does not change candle volume, so AC-CHART-08 proves live updates with a tick (bar color) + close-candle (new bar, volume 0) · last code commit d387857 · CI green (run 45687494979)
 
 ---
 
