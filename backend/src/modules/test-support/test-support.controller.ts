@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { AppError } from '../../common/app-error';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AlertWorker } from '../alerts/alert-worker.service';
 import { seedDemo } from '../../seed/seed-demo';
 import { MARKET_DATA_PROVIDER, type MarketDataProvider } from '../market/providers/market-data-provider.interface';
 import { MockProvider } from '../market/providers/mock/mock.provider';
@@ -26,6 +27,7 @@ export class TestSupportController {
     private readonly subscriptions: SubscriptionManager,
     private readonly realtime: RealtimeService,
     private readonly relay: RealtimeRelay,
+    private readonly worker: AlertWorker,
   ) {}
 
   private mock(): MockProvider {
@@ -46,6 +48,8 @@ export class TestSupportController {
     await this.tickerStore.refresh();
     mock.resetCounters();
     this.throttler.reset();
+    // IDs restart at 1 after the truncate: the worker must forget every alert of the previous test.
+    await this.worker.reload();
     return { ok: true };
   }
 
@@ -65,6 +69,12 @@ export class TestSupportController {
   disconnect(@Body() body: DisconnectDto) {
     this.mock().simulateDisconnect(body.durationMs ?? DEFAULT_DISCONNECT_MS);
     return { ok: true };
+  }
+
+  /** Simulates a backend restart for the worker: memory cleared, ACTIVE alerts reloaded from the DB (AC-ALERT-09). */
+  @Post('worker/reload')
+  async workerReload() {
+    return { activeAlerts: await this.worker.reload() };
   }
 
   @Get('market/stats')
