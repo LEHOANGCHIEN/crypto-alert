@@ -12,6 +12,7 @@ const CONSTRAINT_TO_CODE: Record<string, FieldErrorCode> = {
   isEmail: 'INVALID_EMAIL',
   matches: 'INVALID_TYPE',
   isTimezone: 'INVALID_TIMEZONE',
+  maxDecimals: 'TOO_MANY_DECIMALS',
   minLength: 'TOO_SHORT',
   maxLength: 'TOO_LONG',
   min: 'OUT_OF_RANGE',

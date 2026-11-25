@@ -234,7 +234,7 @@ Refresh rotation grace window: a refresh token that was rotated less than 10 sec
 | Method & path | Body / query | Success | Errors |
 |---|---|---|---|
 | `GET /alerts` | `status?: AlertStatus` | **200** `Alert[]` ordered by `createdAt` desc | `VALIDATION_ERROR` |
-| `POST /alerts` | `{ symbol: string, condition: AlertCondition, targetPrice: number }` | **201** `Alert` (status `ACTIVE`) | `VALIDATION_ERROR` (`targetPrice`: `REQUIRED`, `INVALID_TYPE`, `OUT_OF_RANGE` if ≤ 0, `TOO_MANY_DECIMALS`), `SYMBOL_NOT_FOUND`, `ALERT_LIMIT_REACHED`, `ALERT_CONDITION_ALREADY_MET`, `MARKET_DATA_UNAVAILABLE` |
+| `POST /alerts` | `{ symbol: string, condition: AlertCondition, targetPrice: number }` | **201** `Alert` (status `ACTIVE`) | `VALIDATION_ERROR` (`targetPrice`: `REQUIRED`, `INVALID_TYPE`, `OUT_OF_RANGE` if ≤ 0 or > 1e15 (DATABASE.md `DECIMAL(24,8)` column limit; `params.max`), `TOO_MANY_DECIMALS`), `SYMBOL_NOT_FOUND`, `ALERT_LIMIT_REACHED`, `ALERT_CONDITION_ALREADY_MET`, `MARKET_DATA_UNAVAILABLE` |
 | `DELETE /alerts/:id` | — | **200** `{ id: number }` (ACTIVE or TRIGGERED) | `VALIDATION_ERROR` (non-integer id), `ALERT_NOT_FOUND` |
 
 Check order for `POST /alerts`: validation → symbol exists → active-alert limit → current price available → condition already met.
