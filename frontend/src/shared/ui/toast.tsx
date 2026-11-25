@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
-type ToastKind = 'success' | 'error' | 'info';
+/** `notification` = alert notifications (notification:new, unread summary); styled like info. */
+type ToastKind = 'success' | 'error' | 'info' | 'notification';
 type ToastItem = { id: number; kind: ToastKind; text: string };
 
 type ToastStore = { items: ToastItem[]; push: (kind: ToastKind, text: string) => void; dismiss: (id: number) => void };
@@ -21,11 +22,13 @@ export const toast = {
   success: (text: string) => useToastStore.getState().push('success', text),
   error: (text: string) => useToastStore.getState().push('error', text),
   info: (text: string) => useToastStore.getState().push('info', text),
+  notification: (text: string) => useToastStore.getState().push('notification', text),
 };
 
 const KIND_CLASS: Record<ToastKind, string> = {
   success: 'border-accent',
   info: 'border-accent',
+  notification: 'border-accent',
   error: 'border-danger',
 };
 
@@ -38,6 +41,7 @@ export function Toaster() {
           key={i.id}
           role={i.kind === 'error' ? 'alert' : 'status'}
           data-testid="toast"
+          data-kind={i.kind}
           className={`pointer-events-auto rounded-card border bg-surface-2 p-3 text-body text-text ${KIND_CLASS[i.kind]}`}
         >
           {i.text}

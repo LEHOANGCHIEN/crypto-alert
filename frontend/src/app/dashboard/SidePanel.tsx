@@ -2,9 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../shared/auth/auth.store';
 import { WatchlistPanel } from '../../features/watchlist';
+import { AlertsPanel } from '../../features/alerts';
 import type { DashboardTab } from './MobileTabBar';
 
-/** Right panel: Watchlist / Alerts. Watchlist (Phase 5) for users; the Alerts tab stays a placeholder until Phase 6. */
+/** Right panel: Watchlist / Alerts tabs for users; guests see a login prompt (SPEC §2). */
 export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' | 'alerts'; onChange: (t: DashboardTab) => void; onSelect?: () => void }) {
   const { t } = useTranslation();
   const status = useAuth((s) => s.status);
@@ -25,9 +26,9 @@ export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' 
           </button>
         ))}
       </div>
-      {status === 'authenticated' && active === 'watchlist' ? (
-        <div data-testid="side-content-watchlist" className="flex min-h-0 flex-1 flex-col">
-          <WatchlistPanel onSelect={onSelect} />
+      {status === 'authenticated' ? (
+        <div data-testid={`side-content-${active}`} className="flex min-h-0 flex-1 flex-col">
+          {active === 'watchlist' ? <WatchlistPanel onSelect={onSelect} /> : <AlertsPanel />}
         </div>
       ) : (
         <div data-testid={`side-content-${active}`} className="flex flex-1 flex-col items-center justify-center gap-3 p-4 text-center">
@@ -42,7 +43,6 @@ export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' 
               </Link>
             </>
           )}
-          {status === 'authenticated' && <p className="text-text-muted">{t('dashboard.side.comingSoon')}</p>}
         </div>
       )}
     </>

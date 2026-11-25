@@ -12,6 +12,8 @@ export const SERVER_EVENTS = {
   TICKERS_UPDATE: 'tickers:update',
   KLINE_UPDATE: 'kline:update',
   MARKET_STATUS: 'market:status',
+  NOTIFICATION_NEW: 'notification:new',
+  NOTIFICATION_READ: 'notification:read',
 } as const;
 
 /** Server-internal room names (API.md §4.1). */

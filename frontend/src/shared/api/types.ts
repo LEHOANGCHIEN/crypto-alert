@@ -70,3 +70,36 @@ export type Candle = {
 export type MarketStatus = 'connected' | 'reconnecting';
 
 export type WatchlistItem = { symbol: string; createdAt: string };
+
+export type AlertCondition = 'ABOVE' | 'BELOW';
+export type AlertStatus = 'ACTIVE' | 'TRIGGERED';
+export type NotificationType = 'ALERT_TRIGGERED';
+
+export type Alert = {
+  id: number;
+  symbol: string;
+  condition: AlertCondition;
+  targetPrice: number;
+  status: AlertStatus;
+  triggeredPrice: number | null;
+  createdAt: string;
+  triggeredAt: string | null;
+};
+
+export type AlertTriggeredPayload = {
+  alertId: number;
+  symbol: string;
+  condition: AlertCondition;
+  targetPrice: number;
+  triggeredPrice: number;
+};
+
+export type Notification = {
+  id: number;
+  type: NotificationType;
+  payload: AlertTriggeredPayload;
+  readAt: string | null;
+  createdAt: string;
+};
+
+export type NotificationList = { items: Notification[]; unreadCount: number };

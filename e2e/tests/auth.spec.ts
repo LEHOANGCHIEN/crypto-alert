@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
+import { appToast } from '../helpers/toast';
 import { DEMO, NEW_USER, VI, loginViaUi, logoutViaUi, registerViaUi } from '../helpers/auth';
 
 test.beforeEach(async ({ request }) => resetApp(request));
@@ -96,7 +97,7 @@ test('AC-AUTH-06 session survives reload and token expiry', async ({ page }) => 
   await page.getByTestId('menu-account').click();
   await page.getByTestId('field-displayName').fill('Renamed User');
   await page.getByTestId('save-profile').click();
-  await expect(page.getByTestId('toast')).toBeVisible(); // success without re-login (silent refresh)
+  await expect(appToast(page)).toBeVisible(); // success without re-login (silent refresh)
   await expect(page.getByTestId('user-display-name')).toHaveText('Renamed User');
   await expect(page).toHaveURL(/\/account$/);
 });

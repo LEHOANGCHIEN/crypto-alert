@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength, registerDecorator } from 'class-validator';
+import { IsDefined, IsIn, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Matches, Max, MaxLength, Min, MinLength, registerDecorator } from 'class-validator';
 
 const trim = ({ value }: { value: unknown }) => (typeof value === 'string' ? value.trim() : value);
 
@@ -87,3 +87,48 @@ export function IsTimezone() {
     IsOptional()(target, property);
   };
 }
+
+/** Number of decimal places of a finite number, also for exponent notation (1e-9 → 9). */
+export function decimalPlaces(v: number): number {
+  if (!Number.isFinite(v)) return Number.POSITIVE_INFINITY;
+  const [mantissa, exp] = v.toString().toLowerCase().split('e');
+  const frac = (mantissa.split('.')[1] ?? '').length;
+  return Math.max(0, frac - Number(exp ?? 0));
+}
+
+/** Largest accepted price: DECIMAL(24,8) holds 16 integer digits (docs/DATABASE.md). */
+export const MAX_PRICE = 1e15;
+
+/** Required positive price: REQUIRED → INVALID_TYPE → OUT_OF_RANGE (≤ 0 or > MAX_PRICE) → TOO_MANY_DECIMALS (> 8). */
+export const PriceField = () =>
+  applyDecorators(
+    // class-validator checks IsDefined first, then the others in the order listed here (stopAtFirstError).
+    IsDefined(),
+    IsNumber({ allowNaN: false, allowInfinity: false }),
+    IsPositive({ context: { code: 'OUT_OF_RANGE' } }),
+    Max(MAX_PRICE, { context: { code: 'OUT_OF_RANGE', params: { max: MAX_PRICE } } }),
+    registerMaxDecimals(8),
+  );
+
+function registerMaxDecimals(max: number): PropertyDecorator {
+  return (target: object, property: string | symbol) =>
+    registerDecorator({
+      name: 'maxDecimals',
+      target: target.constructor,
+      propertyName: String(property),
+      constraints: [max],
+      options: { context: { code: 'TOO_MANY_DECIMALS' } },
+      // Non-numbers are reported by IsNumber (INVALID_TYPE); this check only judges numbers.
+      validator: { validate: (v: unknown) => typeof v !== 'number' || decimalPlaces(v) <= max },
+    });
+}
+
+/** Required integer path param (e.g. `/alerts/:id`); non-integers → VALIDATION_ERROR. */
+export const IntParam = () =>
+  applyDecorators(
+    IsDefined(),
+    IsInt(),
+    Min(1, { context: { code: 'OUT_OF_RANGE', params: { min: 1 } } }),
+    Max(2_147_483_647, { context: { code: 'OUT_OF_RANGE', params: { max: 2_147_483_647 } } }),
+    Transform(({ value }) => (typeof value === 'string' && /^-?\d+$/.test(value) ? Number(value) : value)),
+  );

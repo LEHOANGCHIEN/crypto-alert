@@ -14,7 +14,7 @@
 | 3 | Real-time relay | `phase-3-realtime` | Opus 5.5 + High | Nov 30–Dec 1 | done |
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
-| 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | not started |
+| 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | built, awaiting review |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
 | — | Buffer for slips | — | — | Dec 8–10 | — |
 
@@ -176,18 +176,20 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 **Settings before starting:** Opus 5.5 + High · Plan mode ON · *Phase Start Prompt* (N=6) · near the weekly quota limit → Sonnet 5.5 + Medium
 **ACs:** AC-ALERT-01…10 · AC-NOTIF-01…05
 
-- [ ] Alerts API per API.md §3.5 (check order, limit 20, already-met check from `TickerStore`)
-- [ ] `AlertWorker` per ARCHITECTURE §5 (index, boot load, sync on create/delete, atomic one-shot trigger in a transaction, in-flight guard)
-- [ ] `NotificationChannel` interface + `NOTIFICATION_CHANNELS` token + `InAppChannel`; `NotificationService`
-- [ ] Notifications API per API.md §3.6; `notification:new` and `notification:read` socket events
-- [ ] `POST /test/worker/reload`
-- [ ] Integration tests (real test DB): trigger ABOVE/BELOW, one-shot under burst of ticks, delete prevents trigger, isolation, reload rebuilds index
-- [ ] FE Alerts tab: form (prefill symbol + current price), Active/Triggered lists, delete, translated errors
-- [ ] FE toasts on `notification:new`, bell badge (`9+`), notifications panel, mark read / all, cross-tab sync, unread summary toast after login
-- [ ] Playwright tests for this phase's ACs; TRACEABILITY; log line
+- [x] Alerts API per API.md §3.5 (check order, limit 20, already-met check from `TickerStore`)
+- [x] `AlertWorker` per ARCHITECTURE §5 (index, boot load, sync on create/delete, atomic one-shot trigger in a transaction, in-flight guard)
+- [x] `NotificationChannel` interface + `NOTIFICATION_CHANNELS` token + `InAppChannel`; `NotificationService`
+- [x] Notifications API per API.md §3.6; `notification:new` and `notification:read` socket events
+- [x] `POST /test/worker/reload`
+- [x] Integration tests (real test DB): trigger ABOVE/BELOW, one-shot under burst of ticks, delete prevents trigger, isolation, reload rebuilds index
+- [x] FE Alerts tab: form (prefill symbol + current price), Active/Triggered lists, delete, translated errors
+- [x] FE toasts on `notification:new`, bell badge (`9+`), notifications panel, mark read / all, cross-tab sync, unread summary toast after login
+- [x] Playwright tests for this phase's ACs; TRACEABILITY; log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6-review.decision.md; paste into the builder: Read reviews/phase-6-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-25 · Opus 5.5 + High · Phase 6 built: alerts REST API (GET/POST/DELETE, check order validation → symbol → limit 20 → price → already met, `PriceField` with TOO_MANY_DECIMALS), AlertWorker (in-memory index, boot load, sync on create/delete, one-shot conditional UPDATE + notification INSERT in one transaction, in-flight guard), NotificationChannel + NOTIFICATION_CHANNELS + InAppChannel + NotificationsService, notifications API (list/read/read-all) with `notification:new` / `notification:read`, POST /test/worker/reload (and /test/reset now reloads the worker, as API.md §3.8 already said); 25 new integration tests (alerts, worker trigger incl. 20-tick burst and concurrent transactions, notifications + socket isolation); FE Alerts tab (prefilled form, client validation, Active/Triggered lists, delete), header bell (badge 9+), notifications panel, toasts, cross-tab read sync, unread summary toast after login/app start, missed-notification re-sync on socket connect; 15 Playwright ACs (AC-ALERT-01…10, AC-NOTIF-01…05) + AC-UI-01 extended with the logged-in header bell (reviews/phase-2-ui-01-bell.decision.md). Existing toast assertions in account/auth/watchlist specs now exclude notification toasts (`data-kind="notification"`; same texts and counts). Doc changes: API.md §3.5 `targetPrice` OUT_OF_RANGE also > 1e15 (DECIMAL(24,8) limit); API.md §3.6 `notification:read` goes to room `user:{id}` (matches the §4.3 table); frontend/CONTEXT.md testid list; TRACEABILITY. SPEC/DATABASE/ARCHITECTURE untouched · npm run check green (unit 107 BE + 98 FE, integration 90, Playwright 74) · smoke run OK (health db up, provider binance) · last code commit abc9673 · CI green (run 45638142138)
+- 2026-11-25 · Sonnet 5.5 + Medium · Phase 6 review PASS (reviews/phase-6-review.md) + decision applied (reviews/phase-6-review.decision.md): frontend/CONTEXT.md Testing hooks now lists all Phase 6 testids (alert-row-*, alert-*-at/price, alerts-loading/error, notification-* fields, side-content-<tab>). Docs changed: frontend/CONTEXT.md, PROGRESS.md; added review + decision files.
 
 ---
 
