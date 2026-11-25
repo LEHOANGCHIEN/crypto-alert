@@ -1,6 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
 import { left, pushTick } from '../helpers/market';
+import { loginViaUi } from '../helpers/auth';
+import { cssVar } from '../helpers/chart';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -13,8 +15,29 @@ test('AC-MKT-01 list shows only USDT pairs sorted by volume', async ({ page, req
   await page.goto('/trade/BTCUSDT');
   await expect(page.getByTestId('market-row-BTCUSDT')).toBeVisible();
 
-  // Columns: Pair, Last price, 24h change, 24h volume.
-  await expect(page.getByTestId('market-columns').locator('span')).toHaveText(['Cặp', 'Giá gần nhất', 'Thay đổi 24h', 'Khối lượng 24h']);
+  // Column header names all four columns: Pair, 24h volume (left) and Last price, 24h change (right).
+  await expect(page.getByTestId('market-columns').locator('span')).toHaveText(['Cặp', 'Khối lượng 24h', 'Giá gần nhất', 'Thay đổi 24h']);
+
+  // Two-line row: pair (base bold + muted /USDT) over the volume on the left, price over the change on the right.
+  const row = page.getByTestId('market-row-ETHUSDT');
+  expect(Math.round((await row.boundingBox())!.height)).toBe(48);
+  await expect(row).toContainText('ETH/USDT');
+  const base = page.getByTestId('market-pair-ETHUSDT');
+  expect(Number(await base.evaluate((e) => getComputedStyle(e).fontWeight))).toBeGreaterThanOrEqual(600);
+  const suffix = row.getByText('/USDT', { exact: true });
+  const faint = await cssVar(page, '--color-text-faint');
+  const toRgb = (hex: string) => `rgb(${parseInt(hex.slice(1, 3), 16)}, ${parseInt(hex.slice(3, 5), 16)}, ${parseInt(hex.slice(5, 7), 16)})`;
+  await expect(suffix).toHaveCSS('color', toRgb(faint));
+  const pair = (await base.boundingBox())!;
+  const volume = (await page.getByTestId('market-volume-ETHUSDT').boundingBox())!;
+  const price = (await page.getByTestId('market-price-ETHUSDT').boundingBox())!;
+  const change = (await page.getByTestId('market-change-ETHUSDT').boundingBox())!;
+  expect(pair.y + pair.height).toBeLessThanOrEqual(volume.y + 1); // pair above volume
+  expect(Math.abs(pair.x - volume.x)).toBeLessThan(2); // same left edge
+  expect(price.y + price.height).toBeLessThanOrEqual(change.y + 1); // price above change
+  expect(price.x).toBeGreaterThan(pair.x + pair.width); // price column is right of the pair column
+  const eth = ((await (await request.get('/api/v1/market/tickers')).json()).data as { symbol: string; quoteVolume: number }[]).find((t) => t.symbol === 'ETHUSDT')!;
+  await expect(page.getByTestId('market-volume-ETHUSDT')).toHaveText(new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 }).format(eth.quoteVolume));
 
   // Only …USDT pairs: the mock also knows ETHBTC and BTCUSDC, which must not appear.
   await expect(page.getByTestId('market-row-ETHBTC')).toHaveCount(0);
@@ -31,6 +54,44 @@ test('AC-MKT-01 list shows only USDT pairs sorted by volume', async ({ page, req
   // Cells show price with the pair's precision (vi format), compact volume.
   await expect(page.getByTestId('market-price-ETHUSDT')).toHaveText('3.510,25');
   await expect(page.getByTestId('market-price-XRPUSDT')).toHaveText('0,5234');
+});
+
+test('AC-MKT-07 market list has All and Watchlist tabs', async ({ page, browser }) => {
+  // Demo user watches BTCUSDT, ETHUSDT, SOLUSDT; remove SOLUSDT so exactly BTCUSDT and ETHUSDT remain.
+  await loginViaUi(page);
+  await page.goto('/trade/BTCUSDT');
+  await expect(page.getByTestId('market-row-SOLUSDT')).toBeVisible();
+  await expect(page.getByTestId('market-tab-all')).toHaveAttribute('aria-selected', 'true');
+  const removed = page.waitForResponse((r) => r.request().method() === 'DELETE' && r.url().includes('/watchlist/SOLUSDT') && r.status() !== 401);
+  await page.getByTestId('star-SOLUSDT').click();
+  expect((await removed).ok()).toBe(true);
+
+  await page.getByTestId('market-tab-watchlist').click();
+  await expect(page.getByTestId('market-tab-watchlist')).toHaveAttribute('aria-selected', 'true');
+  await expect.poll(() => rowSymbols(page)).toEqual(['BTCUSDT', 'ETHUSDT']);
+
+  // Search still filters inside the tab.
+  await page.getByTestId('market-search').fill('eth');
+  await expect.poll(() => rowSymbols(page)).toEqual(['ETHUSDT']);
+  await page.getByTestId('market-search').fill('sol');
+  await expect(page.getByTestId('market-empty')).toBeVisible();
+  await page.getByTestId('market-search').fill('');
+
+  // All → the full list again.
+  await page.getByTestId('market-tab-all').click();
+  await expect.poll(async () => (await rowSymbols(page)).length).toBe(USDT.length);
+
+  // Guest: Watchlist tab shows a translated login prompt with a link to /login.
+  const guest = await (await browser.newContext({ baseURL: page.url().split('/trade')[0] })).newPage();
+  await guest.goto('/trade/BTCUSDT');
+  await expect(guest.getByTestId('market-row-BTCUSDT')).toBeVisible();
+  await guest.getByTestId('market-tab-watchlist').click();
+  const prompt = guest.getByTestId('market-tab-login-prompt');
+  await expect(prompt).toContainText('Đăng nhập để xem danh sách theo dõi của bạn.');
+  await expect(prompt.getByRole('link', { name: 'Đăng nhập' })).toHaveAttribute('href', '/login');
+  await prompt.getByRole('link', { name: 'Đăng nhập' }).click();
+  await expect(guest).toHaveURL(/\/login$/);
+  await guest.context().close();
 });
 
 test('AC-MKT-02 search filters pairs', async ({ page }) => {

@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 93 ACs · passing 78 · failing 0 · pending 15 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
+**Summary:** 93 ACs · passing 79 · failing 0 · pending 14 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -30,7 +30,7 @@
 | AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
 | AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
 | AC-THEME-03 | 1 | theme.spec.ts | AC-THEME-03 theme persists for guest and account | passing | |
-| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | edited in 6a (two-line rows, column labels): test updated in Phase 6a |
+| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | edited in 6a: two-line rows, four column labels, 48 px rows (test rewritten to the new AC text) |
 | AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | passing | |
 | AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | passing | |
 | AC-MKT-05 | 2 | market.spec.ts | AC-MKT-05 row click opens chart | passing | |
@@ -84,7 +84,7 @@
 | AC-NOTIF-05 | 6 | notifications.spec.ts | AC-NOTIF-05 multi-tab delivery and read sync | passing | two pages of one browser context; integration: notification:read reaches every socket of the user only |
 | AC-I18N-02 | 7 | i18n.spec.ts | AC-I18N-02 every visible text switches to English | pending | |
 | AC-OPS-02 | 7 | ops.spec.ts | AC-OPS-02 seeded demo account | pending | |
-| AC-MKT-07 | 6a | market.spec.ts | AC-MKT-07 market list All and Watchlist tabs | pending | |
+| AC-MKT-07 | 6a | market.spec.ts | AC-MKT-07 market list has All and Watchlist tabs | passing | |
 | AC-UI-05 | 6a | ui.spec.ts | AC-UI-05 side columns can be resized by drag and keyboard | passing | unit: layout.test.ts |
 | AC-UI-06 | 6a | ui.spec.ts | AC-UI-06 side columns can be collapsed and reopened | passing | |
 | AC-UI-07 | 6a | ui.spec.ts | AC-UI-07 market pulse bar shows major pairs live and links to the chart | passing | |
