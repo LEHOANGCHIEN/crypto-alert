@@ -31,13 +31,13 @@ export function AlertList({ kind, alerts }: { kind: 'active' | 'triggered'; aler
             <li key={a.id} data-testid={`alert-row-${a.id}`} data-status={a.status} className="flex items-start gap-2 border-b border-border px-3 py-2 text-row">
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <div className="flex items-center gap-2">
-                  <span data-testid="alert-symbol" className="font-semibold">
+                  <span data-testid="alert-row-symbol" className="font-semibold">
                     {a.symbol}
                   </span>
-                  <span data-testid="alert-condition" className="text-text-muted">
+                  <span data-testid="alert-row-condition" className="text-text-muted">
                     {t(`alerts.condition.${a.condition}`)}
                   </span>
-                  <span data-testid="alert-target" className="tabular-nums">
+                  <span data-testid="alert-row-target" className="tabular-nums">
                     {price(a.symbol, a.targetPrice)}
                   </span>
                 </div>
