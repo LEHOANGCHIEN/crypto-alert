@@ -207,7 +207,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 - [x] Two-line market rows + All/Watchlist tabs (AC-MKT-01, AC-MKT-07)
 - [x] Chart header stats + coin names (AC-CHART-09)
 - [x] Chart types + volume overlay (AC-CHART-07, AC-CHART-08)
-- [ ] Screenshot + maximize (AC-CHART-10)
+- [x] Screenshot + maximize (AC-CHART-10)
 - [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6a-review.decision.md; paste into the builder: Read reviews/phase-6a-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.

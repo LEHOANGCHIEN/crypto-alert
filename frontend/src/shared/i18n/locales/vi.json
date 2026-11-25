@@ -195,7 +195,10 @@
       "bars": "Thanh OHLC",
       "line": "Đường",
       "area": "Vùng"
-    }
+    },
+    "screenshot": "Lưu ảnh biểu đồ",
+    "maximize": "Phóng to biểu đồ",
+    "restore": "Thu nhỏ biểu đồ"
   },
   "connection": {
     "reconnecting": "Mất kết nối, đang kết nối lại…"

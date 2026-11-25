@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
 import { closeCandle, left, pinOpenCandle, openLiveChart, pushTick } from '../helpers/market';
 import { cssVar, hoverCandle } from '../helpers/chart';
+import { readFileSync } from 'node:fs';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -300,4 +301,63 @@ test('AC-CHART-08 volume bars overlay on the price pane', async ({ page, request
   await expect(page.getByTestId('legend-volume')).toHaveCount(0);
   await page.getByTestId('indicators-button').click();
   await expect(page.getByTestId('ind-volume-toggle')).not.toBeChecked();
+});
+
+const stamp = (epoch: number, timeZone: string) => {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(epoch)
+      .map((x) => [x.type, x.value]),
+  );
+  return `${p.year}${p.month}${p.day}-${p.hour}${p.minute}`;
+};
+
+test('AC-CHART-10 screenshot download and maximize', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await openChart(page, '/trade/BTCUSDT?tf=15m');
+  const root = page.getByTestId('chart-root');
+
+  // Camera → the browser downloads <SYMBOL>-<tf>-<yyyyMMdd-HHmm>.png (a real PNG).
+  const before = Date.now();
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByTestId('chart-screenshot').click()]);
+  const after = Date.now();
+  const name = download.suggestedFilename();
+  expect(name).toMatch(/^BTCUSDT-15m-\d{8}-\d{4}\.png$/);
+  expect([stamp(before, 'Asia/Ho_Chi_Minh'), stamp(after, 'Asia/Ho_Chi_Minh')].map((x) => `BTCUSDT-15m-${x}.png`)).toContain(name);
+  const bytes = readFileSync((await download.path())!);
+  expect(bytes.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
+  expect(bytes.length).toBeGreaterThan(2_000);
+
+  // Maximize → the chart panel fills the window above every other panel.
+  const panel = page.getByTestId('chart-panel');
+  const widths = async () => ({
+    market: (await page.getByTestId('panel-market').boundingBox())!.width,
+    side: (await page.getByTestId('panel-side').boundingBox())!.width,
+    chart: (await page.getByTestId('panel-chart').boundingBox())!.width,
+  });
+  const normal = await widths();
+  await expect(panel).toHaveAttribute('data-maximized', 'false');
+  await page.getByTestId('chart-maximize').click();
+  await expect(panel).toHaveAttribute('data-maximized', 'true');
+  await expect(page.getByTestId('panel-chart')).toHaveAttribute('data-maximized', 'true');
+  const box = (await panel.boundingBox())!;
+  expect([Math.round(box.x), Math.round(box.y), Math.round(box.width), Math.round(box.height)]).toEqual([0, 0, 1440, 900]);
+  // On top: the topmost element at the header's position and at a side panel's position belongs to the chart panel.
+  for (const [x, y] of [[100, 20], [30, 450], [1400, 450]]) {
+    expect(await page.evaluate(([px, py]) => document.elementFromPoint(px, py)?.closest('[data-testid="chart-panel"]') !== null, [x, y])).toBe(true);
+  }
+  // The chart redraws to the new size.
+  await expect.poll(async () => Number(await root.getAttribute('data-canvas-width'))).toBe(1440);
+
+  // Esc restores; column widths are unchanged.
+  await page.keyboard.press('Escape');
+  await expect(panel).toHaveAttribute('data-maximized', 'false');
+  await expect.poll(async () => JSON.stringify(await widths())).toBe(JSON.stringify(normal));
+
+  // The button toggles too.
+  await page.getByTestId('chart-maximize').click();
+  await expect(panel).toHaveAttribute('data-maximized', 'true');
+  await page.getByTestId('chart-maximize').click();
+  await expect(panel).toHaveAttribute('data-maximized', 'false');
+  expect(await widths()).toEqual(normal);
 });

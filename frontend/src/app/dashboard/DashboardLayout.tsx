@@ -1,6 +1,7 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResizeHandle } from '../../shared/layout/ResizeHandle';
+import { useMaximized } from '../../shared/layout/maximize.store';
 import { useLayout } from '../../shared/layout/layout.store';
 import { MobileTabBar, type DashboardTab } from './MobileTabBar';
 import { CollapseButton, Rail } from './PanelToggle';
@@ -21,6 +22,7 @@ export function DashboardLayout({ market, chart }: Props) {
   const [active, setActive] = useState<DashboardTab>('chart');
   const left = useLayout((s) => s.left);
   const right = useLayout((s) => s.right);
+  const maximized = useMaximized((s) => s.maximized);
   const show = (on: boolean) => (on ? 'flex' : 'hidden');
   // Column widths are passed as CSS variables so components carry no hard-coded pixel values.
   const vars = { '--dash-left': `${left.width}px`, '--dash-right': `${right.width}px` } as CSSProperties;
@@ -43,6 +45,7 @@ export function DashboardLayout({ market, chart }: Props) {
       {!left.collapsed && <ResizeHandle side="left" />}
       <section
         data-testid="panel-chart"
+        data-maximized={maximized}
         className={`${show(active === 'chart')} min-h-0 min-w-0 flex-1 flex-col bg-bg lg:flex`}
       >
         {chart}

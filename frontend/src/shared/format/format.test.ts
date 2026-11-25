@@ -42,3 +42,12 @@ describe('format helpers', () => {
     expect(priceDirection(0)).toBe('flat');
   });
 });
+
+describe('formatFileStamp', () => {
+  it('formats yyyyMMdd-HHmm in the given timezone', async () => {
+    const { formatFileStamp } = await import('./index');
+    const t = Date.UTC(2026, 10, 26, 7, 5, 59); // 26/11/2026 07:05:59 UTC
+    expect(formatFileStamp(t, 'UTC')).toBe('20261126-0705');
+    expect(formatFileStamp(t, 'Asia/Ho_Chi_Minh')).toBe('20261126-1405');
+  });
+});

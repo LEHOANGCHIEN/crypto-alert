@@ -23,6 +23,8 @@ type Props = {
   settings: IndicatorSettings;
   /** how the price series is drawn (AC-CHART-07) */
   chartType: ChartType;
+  /** gives the parent a way to take a PNG screenshot (null after dispose) */
+  onReady?: (screenshot: (() => HTMLCanvasElement) | null) => void;
 };
 
 const timeOf = (k: Candle) => Math.floor(k.openTime / 1000);
@@ -30,7 +32,7 @@ const timeOf = (k: Candle) => Math.floor(k.openTime / 1000);
 const VISIBLE_BARS = 120;
 
 /** Lightweight Charts v5 candlestick chart. Times are UTC seconds; display timezone is applied by the formatters. */
-export function CandleChart({ candles, precision, tickSize, onHover, liveKey, indicators, settings, chartType }: Props) {
+export function CandleChart({ candles, precision, tickSize, onHover, liveKey, indicators, settings, chartType, onReady }: Props) {
   const fmt = useFormat();
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,10 +44,12 @@ export function CandleChart({ candles, precision, tickSize, onHover, liveKey, in
   const layersRef = useRef<IndicatorLayers | null>(null);
   const shownIndRef = useRef<IndicatorData | null>(null);
   const settingsRef = useRef(settings);
+  const readyRef = useRef(onReady);
   const hoverRef = useRef(onHover);
   useEffect(() => {
     hoverRef.current = onHover;
-  }, [onHover]);
+    readyRef.current = onReady;
+  }, [onHover, onReady]);
 
   // Create once; dispose on unmount.
   useEffect(() => {
@@ -68,11 +72,13 @@ export function CandleChart({ candles, precision, tickSize, onHover, liveKey, in
     });
     ro.observe(el);
     chartRef.current = chart;
+    readyRef.current?.(() => chart.takeScreenshot());
     layersRef.current = new IndicatorLayers(chart, c);
     volumeRef.current = new VolumeLayer(chart, c);
     shownRef.current = []; // a new chart has no data yet: the data effect must call setData
     shownIndRef.current = null;
     return () => {
+      readyRef.current?.(null);
       ro.disconnect();
       chart.remove();
       chartRef.current = null;

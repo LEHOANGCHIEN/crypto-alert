@@ -195,7 +195,10 @@
       "bars": "Bars (OHLC)",
       "line": "Line",
       "area": "Area"
-    }
+    },
+    "screenshot": "Save chart image",
+    "maximize": "Maximize chart",
+    "restore": "Restore chart size"
   },
   "connection": {
     "reconnecting": "Reconnecting…"

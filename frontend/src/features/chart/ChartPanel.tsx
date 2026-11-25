@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { errorText } from '../../shared/i18n/errorText';
@@ -7,6 +7,8 @@ import { useLiveKlines } from '../../shared/market/useLiveMarket';
 import { useConnection } from '../../shared/socket/connection.store';
 import { IndicatorMenu, useIndicatorData, useIndicatorSettings } from '../indicators';
 import { CandleChart } from './CandleChart';
+import { useMaximized } from '../../shared/layout/maximize.store';
+import { ChartActions } from './ChartActions';
 import { ChartHeaderStats } from './ChartHeaderStats';
 import { useChartType } from './chart-type.store';
 import { ChartTypeMenu } from './ChartTypeMenu';
@@ -21,6 +23,11 @@ export function ChartPanel() {
   const interval = parseInterval(params.get('tf'));
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
   const chartType = useChartType((s) => s.type);
+  const maximized = useMaximized((s) => s.maximized);
+  const shotRef = useRef<(() => HTMLCanvasElement) | null>(null);
+  const onReady = useCallback((fn: (() => HTMLCanvasElement) | null) => {
+    shotRef.current = fn;
+  }, []);
 
   const symbols = useSymbols();
   const tickers = useTickers();
@@ -57,7 +64,11 @@ export function ChartPanel() {
   const fail = symbols.error ?? klines.error;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div
+      data-testid="chart-panel"
+      data-maximized={maximized}
+      className={`flex min-h-0 flex-1 flex-col ${maximized ? 'fixed inset-0 z-50 bg-bg' : ''}`}
+    >
       <ChartHeaderStats symbol={symbol} info={info} ticker={ticker} />
       <div className="flex h-toolbar shrink-0 items-center gap-2 border-b border-border px-3">
         <TimeframeBar
@@ -72,6 +83,7 @@ export function ChartPanel() {
         />
         <ChartTypeMenu />
         <IndicatorMenu />
+        <ChartActions symbol={symbol} interval={interval} screenshot={() => shotRef.current?.() ?? null} />
       </div>
       <div className="relative min-h-0 flex-1">
         {info && candles && (
@@ -84,6 +96,7 @@ export function ChartPanel() {
             indicators={indicators}
             settings={indicatorSettings}
             chartType={chartType}
+            onReady={onReady}
           />
         )}
         {info && candles && (

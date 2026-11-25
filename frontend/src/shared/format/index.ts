@@ -64,6 +64,16 @@ export function formatTime(epochMs: number, timeZone: string): string {
   return new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(epochMs);
 }
 
+/** epoch ms → "20261126-1405" (yyyyMMdd-HHmm) in the given IANA timezone, for file names. */
+export function formatFileStamp(epochMs: number, timeZone: string): string {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(epochMs)
+      .map((p) => [p.type, p.value]),
+  );
+  return `${parts.year}${parts.month}${parts.day}-${parts.hour}${parts.minute}`;
+}
+
 export type PriceDirection = 'up' | 'down' | 'flat';
 
 /** Direction of a 24h change as displayed: a change that rounds to 0.00 % is flat (neutral color, no sign). */
