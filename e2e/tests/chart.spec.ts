@@ -174,6 +174,7 @@ test('AC-CHART-09 chart header shows coin name and 24h stats', async ({ page, re
   // A tick above the 24h high updates High (and the last price) within 2 s.
   await page.goto('/trade/BTCUSDT');
   await expect(page.getByTestId('chart-high')).toHaveText(viPrice(tk.highPrice));
+  await expect(page.getByTestId('market-list')).toHaveAttribute('data-live', 'true'); // tickers subscription acknowledged
   const price = Math.round((tk.highPrice + 500) * 100) / 100;
   const deadline = Date.now() + 2_000;
   await pushTick(request, 'BTCUSDT', price);
@@ -215,6 +216,7 @@ test('AC-CHART-07 chart type menu switches the price series', async ({ page, req
   await expect(root).toHaveAttribute('data-ma-series', '7,25,99');
   await expect(page.getByTestId('chart-legend')).toBeVisible();
   await expect(page.getByTestId('legend-ma-1-value')).not.toHaveText('—');
+  await expect(root).toHaveAttribute('data-live', 'BTCUSDT:1h'); // kline subscription acknowledged
   const price = Math.round((candles.at(-1)!.close + 77) * 100) / 100;
   const deadline = Date.now() + 2_000;
   await pushTick(request, 'BTCUSDT', price);

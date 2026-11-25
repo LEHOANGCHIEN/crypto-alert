@@ -208,6 +208,7 @@ test('AC-UI-07 market pulse bar shows major pairs live and links to the chart', 
   await expect(page.getByTestId('pulse-change-XRPUSDT')).not.toHaveClass(/text-up|text-down/);
 
   // A mock tick for ETHUSDT updates its pulse price within 2 s.
+  await expect(page.getByTestId('market-list')).toHaveAttribute('data-live', 'true'); // tickers subscription acknowledged
   const price = Math.round((await lastPrice(request, 'ETHUSDT')) * 1.01 * 100) / 100;
   const deadline = Date.now() + 2_000;
   await pushTick(request, 'ETHUSDT', price);
@@ -265,6 +266,7 @@ test('AC-UI-08 status bar shows connection state, last update and a clock', asyn
   const last = page.getByTestId('status-last-update');
   await expect(last).toHaveAttribute('data-epoch', /\d+/);
   const first = Number(await last.getAttribute('data-epoch'));
+  await expect(page.getByTestId('market-list')).toHaveAttribute('data-live', 'true'); // tickers subscription acknowledged
   await pushTick(request, 'BTCUSDT', (await lastPrice(request, 'BTCUSDT')) + 1);
   await expect.poll(async () => Number(await last.getAttribute('data-epoch'))).toBeGreaterThan(first);
   const epoch = Number(await last.getAttribute('data-epoch'));
