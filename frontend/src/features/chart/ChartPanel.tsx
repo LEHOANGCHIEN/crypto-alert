@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { useFormat } from '../../shared/format/useFormat';
 import { errorText } from '../../shared/i18n/errorText';
 import { useKlines, useSymbols, useTickers } from '../../shared/market/queries';
 import { useLiveKlines } from '../../shared/market/useLiveMarket';
@@ -15,7 +14,6 @@ import { parseInterval, TimeframeBar } from './TimeframeBar';
 /** Center panel: header (symbol, price, 24h change), timeframe bar, candlestick chart with legend. */
 export function ChartPanel() {
   const { t } = useTranslation();
-  const fmt = useFormat();
   const { symbol = '' } = useParams();
   const [params, setParams] = useSearchParams();
   const interval = parseInterval(params.get('tf'));
