@@ -5,6 +5,8 @@ import { Toaster } from '../../shared/ui/toast';
 import { PreferencesSync } from '../PreferencesSync';
 import { RealtimeConnection } from '../RealtimeConnection';
 import { ConnBanner } from './ConnBanner';
+import { PulseBar } from './PulseBar';
+import { StatusBar } from './StatusBar';
 import { WatchlistLoginPrompt, WatchlistSession } from '../../features/watchlist';
 import { AlertSession } from '../../features/alerts';
 import { NotificationsSession } from '../../features/notifications';
@@ -16,9 +18,11 @@ export function AppLayout() {
     <div className="flex h-full flex-col bg-bg text-text">
       <Header />
       <ConnBanner />
+      {isDashboard && <PulseBar />}
       <main className={`min-h-0 flex-1 ${isDashboard ? 'overflow-hidden' : 'overflow-auto p-4'}`}>
         <Outlet />
       </main>
+      <StatusBar />
       <Footer />
       <Toaster />
       <PreferencesSync />

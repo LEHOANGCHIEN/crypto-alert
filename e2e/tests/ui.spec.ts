@@ -1,5 +1,8 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
+import { loginViaUi } from '../helpers/auth';
+import { cssVar } from '../helpers/chart';
+import { left, lastPrice, pushTick, upstreamDisconnect, viPrice } from '../helpers/market';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -179,4 +182,109 @@ test('AC-UI-06 side columns can be collapsed and reopened', async ({ page }) => 
   await expect(page.getByTestId('panel-rail-left')).toBeHidden();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
+});
+
+const PULSE = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'DOGEUSDT'];
+
+test('AC-UI-07 market pulse bar shows major pairs live and links to the chart', async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/trade/BTCUSDT?tf=15m');
+  const bar = page.getByTestId('pulse-bar');
+  await expect(bar).toBeVisible();
+  // Six pairs in the specified order (pairs missing from the tickers would be skipped; the mock has all six).
+  await expect(bar.locator('[data-testid^="pulse-item-"]')).toHaveCount(PULSE.length);
+  const ids = await bar.locator('[data-testid^="pulse-item-"]').evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')));
+  expect(ids).toEqual(PULSE.map((s) => `pulse-item-${s}`));
+
+  // `BTC/USDT <price> <change %>` with the AC-MKT-04 colors (mock: ETH +3.24 %, SOL −5.10 %, XRP 0.00 %).
+  const btc = await lastPrice(request, 'BTCUSDT');
+  await expect(page.getByTestId('pulse-item-BTCUSDT')).toContainText('BTC/USDT');
+  await expect(page.getByTestId('pulse-price-BTCUSDT')).toHaveText(viPrice(btc));
+  await expect(page.getByTestId('pulse-change-ETHUSDT')).toHaveText('+3,24%');
+  await expect(page.getByTestId('pulse-change-ETHUSDT')).toHaveClass(/text-up/);
+  await expect(page.getByTestId('pulse-change-SOLUSDT')).toHaveText('−5,10%');
+  await expect(page.getByTestId('pulse-change-SOLUSDT')).toHaveClass(/text-down/);
+  await expect(page.getByTestId('pulse-change-XRPUSDT')).toHaveText('0,00%');
+  await expect(page.getByTestId('pulse-change-XRPUSDT')).not.toHaveClass(/text-up|text-down/);
+
+  // A mock tick for ETHUSDT updates its pulse price within 2 s.
+  const price = Math.round((await lastPrice(request, 'ETHUSDT')) * 1.01 * 100) / 100;
+  const deadline = Date.now() + 2_000;
+  await pushTick(request, 'ETHUSDT', price);
+  await expect(page.getByTestId('pulse-price-ETHUSDT')).toHaveText(viPrice(price), { timeout: left(deadline) });
+
+  // Click → /trade/<SYMBOL>?tf=<current tf>.
+  await page.getByTestId('pulse-item-SOLUSDT').click();
+  await expect(page).toHaveURL(/\/trade\/SOLUSDT\?tf=15m$/);
+
+  // Hidden below 1024 px.
+  await page.setViewportSize({ width: 900, height: 800 });
+  await expect(bar).toBeHidden();
+});
+
+const rgb = (hex: string) => {
+  const h = hex.replace('#', '');
+  return `rgb(${parseInt(h.slice(0, 2), 16)}, ${parseInt(h.slice(2, 4), 16)}, ${parseInt(h.slice(4, 6), 16)})`;
+};
+const clockText = (epoch: number, timeZone: string) =>
+  new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(epoch);
+
+test('AC-UI-08 status bar shows connection state, last update and a clock', async ({ page, context, request }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/trade/BTCUSDT');
+  const bar = page.getByTestId('status-bar');
+  const text = page.getByTestId('status-text');
+  const dot = page.getByTestId('status-dot');
+  await expect(bar).toBeVisible();
+  await expect(page.getByTestId('footer-title')).toBeVisible();
+
+  // Connected: exact Vietnamese text, dot = accent (never the up/down colors).
+  await expect(text).toHaveText('Đã kết nối');
+  await expect(dot).toHaveAttribute('data-state', 'connected');
+  const accent = rgb(await cssVar(page, '--color-accent'));
+  await expect(dot).toHaveCSS('background-color', accent);
+  expect(accent).not.toBe(rgb(await cssVar(page, '--color-up')));
+  expect(accent).not.toBe(rgb(await cssVar(page, '--color-down')));
+  await page.getByTestId('lang-en').click();
+  await expect(text).toHaveText('Connected');
+
+  // Offline → "Reconnecting…" within 5 s (warning dot), online → "Connected".
+  await context.setOffline(true);
+  await expect(text).toHaveText('Reconnecting…', { timeout: 5_000 });
+  await expect(dot).toHaveCSS('background-color', rgb(await cssVar(page, '--color-warning')));
+  await context.setOffline(false);
+  await expect(text).toHaveText('Connected', { timeout: 5_000 });
+
+  // Upstream feed delayed (AC-RT-06 state) → "Market data delayed", then back.
+  await upstreamDisconnect(request, 3_000);
+  await expect(text).toHaveText('Market data delayed', { timeout: 5_000 });
+  await expect(dot).toHaveCSS('background-color', rgb(await cssVar(page, '--color-warning')));
+  await expect(text).toHaveText('Connected', { timeout: 10_000 });
+
+  // Last market update: a tick moves it (epoch grows) and it is shown in the user's timezone.
+  const last = page.getByTestId('status-last-update');
+  await expect(last).toHaveAttribute('data-epoch', /\d+/);
+  const first = Number(await last.getAttribute('data-epoch'));
+  await pushTick(request, 'BTCUSDT', (await lastPrice(request, 'BTCUSDT')) + 1);
+  await expect.poll(async () => Number(await last.getAttribute('data-epoch'))).toBeGreaterThan(first);
+  const epoch = Number(await last.getAttribute('data-epoch'));
+  await expect(last).toHaveText(clockText(epoch, 'Asia/Ho_Chi_Minh'));
+
+  // Clock ticks every second, guest = Asia/Ho_Chi_Minh.
+  const clock = page.getByTestId('status-clock');
+  const t0 = Number(await clock.getAttribute('data-epoch'));
+  await expect.poll(async () => Number(await clock.getAttribute('data-epoch'))).toBeGreaterThan(t0);
+  const t1 = Number(await clock.getAttribute('data-epoch'));
+  await expect(clock).toHaveText(clockText(t1, 'Asia/Ho_Chi_Minh'));
+
+  // Logged-in user with timezone UTC: the clock follows the account timezone.
+  await loginViaUi(page);
+  await page.goto('/account');
+  await page.getByTestId('pref-timezone').selectOption('UTC');
+  await page.getByTestId('save-preferences').click();
+  await page.goto('/trade/BTCUSDT');
+  await expect.poll(async () => {
+    const e = Number(await clock.getAttribute('data-epoch'));
+    return (await clock.textContent()) === clockText(e, 'UTC');
+  }).toBe(true);
 });

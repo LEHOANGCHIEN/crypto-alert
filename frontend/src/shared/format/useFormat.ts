@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../auth/auth.store';
-import { formatCompact, formatDateTime, formatPercent, formatPrice, formatTickMark, type FormatLocale } from './index';
+import { formatCompact, formatDateTime, formatPercent, formatPrice, formatTickMark, formatTime, type FormatLocale } from './index';
 
 export const DEFAULT_TIMEZONE = 'Asia/Ho_Chi_Minh';
 
@@ -18,6 +18,7 @@ export function useFormat() {
       percent: (v: number) => formatPercent(v, locale),
       compact: (v: number) => formatCompact(v, locale),
       dateTime: (epochMs: number) => formatDateTime(epochMs, locale, timeZone),
+      time: (epochMs: number) => formatTime(epochMs, timeZone),
       tickMark: (epochMs: number, tickType: number) => formatTickMark(epochMs, tickType, locale, timeZone),
     }),
     [locale, timeZone],

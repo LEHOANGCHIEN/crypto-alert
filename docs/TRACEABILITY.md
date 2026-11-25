@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 93 ACs · passing 76 · failing 0 · pending 17 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
+**Summary:** 93 ACs · passing 78 · failing 0 · pending 15 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -44,7 +44,7 @@
 | AC-PROF-05 | 2 | account.spec.ts | AC-PROF-05 timezone setting changes displayed times | passing | |
 | AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
 | AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
-| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | edited in 6a (240/320 columns, pulse bar, status bar): test updated in Phase 6a; guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
+| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | edited in 6a: 240/320 columns, handles, pulse bar 32, status bar 28, header 56; guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
 | AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
 | AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | passing | |
 | AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | passing | Unit: backoff, send queue, upstream reconnect (fake WS), SubscriptionManager + caps, ticker batcher; integration: realtime.int-spec.ts |
@@ -87,8 +87,8 @@
 | AC-MKT-07 | 6a | market.spec.ts | AC-MKT-07 market list All and Watchlist tabs | pending | |
 | AC-UI-05 | 6a | ui.spec.ts | AC-UI-05 side columns can be resized by drag and keyboard | passing | unit: layout.test.ts |
 | AC-UI-06 | 6a | ui.spec.ts | AC-UI-06 side columns can be collapsed and reopened | passing | |
-| AC-UI-07 | 6a | ui.spec.ts | AC-UI-07 market pulse bar | pending | |
-| AC-UI-08 | 6a | ui.spec.ts | AC-UI-08 status bar | pending | |
+| AC-UI-07 | 6a | ui.spec.ts | AC-UI-07 market pulse bar shows major pairs live and links to the chart | passing | |
+| AC-UI-08 | 6a | ui.spec.ts | AC-UI-08 status bar shows connection state, last update and a clock | passing | last update = tickers query dataUpdatedAt (snapshot or live) |
 | AC-CHART-07 | 6a | chart.spec.ts | AC-CHART-07 chart types | pending | |
 | AC-CHART-08 | 6a | chart.spec.ts | AC-CHART-08 volume overlay | pending | |
 | AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header stats | pending | |

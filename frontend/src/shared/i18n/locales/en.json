@@ -158,7 +158,15 @@
     "status": {
       "connected": "Market data live",
       "reconnecting": "Market data delayed"
-    }
+    },
+    "tabs": {
+      "label": "Filter market list",
+      "all": "All",
+      "watchlist": "Watchlist"
+    },
+    "watchlistLogin": "Log in to see your watchlist.",
+    "watchlistLoginLink": "Log in",
+    "watchlistEmpty": "Your watchlist is empty. Click the star on a pair to add it."
   },
   "chart": {
     "timeframes": "Timeframe",
@@ -262,5 +270,13 @@
       "left": "Expand market list",
       "right": "Expand right panel"
     }
+  },
+  "statusBar": {
+    "connected": "Connected",
+    "connecting": "Connecting…",
+    "lastUpdate": "Last update",
+    "clock": "Current time",
+    "pulse": "Market pulse",
+    "pulseLabel": "Quick moves"
   }
 }

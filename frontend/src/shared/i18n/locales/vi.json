@@ -158,7 +158,15 @@
     "status": {
       "connected": "Dữ liệu thị trường trực tiếp",
       "reconnecting": "Dữ liệu thị trường bị trễ"
-    }
+    },
+    "tabs": {
+      "label": "Lọc danh sách thị trường",
+      "all": "Tất cả",
+      "watchlist": "Theo dõi"
+    },
+    "watchlistLogin": "Đăng nhập để xem danh sách theo dõi của bạn.",
+    "watchlistLoginLink": "Đăng nhập",
+    "watchlistEmpty": "Danh sách theo dõi trống. Bấm ngôi sao ở một cặp để thêm."
   },
   "chart": {
     "timeframes": "Khung thời gian",
@@ -262,5 +270,13 @@
       "left": "Mở lại danh sách thị trường",
       "right": "Mở lại bảng bên phải"
     }
+  },
+  "statusBar": {
+    "connected": "Đã kết nối",
+    "connecting": "Đang kết nối…",
+    "lastUpdate": "Cập nhật gần nhất",
+    "clock": "Giờ hiện tại",
+    "pulse": "Nhịp thị trường",
+    "pulseLabel": "Biến động nhanh"
   }
 }

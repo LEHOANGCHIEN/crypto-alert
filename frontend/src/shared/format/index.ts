@@ -51,6 +51,11 @@ export function formatDateTime(epochMs: number, locale: FormatLocale, timeZone: 
   return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}`;
 }
 
+/** epoch ms → "14:05:09" (24 h, both languages) in the given IANA timezone. */
+export function formatTime(epochMs: number, timeZone: string): string {
+  return new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(epochMs);
+}
+
 export type PriceDirection = 'up' | 'down' | 'flat';
 
 /** Direction of a 24h change as displayed: a change that rounds to 0.00 % is flat (neutral color, no sign). */
