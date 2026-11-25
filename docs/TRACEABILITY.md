@@ -67,16 +67,16 @@
 | AC-WL-05 | 5 | watchlist.spec.ts | AC-WL-05 watchlist row opens chart | passing | |
 | AC-WL-06 | 5 | watchlist.spec.ts | AC-WL-06 guest sees login prompt | passing | |
 | AC-WL-07 | 5 | watchlist.spec.ts | AC-WL-07 isolation, no duplicates, limit 50 | passing | limit case fills the test DB directly (e2e/helpers/watchlist.ts) because the mock has only 8 pairs |
-| AC-ALERT-01 | 6 | alerts.spec.ts | AC-ALERT-01 create alert | pending | |
-| AC-ALERT-02 | 6 | alerts.spec.ts | AC-ALERT-02 alert validation and already-met | pending | |
-| AC-ALERT-03 | 6 | alerts.spec.ts | AC-ALERT-03 above alert triggers toast within 5s | pending | |
-| AC-ALERT-04 | 6 | alerts.spec.ts | AC-ALERT-04 below alert triggers toast within 5s | pending | |
-| AC-ALERT-05 | 6 | alerts.spec.ts | AC-ALERT-05 alert is one-shot | pending | |
-| AC-ALERT-06 | 6 | alerts.spec.ts | AC-ALERT-06 deleted alert never triggers | pending | |
-| AC-ALERT-07 | 6 | alerts.spec.ts | AC-ALERT-07 active alert limit 20 | pending | |
-| AC-ALERT-08 | 6 | alerts.spec.ts | AC-ALERT-08 alerts isolated between users | pending | |
-| AC-ALERT-09 | 6 | alerts.spec.ts | AC-ALERT-09 alerts survive worker reload | pending | |
-| AC-ALERT-10 | 6 | alerts.spec.ts | AC-ALERT-10 alert on a symbol not being viewed | pending | |
+| AC-ALERT-01 | 6 | alerts.spec.ts | AC-ALERT-01 create alert | passing | integration: alerts.int-spec.ts (fields, order, check order); unit: alert-match.spec.ts, target.test.ts |
+| AC-ALERT-02 | 6 | alerts.spec.ts | AC-ALERT-02 alert validation and already-met | passing | integration: alerts.int-spec.ts (every field code, 422 for ABOVE/BELOW) |
+| AC-ALERT-03 | 6 | alerts.spec.ts | AC-ALERT-03 above alert triggers toast within 5s | passing | run in English; integration: alert-worker.int-spec.ts |
+| AC-ALERT-04 | 6 | alerts.spec.ts | AC-ALERT-04 below alert triggers toast within 5s | passing | |
+| AC-ALERT-05 | 6 | alerts.spec.ts | AC-ALERT-05 alert is one-shot | passing | proof of absence: every toast is recorded (helpers/alerts.ts recordToasts) and a later sentinel alert; integration: 20-tick burst + concurrent trigger transactions |
+| AC-ALERT-06 | 6 | alerts.spec.ts | AC-ALERT-06 deleted alert never triggers | passing | sentinel alert proves the deleted one sent nothing |
+| AC-ALERT-07 | 6 | alerts.spec.ts | AC-ALERT-07 active alert limit 20 | passing | 18 alerts created through the API + 2 seeded |
+| AC-ALERT-08 | 6 | alerts.spec.ts | AC-ALERT-08 alerts isolated between users | passing | integration: alerts.int-spec.ts + alert-worker.int-spec.ts (socket isolation) |
+| AC-ALERT-09 | 6 | alerts.spec.ts | AC-ALERT-09 alerts survive worker reload | passing | integration: alert inserted behind the worker is picked up only after /test/worker/reload |
+| AC-ALERT-10 | 6 | alerts.spec.ts | AC-ALERT-10 alert on a symbol not being viewed | passing | checks no dogeusdt kline stream upstream |
 | AC-NOTIF-01 | 6 | notifications.spec.ts | AC-NOTIF-01 bell unread badge | pending | |
 | AC-NOTIF-02 | 6 | notifications.spec.ts | AC-NOTIF-02 notification list content and order | pending | |
 | AC-NOTIF-03 | 6 | notifications.spec.ts | AC-NOTIF-03 mark read and mark all read | pending | |
