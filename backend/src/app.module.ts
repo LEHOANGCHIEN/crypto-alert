@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module';
 import { RealtimeModule } from './modules/realtime/realtime.module';
 import { WatchlistModule } from './modules/watchlist/watchlist.module';
 import { AlertsModule } from './modules/alerts/alerts.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { TestSupportModule } from './modules/test-support/test-support.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { TestSupportModule } from './modules/test-support/test-support.module';
     RealtimeModule,
     WatchlistModule,
     AlertsModule,
+    NotificationsModule,
     // Test routes must not exist at all unless explicitly enabled (route → NOT_FOUND otherwise).
     ...(testEndpointsEnabled(process.env) ? [TestSupportModule] : []),
   ],
