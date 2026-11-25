@@ -7,7 +7,7 @@ export function AlertSession() {
   const qc = useQueryClient();
   const userId = useAuth((s) => s.user?.id ?? null);
   useEffect(() => {
-    qc.removeQueries({ queryKey: ['alerts'] });
+    void qc.resetQueries({ queryKey: ['alerts'] });
   }, [userId, qc]);
   return null;
 }

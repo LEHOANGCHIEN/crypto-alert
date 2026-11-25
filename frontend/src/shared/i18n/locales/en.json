@@ -230,5 +230,23 @@
     "createdAt": "Created",
     "triggeredPrice": "Triggered at",
     "delete": "Delete {{symbol}} alert"
+  },
+  "notifications": {
+    "ALERT_TRIGGERED": {
+      "ABOVE": "{{symbol}} rose above {{targetPrice}} (now {{triggeredPrice}})",
+      "BELOW": "{{symbol}} fell below {{targetPrice}} (now {{triggeredPrice}})"
+    },
+    "title": "Notifications",
+    "bell": "Notifications",
+    "bellUnread_one": "Notifications, {{count}} unread",
+    "bellUnread_other": "Notifications, {{count}} unread",
+    "markAll": "Mark all as read",
+    "empty": "No notifications yet.",
+    "loading": "Loading…",
+    "unread": "Unread",
+    "target": "Target",
+    "triggeredPrice": "Triggered price",
+    "summary_one": "You have {{count}} unread notification",
+    "summary_other": "You have {{count}} unread notifications"
   }
 }

@@ -7,6 +7,7 @@ import { RealtimeConnection } from '../RealtimeConnection';
 import { ConnBanner } from './ConnBanner';
 import { WatchlistLoginPrompt, WatchlistSession } from '../../features/watchlist';
 import { AlertSession } from '../../features/alerts';
+import { NotificationsSession } from '../../features/notifications';
 
 export function AppLayout() {
   // The dashboard uses the full area; other pages are padded and scrollable.
@@ -24,6 +25,7 @@ export function AppLayout() {
       <RealtimeConnection />
       <WatchlistSession />
       <AlertSession />
+      <NotificationsSession />
       <WatchlistLoginPrompt />
     </div>
   );

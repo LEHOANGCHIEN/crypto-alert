@@ -6,6 +6,7 @@ import { useTheme } from '../../shared/theme/ThemeProvider';
 import { usePreferenceActions } from '../usePreferenceActions';
 import { UserMenu } from './UserMenu';
 import { MarketStatusBadge } from './MarketStatusBadge';
+import { Bell } from '../../features/notifications';
 
 const LOCALES: Locale[] = ['vi', 'en'];
 
@@ -48,6 +49,7 @@ export function Header() {
       >
         {theme === 'dark' ? t('theme.dark') : t('theme.light')}
       </button>
+      {status === 'authenticated' && <Bell />}
       {status === 'authenticated' && <UserMenu />}
       {status === 'guest' && (
         <nav className="flex gap-2">

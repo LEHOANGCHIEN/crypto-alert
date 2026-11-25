@@ -17,3 +17,19 @@ export function useSocketEvent<E extends keyof ServerEvents>(event: E, handler: 
     };
   }, [event]);
 }
+
+/** Runs `handler` on every successful socket (re)connect while the component is mounted. */
+export function useSocketConnect(handler: () => void): void {
+  const ref = useRef(handler);
+  useEffect(() => {
+    ref.current = handler;
+  }, [handler]);
+  useEffect(() => {
+    const s = getSocket();
+    const listener = () => ref.current();
+    s.on('connect', listener);
+    return () => {
+      s.off('connect', listener);
+    };
+  }, []);
+}
