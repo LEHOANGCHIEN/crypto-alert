@@ -180,6 +180,13 @@
       "title": "Không tìm thấy cặp giao dịch",
       "description": "Cặp bạn mở không tồn tại hoặc không được hỗ trợ.",
       "link": "Mở BTC/USDT"
+    },
+    "stats": {
+      "change": "Thay đổi 24h",
+      "high": "Cao nhất 24h",
+      "low": "Thấp nhất 24h",
+      "volBase": "KL 24h ({{asset}})",
+      "volQuote": "KL 24h (USDT)"
     }
   },
   "connection": {

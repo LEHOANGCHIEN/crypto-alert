@@ -180,6 +180,13 @@
       "title": "Pair not found",
       "description": "The pair you opened does not exist or is not supported.",
       "link": "Open BTC/USDT"
+    },
+    "stats": {
+      "change": "24h change",
+      "high": "24h high",
+      "low": "24h low",
+      "volBase": "24h vol ({{asset}})",
+      "volQuote": "24h vol (USDT)"
     }
   },
   "connection": {

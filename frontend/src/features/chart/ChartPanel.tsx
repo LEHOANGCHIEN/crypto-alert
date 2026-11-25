@@ -1,19 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { priceDirection } from '../../shared/format';
 import { useFormat } from '../../shared/format/useFormat';
 import { errorText } from '../../shared/i18n/errorText';
 import { useKlines, useSymbols, useTickers } from '../../shared/market/queries';
 import { useLiveKlines } from '../../shared/market/useLiveMarket';
 import { useConnection } from '../../shared/socket/connection.store';
 import { IndicatorMenu, useIndicatorData, useIndicatorSettings } from '../indicators';
-import { StarButton } from '../watchlist';
 import { CandleChart } from './CandleChart';
+import { ChartHeaderStats } from './ChartHeaderStats';
 import { ChartLegend } from './ChartLegend';
 import { parseInterval, TimeframeBar } from './TimeframeBar';
-
-const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;
 
 /** Center panel: header (symbol, price, 24h change), timeframe bar, candlestick chart with legend. */
 export function ChartPanel() {
@@ -56,35 +53,23 @@ export function ChartPanel() {
     );
   }
 
-  const dir = ticker ? priceDirection(ticker.priceChangePercent) : 'flat';
   const fail = symbols.error ?? klines.error;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 border-b border-border px-4 py-2">
-        <h1 data-testid="chart-symbol" className="text-section font-semibold">
-          {info ? `${info.baseAsset}/${info.quoteAsset}` : symbol}
-        </h1>
-        {info && <StarButton symbol={symbol} testId={`chart-star-${symbol}`} />}
-        <span data-testid="chart-price" className={`font-mono text-price font-semibold ${DIRECTION_CLASS[dir]}`}>
-          {ticker && info ? fmt.price(ticker.lastPrice, info.pricePrecision) : '—'}
-        </span>
-        <span data-testid="chart-change" className={`text-body ${DIRECTION_CLASS[dir]}`}>
-          {ticker ? fmt.percent(ticker.priceChangePercent) : '—'}
-        </span>
-        <div className="ml-auto flex flex-wrap items-center gap-2">
-          <TimeframeBar
-            active={interval}
-            onChange={(i) =>
-              setParams((p) => {
-                const next = new URLSearchParams(p);
-                next.set('tf', i);
-                return next;
-              })
-            }
-          />
-          <IndicatorMenu />
-        </div>
+      <ChartHeaderStats symbol={symbol} info={info} ticker={ticker} />
+      <div className="flex h-toolbar shrink-0 items-center gap-2 border-b border-border px-3">
+        <TimeframeBar
+          active={interval}
+          onChange={(i) =>
+            setParams((p) => {
+              const next = new URLSearchParams(p);
+              next.set('tf', i);
+              return next;
+            })
+          }
+        />
+        <IndicatorMenu />
       </div>
       <div className="relative min-h-0 flex-1">
         {info && candles && (

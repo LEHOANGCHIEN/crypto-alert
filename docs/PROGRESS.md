@@ -205,7 +205,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 - [x] Resizable + collapsible side columns (AC-UI-01, AC-UI-05, AC-UI-06)
 - [x] Market pulse bar + status bar (AC-UI-07, AC-UI-08)
 - [x] Two-line market rows + All/Watchlist tabs (AC-MKT-01, AC-MKT-07)
-- [ ] Chart header stats + coin names (AC-CHART-09)
+- [x] Chart header stats + coin names (AC-CHART-09)
 - [ ] Chart types + volume overlay (AC-CHART-07, AC-CHART-08)
 - [ ] Screenshot + maximize (AC-CHART-10)
 - [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line

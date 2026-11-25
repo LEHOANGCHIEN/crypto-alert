@@ -10,6 +10,14 @@ export function formatPrice(value: number, precision: number, locale: FormatLoca
   }).format(value);
 }
 
+/** 1543.02 → "+1.543,02" (vi) / "+1,543.02" (en) with the pair's decimals; sign always shown for non-zero. */
+export function formatSignedPrice(value: number, precision: number, locale: FormatLocale): string {
+  const abs = formatPrice(Math.abs(value), precision, locale);
+  const rounded = Number(Math.abs(value).toFixed(precision));
+  const sign = rounded === 0 ? '' : value > 0 ? '+' : '−';
+  return `${sign}${abs}`;
+}
+
 /** 1.2345 → "+1,23%" (vi) / "+1.23%" (en); sign always shown for non-zero. */
 export function formatPercent(value: number, locale: FormatLocale): string {
   const abs = new Intl.NumberFormat(INTL_LOCALE[locale], { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.abs(value));

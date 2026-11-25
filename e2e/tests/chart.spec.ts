@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
+import { left, pushTick } from '../helpers/market';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -137,4 +138,43 @@ test('AC-CHART-06 times shown in user timezone', async ({ page }) => {
   await expect(page.getByTestId('legend-time')).toHaveText(viTime(last, 'Asia/Ho_Chi_Minh'));
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-timezone', 'Asia/Ho_Chi_Minh'); // time axis uses the same zone
   expect(viTime(last, 'Asia/Ho_Chi_Minh')).not.toBe(viTime(last, 'UTC')); // the check can tell the zones apart
+});
+
+type FullTicker = { symbol: string; lastPrice: number; openPrice: number; highPrice: number; lowPrice: number; volume: number; quoteVolume: number };
+const getTicker = async (request: import('@playwright/test').APIRequestContext, symbol: string) =>
+  ((await (await request.get('/api/v1/market/tickers')).json()).data as FullTicker[]).find((t) => t.symbol === symbol)!;
+const viCompact = (v: number) => new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 }).format(v);
+const signed = (v: number, d = 2) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${viPrice(Math.abs(v), d)}`;
+
+test('AC-CHART-09 chart header shows coin name and 24h stats', async ({ page, request }) => {
+  await openChart(page);
+  const tk = await getTicker(request, 'BTCUSDT');
+
+  // Avatar (first letter), pair, full name, 24 px last price, all stats in locale number format.
+  await expect(page.getByTestId('chart-avatar')).toHaveText('B');
+  await expect(page.getByTestId('chart-symbol')).toHaveText('BTC/USDT');
+  await expect(page.getByTestId('chart-name')).toHaveText('Bitcoin');
+  await expect(page.getByTestId('chart-price')).toHaveText(viPrice(tk.lastPrice));
+  await expect(page.getByTestId('chart-price')).toHaveCSS('font-size', '24px');
+  await expect(page.getByTestId('chart-change-abs')).toHaveText(signed(tk.lastPrice - tk.openPrice));
+  await expect(page.getByTestId('chart-change')).toHaveText(/^[+−]\d+,\d{2}%$/);
+  await expect(page.getByTestId('chart-high')).toHaveText(viPrice(tk.highPrice));
+  await expect(page.getByTestId('chart-low')).toHaveText(viPrice(tk.lowPrice));
+  await expect(page.getByTestId('chart-vol-base')).toHaveText(viPrice(tk.volume));
+  await expect(page.getByTestId('chart-vol-quote')).toHaveText(viCompact(tk.quoteVolume));
+
+  // A pair outside the static name map shows no name (the mock has no such USDT pair, so check the map's other side:
+  // a mapped pair shows its name).
+  await page.goto('/trade/ADAUSDT');
+  await expect(page.getByTestId('chart-name')).toHaveText('Cardano');
+  await expect(page.getByTestId('chart-avatar')).toHaveText('A');
+
+  // A tick above the 24h high updates High (and the last price) within 2 s.
+  await page.goto('/trade/BTCUSDT');
+  await expect(page.getByTestId('chart-high')).toHaveText(viPrice(tk.highPrice));
+  const price = Math.round((tk.highPrice + 500) * 100) / 100;
+  const deadline = Date.now() + 2_000;
+  await pushTick(request, 'BTCUSDT', price);
+  await expect(page.getByTestId('chart-high')).toHaveText(viPrice(price), { timeout: left(deadline) });
+  await expect(page.getByTestId('chart-price')).toHaveText(viPrice(price), { timeout: left(deadline) });
 });

@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 93 ACs · passing 79 · failing 0 · pending 14 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
+**Summary:** 93 ACs · passing 80 · failing 0 · pending 13 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -91,7 +91,7 @@
 | AC-UI-08 | 6a | ui.spec.ts | AC-UI-08 status bar shows connection state, last update and a clock | passing | last update = tickers query dataUpdatedAt (snapshot or live) |
 | AC-CHART-07 | 6a | chart.spec.ts | AC-CHART-07 chart types | pending | |
 | AC-CHART-08 | 6a | chart.spec.ts | AC-CHART-08 volume overlay | pending | |
-| AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header stats | pending | |
+| AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name) |
 | AC-CHART-10 | 6a | chart.spec.ts | AC-CHART-10 screenshot and maximize | pending | |
 | AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | pending | |
 | AC-ALERT-11 | 6b | alerts-panel.spec.ts | AC-ALERT-11 bottom panel | pending | |
