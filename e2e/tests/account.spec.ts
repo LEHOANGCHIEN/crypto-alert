@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
+import { appToast } from '../helpers/toast';
 import { DEMO, VI, loginViaUi, logoutViaUi } from '../helpers/auth';
 
 test.beforeEach(async ({ request }) => resetApp(request));
@@ -13,7 +14,7 @@ test('AC-PROF-01 update display name', async ({ page }) => {
   await expect(page.getByTestId('field-email')).toHaveAttribute('readonly', '');
   await page.getByTestId('field-displayName').fill('Tên Mới');
   await page.getByTestId('save-profile').click();
-  await expect(page.getByTestId('toast')).toHaveText('Đã lưu hồ sơ.');
+  await expect(appToast(page)).toHaveText('Đã lưu hồ sơ.');
   await expect(page.getByTestId('user-display-name')).toHaveText('Tên Mới');
   await page.reload();
   await expect(page.getByTestId('user-display-name')).toHaveText('Tên Mới');
@@ -28,7 +29,7 @@ test('AC-PROF-02 display name validation', async ({ page }) => {
   await page.getByTestId('field-displayName').fill('x'.repeat(51));
   await page.getByTestId('save-profile').click();
   await expect(page.getByTestId('error-displayName')).toHaveText('Không được vượt quá 50 ký tự.');
-  await expect(page.getByTestId('toast')).toHaveCount(0);
+  await expect(appToast(page)).toHaveCount(0);
   await page.reload();
   await expect(page.getByTestId('user-display-name')).toHaveText(DEMO.displayName); // nothing saved
 });
@@ -44,7 +45,7 @@ test('AC-PROF-03 change password', async ({ page }) => {
 
   await page.getByTestId('field-currentPassword').fill(DEMO.password);
   await page.getByTestId('save-password').click();
-  await expect(page.getByTestId('toast')).toHaveText('Đã đổi mật khẩu.');
+  await expect(appToast(page)).toHaveText('Đã đổi mật khẩu.');
   await logoutViaUi(page);
 
   await page.goto('/login');
@@ -71,7 +72,7 @@ test('AC-PROF-04 change password logs out other sessions', async ({ page, browse
     await page.getByTestId('field-newPassword').fill(NEW_PASSWORD);
     await page.getByTestId('field-confirmPassword').last().fill(NEW_PASSWORD);
     await page.getByTestId('save-password').click();
-    await expect(page.getByTestId('toast')).toHaveText('Đã đổi mật khẩu.');
+    await expect(appToast(page)).toHaveText('Đã đổi mật khẩu.');
     await expect(page.getByTestId('user-display-name')).toHaveText(DEMO.displayName); // A stays logged in
 
     await pageB.waitForTimeout(6000); // B's access token (5 s) expires; its refresh token was revoked
@@ -107,7 +108,7 @@ test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => 
   await expect(page.getByTestId('pref-timezone')).toHaveValue('Asia/Ho_Chi_Minh');
   await page.getByTestId('pref-timezone').selectOption('UTC');
   await page.getByTestId('save-preferences').click();
-  await expect(page.getByTestId('toast')).toBeVisible();
+  await expect(appToast(page)).toBeVisible();
 
   await page.goto('/trade/BTCUSDT');
   const after = await legendNow('UTC');

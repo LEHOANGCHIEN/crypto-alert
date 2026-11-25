@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { DEMO, loginViaUi, registerViaUi } from '../helpers/auth';
 import { left, pushTick, viPrice } from '../helpers/market';
 import { resetApp } from '../helpers/reset';
+import { appToast } from '../helpers/toast';
 import { clickStar, fillWatchlist, panelSymbols } from '../helpers/watchlist';
 
 test.beforeEach(async ({ request }) => resetApp(request));
@@ -132,7 +133,7 @@ test('AC-WL-07 isolation, no duplicates, limit 50', async ({ page, request, brow
   await page.reload();
   await expect(page.getByTestId('watchlist-row-SOLUSDT')).toBeVisible();
   await page.getByTestId('star-DOGEUSDT').click();
-  await expect(page.getByTestId('toast')).toHaveText('Danh sách theo dõi đã đạt tối đa 50 cặp.');
+  await expect(appToast(page)).toHaveText('Danh sách theo dõi đã đạt tối đa 50 cặp.');
   await expect(page.getByTestId('star-DOGEUSDT')).toHaveAttribute('aria-pressed', 'false');
   await expect(page.getByTestId('watchlist-row-DOGEUSDT')).toHaveCount(0);
 });
