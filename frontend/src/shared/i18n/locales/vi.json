@@ -248,5 +248,19 @@
     "triggeredPrice": "Giá kích hoạt",
     "summary_one": "Bạn có {{count}} thông báo chưa đọc",
     "summary_other": "Bạn có {{count}} thông báo chưa đọc"
+  },
+  "layout": {
+    "resize": {
+      "left": "Đổi độ rộng danh sách thị trường",
+      "right": "Đổi độ rộng bảng bên phải"
+    },
+    "collapse": {
+      "left": "Thu gọn danh sách thị trường",
+      "right": "Thu gọn bảng bên phải"
+    },
+    "expand": {
+      "left": "Mở lại danh sách thị trường",
+      "right": "Mở lại bảng bên phải"
+    }
   }
 }

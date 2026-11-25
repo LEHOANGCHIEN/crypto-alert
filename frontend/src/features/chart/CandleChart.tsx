@@ -72,12 +72,18 @@ export function CandleChart({ candles, precision, tickSize, onHover, liveKey, in
     chart.subscribeCrosshairMove((param) => {
       hoverRef.current(param.time === undefined ? null : (param.time as number) * 1000);
     });
+    // Test hook: the chart follows its container (autoSize) when a column is dragged; no data is refetched.
+    const ro = new ResizeObserver(() => {
+      el.dataset.canvasWidth = String(Math.round(el.clientWidth));
+    });
+    ro.observe(el);
     chartRef.current = chart;
     seriesRef.current = series;
     layersRef.current = new IndicatorLayers(chart, c);
     shownRef.current = []; // a new chart has no data yet: the data effect must call setData
     shownIndRef.current = null;
     return () => {
+      ro.disconnect();
       chart.remove();
       chartRef.current = null;
       seriesRef.current = null;

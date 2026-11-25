@@ -4,6 +4,7 @@ import { useAuth } from '../../shared/auth/auth.store';
 import { WatchlistPanel } from '../../features/watchlist';
 import { AlertsPanel } from '../../features/alerts';
 import type { DashboardTab } from './MobileTabBar';
+import { CollapseButton } from './PanelToggle';
 
 /** Right panel: Watchlist / Alerts tabs for users; guests see a login prompt (SPEC §2). */
 export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' | 'alerts'; onChange: (t: DashboardTab) => void; onSelect?: () => void }) {
@@ -20,11 +21,14 @@ export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' 
             data-testid={`side-tab-${tab}`}
             aria-selected={active === tab}
             onClick={() => onChange(tab)}
-            className={`flex-1 text-body font-medium ${active === tab ? 'border-b-2 border-accent text-text' : 'text-text-muted'}`}
+            className={`flex-1 text-section font-medium ${active === tab ? 'border-b-2 border-accent text-text' : 'text-text-muted'}`}
           >
             {t(`dashboard.tabs.${tab}`)}
           </button>
         ))}
+        <div className="flex items-center px-2">
+          <CollapseButton side="right" />
+        </div>
       </div>
       {status === 'authenticated' ? (
         <div data-testid={`side-content-${active}`} className="flex min-h-0 flex-1 flex-col">
