@@ -64,7 +64,7 @@ export function CandleChart({ candles, precision, tickSize, onHover, liveKey, in
     const chart = createChart(el, {
       autoSize: true,
       ...chartThemeOptions(c),
-      layout: { ...chartThemeOptions(c).layout, attributionLogo: true, fontFamily: 'Inter, system-ui, sans-serif' },
+      layout: { ...chartThemeOptions(c).layout, attributionLogo: true, fontFamily: "'Roboto Mono', ui-monospace, monospace" },
       timeScale: { ...chartThemeOptions(c).timeScale, timeVisible: true, secondsVisible: false },
     });
     const series = chart.addSeries(CandlestickSeries, { ...candleThemeOptions(c), borderVisible: false });

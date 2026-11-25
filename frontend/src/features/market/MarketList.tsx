@@ -60,7 +60,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
           placeholder={t('market.search.placeholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="h-10 w-full rounded-input border border-border bg-surface-2 px-3 text-body text-text placeholder:text-text-muted"
+          className="h-8 w-full rounded-input border border-border bg-surface-2 px-3 text-body text-text placeholder:text-text-muted"
         />
       </div>
       <div

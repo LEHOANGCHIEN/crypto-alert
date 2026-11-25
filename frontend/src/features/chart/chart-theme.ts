@@ -17,7 +17,7 @@ const cssVar = (name: string): string => getComputedStyle(document.documentEleme
 
 export function readChartColors(): ChartColors {
   return {
-    background: cssVar('--color-surface'),
+    background: cssVar('--color-bg'),
     text: cssVar('--color-text-muted'),
     grid: cssVar('--color-chart-grid'),
     crosshair: cssVar('--color-chart-crosshair'),

@@ -120,7 +120,7 @@ test('AC-MKT-03 live ticker updates row', async ({ page, request }) => {
     { timeout: left(deadline) },
   );
   await expect(price).toHaveAttribute('data-flash', 'up', { timeout: left(deadline) });
-  await expect(price).toHaveClass(/bg-up\/20/);
+  await expect(price).toHaveClass(/bg-up-soft/);
 
   // Down: lower price → red flash, change recomputed (+2.94 %).
   deadline = Date.now() + 2_000;
@@ -128,7 +128,7 @@ test('AC-MKT-03 live ticker updates row', async ({ page, request }) => {
   await expect(price).toHaveText('3.500,00', { timeout: left(deadline) });
   await expect(page.getByTestId('market-change-ETHUSDT')).toHaveText('+2,94%', { timeout: left(deadline) });
   await expect(price).toHaveAttribute('data-flash', 'down', { timeout: left(deadline) });
-  await expect(price).toHaveClass(/bg-down\/20/);
+  await expect(price).toHaveClass(/bg-down-soft/);
   // The flash is brief: it goes away by itself.
   await expect(price).not.toHaveAttribute('data-flash', /.+/);
 });

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const FLASH_MS = 600;
-const FLASH_CLASS = { up: 'bg-up/20', down: 'bg-down/20' } as const;
+const FLASH_CLASS = { up: 'bg-up-soft', down: 'bg-down-soft' } as const;
 
 /**
  * Last-price cell that briefly flashes green (up) or red (down) when the price changes (ARCHITECTURE §11.3
@@ -24,7 +24,7 @@ export function PriceCell({ testId, price, text }: { testId: string; price: numb
     <span
       data-testid={testId}
       data-flash={flash ?? undefined}
-      className={`rounded-input text-right transition-colors duration-600 motion-reduce:transition-none ${flash ? FLASH_CLASS[flash] : ''}`}
+      className={`rounded-input text-right font-mono transition-colors duration-600 motion-reduce:transition-none ${flash ? FLASH_CLASS[flash] : ''}`}
     >
       {text}
     </span>

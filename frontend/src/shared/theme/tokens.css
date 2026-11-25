@@ -5,18 +5,22 @@
  * so the light block below re-themes everything without rebuilding.
  */
 @theme {
-  --color-bg: #0f1115;
-  --color-surface: #161a20;
-  --color-surface-2: #1e232b;
-  --color-border: #2a303a;
-  --color-text: #e6e8eb;
-  --color-text-muted: #8b93a1;
+  --color-bg: #0b0e12;
+  --color-surface: #101419;
+  --color-surface-2: #161b22;
+  --color-surface-3: #1a2028;
+  --color-border: #252c35;
+  --color-text: #e8edf2;
+  --color-text-muted: #a0abb8;
+  --color-text-faint: #7d8997;
   --color-accent: #3b82f6;
   --color-danger: #f97316;
   --color-warning: #f59e0b;
-  --color-up: #26a69a;
-  --color-down: #ef5350;
-  --color-chart-grid: #1e232b;
+  --color-up: #37c99a;
+  --color-down: #ef7381;
+  --color-up-soft: rgb(55 201 154 / 0.15);
+  --color-down-soft: rgb(239 115 129 / 0.15);
+  --color-chart-grid: #161b22;
   --color-chart-crosshair: #5b6472;
   --color-ind-1: #f59e0b;
   --color-ind-2: #a855f7;
@@ -26,37 +30,47 @@
   --color-ind-signal: #f97316;
 
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
 
-  --text-meta: 12px;
-  --text-row: 13px;
-  --text-body: 14px;
-  --text-section: 16px;
-  --text-price: 20px;
-  --text-page: 24px;
+  --text-meta: 10px;
+  --text-row: 11px;
+  --text-body: 12px;
+  --text-section: 13px;
+  --text-pair: 18px;
+  --text-price: 24px;
+  --text-page: 18px;
 
   --radius-input: 4px;
-  --radius-button: 6px;
-  --radius-card: 8px;
+  --radius-chip: 3px;
+  --radius-button: 4px;
+  --radius-card: 6px;
 
   --spacing-header: 56px;
+  --spacing-pulse: 32px;
+  --spacing-toolbar: 40px;
+  --spacing-statusbar: 28px;
   --spacing-tabbar: 56px;
-  --spacing-row: 32px;
-  --spacing-panel-left: 320px;
-  --spacing-panel-right: 340px;
+  --spacing-row: 48px;
+  --spacing-panel-left: 240px;
+  --spacing-panel-right: 320px;
 }
 
 :root[data-theme='light'] {
   --color-bg: #f7f8fa;
   --color-surface: #ffffff;
   --color-surface-2: #f0f2f5;
+  --color-surface-3: #e6e9ee;
   --color-border: #dde1e6;
   --color-text: #12161c;
   --color-text-muted: #5b6472;
+  --color-text-faint: #5f6877;
   --color-accent: #2563eb;
   --color-danger: #c2410c;
   --color-warning: #b45309;
   --color-up: #0a7f6f;
   --color-down: #d32f2f;
+  --color-up-soft: rgb(10 127 111 / 0.15);
+  --color-down-soft: rgb(211 47 47 / 0.15);
   --color-chart-grid: #eef0f3;
   --color-chart-crosshair: #9aa3af;
   --color-ind-1: #d97706;

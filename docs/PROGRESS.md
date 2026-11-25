@@ -201,7 +201,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 **ACs:** AC-MKT-01 (edited), AC-MKT-07, AC-UI-01 (edited), AC-UI-05…08, AC-CHART-07…10
 
 - [x] Doc edits of reviews/ui-polish.decision.md §3 (SPEC, ARCHITECTURE §11/§12, PROGRESS 6a/6b, TRACEABILITY pending rows, CONTEXT) + commit the decision and `docs/design/`
-- [ ] Tokens + fonts (§4), restyle of every existing screen to the mockup density
+- [x] Tokens + fonts (§4), restyle of every existing screen to the mockup density
 - [ ] Resizable + collapsible side columns (AC-UI-01, AC-UI-05, AC-UI-06)
 - [ ] Market pulse bar + status bar (AC-UI-07, AC-UI-08)
 - [ ] Two-line market rows + All/Watchlist tabs (AC-MKT-01, AC-MKT-07)

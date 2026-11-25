@@ -52,13 +52,13 @@ test.describe('dashboard layout', () => {
     const m = (await market.boundingBox())!;
     const c = (await chart.boundingBox())!;
     const s = (await side.boundingBox())!;
-    // Left → center → right, same row, widths 320 / flex / 340 (ARCHITECTURE §11.1).
+    // Left → center → right, same row, widths 240 / flex / 320 (ARCHITECTURE §11.1).
     expect(m.x).toBeLessThan(c.x);
     expect(c.x).toBeLessThan(s.x);
     expect(Math.abs(m.y - c.y)).toBeLessThan(2);
     expect(Math.abs(c.y - s.y)).toBeLessThan(2);
-    expect(Math.round(m.width)).toBe(320);
-    expect(Math.round(s.width)).toBe(340);
+    expect(Math.round(m.width)).toBe(240);
+    expect(Math.round(s.width)).toBe(320);
     expect(c.width).toBeGreaterThan(m.width);
 
     // Right panel has Watchlist / Alerts tabs; no mobile tab bar on desktop.
