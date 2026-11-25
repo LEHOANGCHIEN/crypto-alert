@@ -20,6 +20,23 @@ const bearer = (token: string) => ({ Authorization: `Bearer ${token}` });
 export const apiLogin = async (request: APIRequestContext, email = DEMO.email, password = DEMO.password): Promise<string> =>
   (await data<{ accessToken: string }>(await request.post('/api/v1/auth/login', { data: { email, password } }))).accessToken;
 
+/**
+ * API access token that stays valid although the e2e access-token TTL is 5 s: logs in once, then renews it through
+ * POST /auth/refresh (refresh cookie kept by this request context; refresh does not count toward the login rate limit).
+ */
+export function apiSession(request: APIRequestContext, email = DEMO.email, password = DEMO.password): () => Promise<string> {
+  let token: string | null = null;
+  let at = 0;
+  return async () => {
+    if (token && Date.now() - at < 3000) return token;
+    token = token
+      ? (await data<{ accessToken: string }>(await request.post('/api/v1/auth/refresh'))).accessToken
+      : await apiLogin(request, email, password);
+    at = Date.now();
+    return token;
+  };
+}
+
 export const apiCreateAlert = async (request: APIRequestContext, token: string, symbol: string, condition: 'ABOVE' | 'BELOW', targetPrice: number): Promise<Alert> =>
   data(await request.post('/api/v1/alerts', { headers: bearer(token), data: { symbol, condition, targetPrice } }));
 

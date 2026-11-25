@@ -44,7 +44,7 @@
 | AC-PROF-05 | 2 | account.spec.ts | AC-PROF-05 timezone setting changes displayed times | passing | |
 | AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
 | AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
-| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | Header bell is built in Phase 6 (AC-NOTIF-01); checked here: logo, language, theme, login/register, footer |
+| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
 | AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
 | AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | passing | |
 | AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | passing | Unit: backoff, send queue, upstream reconnect (fake WS), SubscriptionManager + caps, ticker batcher; integration: realtime.int-spec.ts |
@@ -77,10 +77,10 @@
 | AC-ALERT-08 | 6 | alerts.spec.ts | AC-ALERT-08 alerts isolated between users | passing | integration: alerts.int-spec.ts + alert-worker.int-spec.ts (socket isolation) |
 | AC-ALERT-09 | 6 | alerts.spec.ts | AC-ALERT-09 alerts survive worker reload | passing | integration: alert inserted behind the worker is picked up only after /test/worker/reload |
 | AC-ALERT-10 | 6 | alerts.spec.ts | AC-ALERT-10 alert on a symbol not being viewed | passing | checks no dogeusdt kline stream upstream |
-| AC-NOTIF-01 | 6 | notifications.spec.ts | AC-NOTIF-01 bell unread badge | pending | |
-| AC-NOTIF-02 | 6 | notifications.spec.ts | AC-NOTIF-02 notification list content and order | pending | |
-| AC-NOTIF-03 | 6 | notifications.spec.ts | AC-NOTIF-03 mark read and mark all read | pending | |
-| AC-NOTIF-04 | 6 | notifications.spec.ts | AC-NOTIF-04 offline trigger shown on next login | pending | |
-| AC-NOTIF-05 | 6 | notifications.spec.ts | AC-NOTIF-05 multi-tab delivery and read sync | pending | |
+| AC-NOTIF-01 | 6 | notifications.spec.ts | AC-NOTIF-01 bell unread badge | passing | 9+ reached with 10 triggers from API-created alerts; unit: badge.test.ts |
+| AC-NOTIF-02 | 6 | notifications.spec.ts | AC-NOTIF-02 notification list content and order | passing | times checked in Asia/Ho_Chi_Minh against the API createdAt; unit: cache.test.ts |
+| AC-NOTIF-03 | 6 | notifications.spec.ts | AC-NOTIF-03 mark read and mark all read | passing | integration: notifications.int-spec.ts (read idempotent, read-all) |
+| AC-NOTIF-04 | 6 | notifications.spec.ts | AC-NOTIF-04 offline trigger shown on next login | passing | waits (expect.poll) until the trigger is stored before logging in again |
+| AC-NOTIF-05 | 6 | notifications.spec.ts | AC-NOTIF-05 multi-tab delivery and read sync | passing | two pages of one browser context; integration: notification:read reaches every socket of the user only |
 | AC-I18N-02 | 7 | i18n.spec.ts | AC-I18N-02 every visible text switches to English | pending | |
 | AC-OPS-02 | 7 | ops.spec.ts | AC-OPS-02 seeded demo account | pending | |

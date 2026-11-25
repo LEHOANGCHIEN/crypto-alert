@@ -7,8 +7,8 @@ import {
   apiAlerts,
   apiCreateAlert,
   apiDeleteAlert,
-  apiLogin,
   apiNotifications,
+  apiSession,
   createAlertViaUi,
   enPrice,
   openAlertsTab,
@@ -174,11 +174,11 @@ test('AC-ALERT-05 alert is one-shot', async ({ page, request }) => {
 
   const toasts = (await shownToasts(page)).filter((t) => t.startsWith('BTCUSDT'));
   expect(toasts).toEqual([viAbove('BTCUSDT', viPrice(target), viPrice(round(target + 1)))]);
-  const token = await apiLogin(request);
-  const { items } = await apiNotifications(request, token);
+  const token = apiSession(request);
+  const { items } = await apiNotifications(request, await token());
   expect(items.filter((n) => n.payload.alertId === alert.id)).toHaveLength(1);
   expect(items.filter((n) => n.payload.alertId === sentinel.id)).toHaveLength(1);
-  expect((await apiAlerts(request, token)).find((a) => a.id === alert.id)?.triggeredPrice).toBe(round(target + 1));
+  expect((await apiAlerts(request, await token())).find((a) => a.id === alert.id)?.triggeredPrice).toBe(round(target + 1));
 });
 
 test('AC-ALERT-06 deleted alert never triggers', async ({ page, request }) => {
@@ -199,14 +199,14 @@ test('AC-ALERT-06 deleted alert never triggers', async ({ page, request }) => {
   await expect(notificationToast(page).filter({ hasText: 'ETHUSDT' })).toBeVisible({ timeout: 5000 });
   await expect(page.getByTestId('bell-badge')).toHaveText('2'); // seed + sentinel only
   expect((await shownToasts(page)).filter((t) => t.includes('BTCUSDT'))).toEqual([]);
-  const token = await apiLogin(request);
-  expect((await apiNotifications(request, token)).items.filter((n) => n.payload.alertId === doomed.id)).toEqual([]);
+  const token = apiSession(request);
+  expect((await apiNotifications(request, await token())).items.filter((n) => n.payload.alertId === doomed.id)).toEqual([]);
 
   // Triggered alerts can be deleted too (history only).
   await expect(triggeredRow(page, sentinel.id)).toBeVisible();
   await page.getByTestId(`alert-delete-${sentinel.id}`).click();
   await expect(triggeredRow(page, sentinel.id)).toHaveCount(0);
-  expect((await apiAlerts(request, token)).map((a) => a.id)).not.toContain(sentinel.id);
+  expect((await apiAlerts(request, await token())).map((a) => a.id)).not.toContain(sentinel.id);
   await page.reload();
   await openAlertsTab(page);
   await expect(page.getByTestId(`alert-row-${sentinel.id}`)).toHaveCount(0);
@@ -215,9 +215,9 @@ test('AC-ALERT-06 deleted alert never triggers', async ({ page, request }) => {
 test('AC-ALERT-07 active alert limit 20', async ({ page, request }) => {
   await loginViaUi(page);
   const price = await lastPrice(request, 'BTCUSDT');
-  const token = await apiLogin(request);
+  const token = apiSession(request);
   // 2 seeded ACTIVE alerts + 18 = 20.
-  for (let i = 0; i < 18; i++) await apiCreateAlert(request, token, 'BTCUSDT', 'ABOVE', round(price + 10 + i));
+  for (let i = 0; i < 18; i++) await apiCreateAlert(request, await token(), 'BTCUSDT', 'ABOVE', round(price + 10 + i));
   await openAlertsTab(page);
   await expect(page.getByTestId('alerts-active').locator('li')).toHaveCount(20);
 
@@ -249,8 +249,8 @@ test('AC-ALERT-08 alerts isolated between users', async ({ page, browser, reques
   await expect(pageB.getByTestId('bell-badge')).toHaveCount(0);
 
   // B deleting A's alert → ALERT_NOT_FOUND; A's alert still exists.
-  const tokenB = await apiLogin(request, NEW_USER.email, NEW_USER.password);
-  const del = await apiDeleteAlert(request, tokenB, alertA.id);
+  const tokenB = apiSession(request, NEW_USER.email, NEW_USER.password);
+  const del = await apiDeleteAlert(request, await tokenB(), alertA.id);
   expect(del.status()).toBe(404);
   expect(((await del.json()) as { error: { code: string } }).error.code).toBe('ALERT_NOT_FOUND');
   await expect(activeRow(page, alertA.id)).toBeVisible();

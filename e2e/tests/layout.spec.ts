@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetApp } from '../helpers/reset';
+import { loginViaUi } from '../helpers/auth';
 
 const TITLE = 'Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá';
 
@@ -72,6 +73,14 @@ test.describe('dashboard layout', () => {
     await expect(page.locator('header').getByRole('link', { name: 'Đăng nhập' })).toBeVisible();
     await expect(page.locator('header').getByRole('link', { name: 'Đăng ký' })).toBeVisible();
     await expect(page.getByTestId('footer-title')).toBeVisible();
+
+    // Logged in: the header also shows the notifications bell and the user menu (reviews/phase-2-ui-01-bell.decision.md).
+    await expect(page.locator('header').getByTestId('bell')).toHaveCount(0);
+    await loginViaUi(page);
+    await expect(page).toHaveURL(/\/trade\/BTCUSDT/);
+    await expect(page.locator('header').getByTestId('bell')).toBeVisible();
+    await expect(page.locator('header').getByTestId('user-menu')).toBeVisible();
+    await expect(page.getByTestId('panel-side')).toBeVisible();
   });
 
   test('AC-UI-02 mobile bottom tabs', async ({ page }) => {
