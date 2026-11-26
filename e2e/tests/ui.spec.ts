@@ -218,6 +218,18 @@ test('AC-UI-07 market pulse bar shows major pairs live and links to the chart', 
   await page.getByTestId('pulse-item-SOLUSDT').click();
   await expect(page).toHaveURL(/\/trade\/SOLUSDT\?tf=15m$/);
 
+  // At 1024 px all six items fit fully inside the bar.
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(bar).toBeVisible();
+  const barBox = await bar.boundingBox();
+  expect(barBox).not.toBeNull();
+  for (const s of PULSE) {
+    const box = await page.getByTestId(`pulse-item-${s}`).boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(barBox!.x);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(barBox!.x + barBox!.width);
+  }
+
   // Hidden below 1024 px.
   await page.setViewportSize({ width: 900, height: 800 });
   await expect(bar).toBeHidden();

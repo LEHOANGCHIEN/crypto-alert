@@ -26,9 +26,9 @@ export function PulseBar() {
   return (
     <div
       data-testid="pulse-bar"
-      className="hidden h-pulse shrink-0 items-center gap-6 overflow-hidden border-b border-border bg-surface px-4 text-row lg:flex"
+      className="hidden h-pulse shrink-0 items-center gap-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-border bg-surface px-4 text-row lg:flex xl:gap-6"
     >
-      <span className="shrink-0 text-meta font-semibold uppercase tracking-wide text-text-faint">{t('statusBar.pulse')}</span>
+      <span className="hidden shrink-0 text-meta font-semibold uppercase tracking-wide text-text-faint xl:inline">{t('statusBar.pulse')}</span>
       {items.map(({ info, ticker }) => {
         const dir = priceDirection(ticker.priceChangePercent);
         return (
