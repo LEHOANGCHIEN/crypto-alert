@@ -31,7 +31,7 @@ test('AC-CHART-01 chart renders with attribution logo', async ({ page, request }
   )!;
   await expect(page.getByTestId('chart-symbol')).toHaveText('BTC/USDT');
   await expect(page.getByTestId('chart-price')).toHaveText(viPrice(btc.lastPrice));
-  await expect(page.getByTestId('chart-change')).toHaveText(`${signed(tk.priceChangePercent)}%`);
+  await expect(page.getByTestId('chart-change')).toHaveText(/^[+−]\d+,\d{2}%$/);
 
   // TradingView attribution logo must be visible (licence requirement).
   const logo = page.locator('#tv-attr-logo');
@@ -159,7 +159,7 @@ test('AC-CHART-09 chart header shows coin name and 24h stats', async ({ page, re
   await expect(page.getByTestId('chart-price')).toHaveText(viPrice(tk.lastPrice));
   await expect(page.getByTestId('chart-price')).toHaveCSS('font-size', '24px');
   await expect(page.getByTestId('chart-change-abs')).toHaveText(signed(tk.lastPrice - tk.openPrice));
-  await expect(page.getByTestId('chart-change')).toHaveText(/^[+−]\d+,\d{2}%$/);
+  await expect(page.getByTestId('chart-change')).toHaveText(`${signed(tk.priceChangePercent)}%`);
   await expect(page.getByTestId('chart-high')).toHaveText(viPrice(tk.highPrice));
   await expect(page.getByTestId('chart-low')).toHaveText(viPrice(tk.lowPrice));
   await expect(page.getByTestId('chart-vol-base')).toHaveText(viPrice(tk.volume));

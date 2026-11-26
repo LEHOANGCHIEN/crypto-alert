@@ -40,7 +40,7 @@ export function PulseBar() {
             className="flex shrink-0 items-center gap-2 rounded-chip px-1 hover:bg-surface-3"
           >
             <span className="text-text-muted">
-              {info.baseAsset}/{info.quoteAsset}
+              {info.baseAsset}<span className="hidden xl:inline">/{info.quoteAsset}</span>
             </span>
             <PriceCell testId={`pulse-price-${info.symbol}`} price={ticker.lastPrice} text={fmt.price(ticker.lastPrice, info.pricePrecision)} />
             <span data-testid={`pulse-change-${info.symbol}`} className={`font-mono ${DIRECTION_CLASS[dir]}`}>
