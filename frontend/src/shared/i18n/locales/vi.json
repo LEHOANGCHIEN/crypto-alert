@@ -158,7 +158,15 @@
     "status": {
       "connected": "Dữ liệu thị trường trực tiếp",
       "reconnecting": "Dữ liệu thị trường bị trễ"
-    }
+    },
+    "tabs": {
+      "label": "Lọc danh sách thị trường",
+      "all": "Tất cả",
+      "watchlist": "Theo dõi"
+    },
+    "watchlistLogin": "Đăng nhập để xem danh sách theo dõi của bạn.",
+    "watchlistLoginLink": "Đăng nhập",
+    "watchlistEmpty": "Danh sách theo dõi trống. Bấm ngôi sao ở một cặp để thêm."
   },
   "chart": {
     "timeframes": "Khung thời gian",
@@ -166,13 +174,31 @@
       "open": "O",
       "high": "H",
       "low": "L",
-      "close": "C"
+      "close": "C",
+      "volume": "Vol"
     },
     "notFound": {
       "title": "Không tìm thấy cặp giao dịch",
       "description": "Cặp bạn mở không tồn tại hoặc không được hỗ trợ.",
       "link": "Mở BTC/USDT"
-    }
+    },
+    "stats": {
+      "change": "Thay đổi 24h",
+      "high": "Cao nhất 24h",
+      "low": "Thấp nhất 24h",
+      "volBase": "KL 24h ({{asset}})",
+      "volQuote": "KL 24h (USDT)"
+    },
+    "type": {
+      "label": "Kiểu biểu đồ",
+      "candles": "Nến",
+      "bars": "Thanh OHLC",
+      "line": "Đường",
+      "area": "Vùng"
+    },
+    "screenshot": "Lưu ảnh biểu đồ",
+    "maximize": "Phóng to biểu đồ",
+    "restore": "Thu nhỏ biểu đồ"
   },
   "connection": {
     "reconnecting": "Mất kết nối, đang kết nối lại…"
@@ -194,7 +220,8 @@
       "line": "MACD",
       "signal": "Tín hiệu",
       "hist": "Hist"
-    }
+    },
+    "volume": "Khối lượng"
   },
   "watchlist": {
     "star": {
@@ -248,5 +275,27 @@
     "triggeredPrice": "Giá kích hoạt",
     "summary_one": "Bạn có {{count}} thông báo chưa đọc",
     "summary_other": "Bạn có {{count}} thông báo chưa đọc"
+  },
+  "layout": {
+    "resize": {
+      "left": "Đổi độ rộng danh sách thị trường",
+      "right": "Đổi độ rộng bảng bên phải"
+    },
+    "collapse": {
+      "left": "Thu gọn danh sách thị trường",
+      "right": "Thu gọn bảng bên phải"
+    },
+    "expand": {
+      "left": "Mở lại danh sách thị trường",
+      "right": "Mở lại bảng bên phải"
+    }
+  },
+  "statusBar": {
+    "connected": "Đã kết nối",
+    "connecting": "Đang kết nối…",
+    "lastUpdate": "Cập nhật gần nhất",
+    "clock": "Giờ hiện tại",
+    "pulse": "Nhịp thị trường",
+    "pulseLabel": "Biến động nhanh"
   }
 }

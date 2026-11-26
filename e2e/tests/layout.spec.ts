@@ -52,19 +52,34 @@ test.describe('dashboard layout', () => {
     const m = (await market.boundingBox())!;
     const c = (await chart.boundingBox())!;
     const s = (await side.boundingBox())!;
-    // Left → center → right, same row, widths 320 / flex / 340 (ARCHITECTURE §11.1).
+    // Left → center → right, same row, widths 240 / flex / 320 (ARCHITECTURE §11.1).
     expect(m.x).toBeLessThan(c.x);
     expect(c.x).toBeLessThan(s.x);
     expect(Math.abs(m.y - c.y)).toBeLessThan(2);
     expect(Math.abs(c.y - s.y)).toBeLessThan(2);
-    expect(Math.round(m.width)).toBe(320);
-    expect(Math.round(s.width)).toBe(340);
+    expect(Math.round(m.width)).toBe(240);
+    expect(Math.round(s.width)).toBe(320);
     expect(c.width).toBeGreaterThan(m.width);
 
     // Right panel has Watchlist / Alerts tabs; no mobile tab bar on desktop.
     await expect(page.getByTestId('side-tab-watchlist')).toBeVisible();
     await expect(page.getByTestId('side-tab-alerts')).toBeVisible();
     await expect(page.getByTestId('mobile-tabs')).toBeHidden();
+
+    // Market pulse bar under the header, resize handles between the columns, status bar above the footer (decision ui-polish).
+    await expect(page.getByTestId('pulse-bar')).toBeVisible();
+    await expect(page.getByTestId('panel-resize-left')).toBeVisible();
+    await expect(page.getByTestId('panel-resize-right')).toBeVisible();
+    await expect(page.getByTestId('status-bar')).toBeVisible();
+    const header = (await page.locator('header').boundingBox())!;
+    const pulse = (await page.getByTestId('pulse-bar').boundingBox())!;
+    const status = (await page.getByTestId('status-bar').boundingBox())!;
+    const footer = (await page.getByTestId('footer-title').boundingBox())!;
+    expect(Math.round(header.height)).toBe(56);
+    expect(Math.round(pulse.height)).toBe(32);
+    expect(Math.round(status.height)).toBe(28);
+    expect(pulse.y).toBeGreaterThanOrEqual(header.y + header.height - 1);
+    expect(status.y + status.height).toBeLessThanOrEqual(footer.y + 1);
 
     // Header: logo, language switcher, theme toggle, login/register for a guest; footer visible.
     await expect(page.getByTestId('logo')).toBeVisible();

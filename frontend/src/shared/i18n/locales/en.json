@@ -158,7 +158,15 @@
     "status": {
       "connected": "Market data live",
       "reconnecting": "Market data delayed"
-    }
+    },
+    "tabs": {
+      "label": "Filter market list",
+      "all": "All",
+      "watchlist": "Watchlist"
+    },
+    "watchlistLogin": "Log in to see your watchlist.",
+    "watchlistLoginLink": "Log in",
+    "watchlistEmpty": "Your watchlist is empty. Click the star on a pair to add it."
   },
   "chart": {
     "timeframes": "Timeframe",
@@ -166,13 +174,31 @@
       "open": "O",
       "high": "H",
       "low": "L",
-      "close": "C"
+      "close": "C",
+      "volume": "Vol"
     },
     "notFound": {
       "title": "Pair not found",
       "description": "The pair you opened does not exist or is not supported.",
       "link": "Open BTC/USDT"
-    }
+    },
+    "stats": {
+      "change": "24h change",
+      "high": "24h high",
+      "low": "24h low",
+      "volBase": "24h vol ({{asset}})",
+      "volQuote": "24h vol (USDT)"
+    },
+    "type": {
+      "label": "Chart type",
+      "candles": "Candles",
+      "bars": "Bars (OHLC)",
+      "line": "Line",
+      "area": "Area"
+    },
+    "screenshot": "Save chart image",
+    "maximize": "Maximize chart",
+    "restore": "Restore chart size"
   },
   "connection": {
     "reconnecting": "Reconnecting…"
@@ -194,7 +220,8 @@
       "line": "MACD",
       "signal": "Signal",
       "hist": "Hist"
-    }
+    },
+    "volume": "Volume"
   },
   "watchlist": {
     "star": {
@@ -248,5 +275,27 @@
     "triggeredPrice": "Triggered price",
     "summary_one": "You have {{count}} unread notification",
     "summary_other": "You have {{count}} unread notifications"
+  },
+  "layout": {
+    "resize": {
+      "left": "Resize market list",
+      "right": "Resize right panel"
+    },
+    "collapse": {
+      "left": "Collapse market list",
+      "right": "Collapse right panel"
+    },
+    "expand": {
+      "left": "Expand market list",
+      "right": "Expand right panel"
+    }
+  },
+  "statusBar": {
+    "connected": "Connected",
+    "connecting": "Connecting…",
+    "lastUpdate": "Last update",
+    "clock": "Current time",
+    "pulse": "Market pulse",
+    "pulseLabel": "Quick moves"
   }
 }

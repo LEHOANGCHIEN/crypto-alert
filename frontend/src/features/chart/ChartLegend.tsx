@@ -30,7 +30,7 @@ export function ChartLegend({ candle, index, hovered, precision, indicators, set
       data-testid="chart-legend"
       data-time={candle.openTime}
       data-hovered={hovered}
-      className="pointer-events-none absolute left-2 top-2 z-10 flex flex-col gap-y-1 rounded-input bg-surface/80 px-2 py-1 text-meta tabular-nums"
+      className="pointer-events-none absolute left-2 top-2 z-10 flex flex-col gap-y-1 rounded-input bg-surface/80 px-2 py-1 font-mono text-meta tabular-nums"
     >
       <div className="flex flex-wrap gap-x-3 gap-y-1">
         <span data-testid="legend-time" className="text-text-muted">
@@ -42,6 +42,12 @@ export function ChartLegend({ candle, index, hovered, precision, indicators, set
             <span data-testid={`legend-${key}`}>{fmt.price(value, precision)}</span>
           </span>
         ))}
+        {settings.volume && (
+          <span className="text-text">
+            <span className="text-text-muted">{t('chart.legend.volume')} </span>
+            <span data-testid="legend-volume">{fmt.compact(candle.volume)}</span>
+          </span>
+        )}
       </div>
       {indicators && <IndicatorLegend data={indicators} index={index} settings={settings} precision={precision} />}
     </div>

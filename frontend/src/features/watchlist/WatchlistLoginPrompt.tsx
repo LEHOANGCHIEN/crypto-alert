@@ -26,7 +26,7 @@ export function WatchlistLoginPrompt() {
             to="/login"
             data-testid="watchlist-login-button"
             onClick={hide}
-            className="h-10 rounded-button bg-accent px-4 text-body font-medium leading-10 text-bg"
+            className="h-8 rounded-button bg-accent px-4 text-body font-medium leading-8 text-bg"
           >
             {t("watchlist.loginPrompt.login")}
           </Link>
@@ -34,7 +34,7 @@ export function WatchlistLoginPrompt() {
             type="button"
             data-testid="watchlist-login-cancel"
             onClick={hide}
-            className="h-10 rounded-button bg-surface-2 px-4 text-body text-text"
+            className="h-8 rounded-button bg-surface-2 px-4 text-body text-text"
           >
             {t("watchlist.loginPrompt.cancel")}
           </button>

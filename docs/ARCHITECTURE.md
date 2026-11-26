@@ -251,14 +251,17 @@ Layering (BE): controller (HTTP + DTO validation) → service (business rules, t
 
 ## 11. UI guidelines
 
-No Figma. Clean trading-dashboard look *inspired by* Binance/TradingView layouts; **no** copied logos, names or brand colors. Every visual value comes from a token (CSS variable) — no raw hex/px in components (Tailwind v4 `@theme` maps tokens to utilities). A future Figma redesign = change token values + component styles only.
+Visual reference: owner's mockup `docs/design/mockup-trading-terminal.png` (layout, density, colors). Names/logos in the mockup are not used. Every visual value comes from a token (CSS variable) — no raw hex/px in components (Tailwind v4 `@theme` maps tokens to utilities). A future redesign = change token values + component styles only.
 
 ### 11.1 Layout per page
 
 | Page | Desktop (≥ 1024 px) | Mobile (< 1024 px) |
 |---|---|---|
 | Header (all pages, 56 px) | Logo + app name · (spacer) · market-data status badge · language switcher (VI/EN) · theme toggle · bell · user menu or Login/Register | Same, compact; bell + menu icons only |
-| `/trade/:symbol` | 3 columns: **Market list 320 px** (search + virtual list) · **Chart flex** (symbol header with star, price, 24h change → timeframe bar + Indicators button → price pane → RSI pane → MACD pane) · **Right panel 340 px** tabs *Watchlist / Alerts* | Bottom tab bar *Markets / Chart / Watchlist / Alerts* (56 px); one panel at a time; chart fills height |
+| `/trade/:symbol` | Header 56 · market pulse bar 32 · 3 columns: **Market list** (default 240 px; search, All/Watchlist tabs, two-line rows 48 px) · **Chart flex** (header with avatar, pair, name, last price 24 px and 24h stats → toolbar 40 px: timeframes, chart type, Indicators, screenshot, maximize → price pane with volume overlay → RSI pane → MACD pane) · **Right panel** (default 320 px) tabs *Watchlist / Alerts*; left and right columns are resizable (left 180–480, right 260–520) and collapsible to a ≤ 24 px rail, state in localStorage `crypto-alert.layout` · status bar 28 · footer | Bottom tab bar *Markets / Chart / Watchlist / Alerts* (56 px); one panel at a time; chart fills height; no pulse bar, no resize handles |
+| `/coin/:symbol` (Phase 6b) | Coin overview: header (avatar, name, pair, star, large price, 24h change, updated-at, "Open full chart") · range area chart (1D…1Y) + performance tiles + key stats card (AC-COIN-01…04) | Single column |
+| `/alerts` (Phase 6b) | Table of all alerts, Status filter + symbol search, New alert button (AC-ALERT-12) | Full width |
+| `/notifications` (Phase 6b) | Latest 100 notifications, All/Unread filter, mark all as read (AC-NOTIF-06) | Full width |
 | `/login`, `/register` | Centered card 400 px | Full-width card, 16 px margin |
 | `/account` | Single column 640 px: Profile · Change password · Preferences (language, theme, timezone) | Full width |
 | 404 | Centered message + Home button | same |
@@ -268,36 +271,42 @@ No Figma. Clean trading-dashboard look *inspired by* Binance/TradingView layouts
 
 | Token | Dark (default) | Light | Use |
 |---|---|---|---|
-| `--color-bg` | `#0F1115` | `#F7F8FA` | page background |
-| `--color-surface` | `#161A20` | `#FFFFFF` | panels, cards |
-| `--color-surface-2` | `#1E232B` | `#F0F2F5` | hover, inputs, selected row |
-| `--color-border` | `#2A303A` | `#DDE1E6` | dividers |
-| `--color-text` | `#E6E8EB` | `#12161C` | primary text |
-| `--color-text-muted` | `#8B93A1` | `#5B6472` | labels, secondary |
-| `--color-accent` | `#3B82F6` | `#2563EB` | primary buttons, links, active tab, focus ring, info/success toasts |
+| `--color-bg` | `#0B0E12` | `#F7F8FA` | page background, chart background |
+| `--color-surface` | `#101419` | `#FFFFFF` | header, panels, side columns, status bar |
+| `--color-surface-2` | `#161B22` | `#F0F2F5` | inputs, search box, badges, selected row |
+| `--color-surface-3` | `#1A2028` | `#E6E9EE` | hover, active timeframe chip, avatar |
+| `--color-border` | `#252C35` | `#DDE1E6` | all 1 px dividers |
+| `--color-text` | `#E8EDF2` | `#12161C` | primary text, numbers |
+| `--color-text-muted` | `#A0ABB8` | `#5B6472` | secondary text, inactive tabs/buttons |
+| `--color-text-faint` | `#7D8997` | `#5F6877` | labels, column headers, placeholders, `/USDT` suffix |
+| `--color-accent` | `#3B82F6` | `#2563EB` | active tab underline, primary buttons, links, focus ring, "connected" dot, info/success toasts, line/area series |
 | `--color-danger` | `#F97316` | `#C2410C` | errors, destructive buttons (**orange — red is reserved for price down**) |
 | `--color-warning` | `#F59E0B` | `#B45309` | "Reconnecting…", "Market data delayed" |
-| `--color-up` | `#26A69A` | `#0A7F6F` | price up, bullish candle, MACD hist ≥ 0 |
-| `--color-down` | `#EF5350` | `#D32F2F` | price down, bearish candle, MACD hist < 0 |
-| `--color-chart-grid` | `#1E232B` | `#EEF0F3` | chart grid |
+| `--color-up` | `#37C99A` | `#0A7F6F` | price up, bullish candle, MACD hist ≥ 0 |
+| `--color-down` | `#EF7381` | `#D32F2F` | price down, bearish candle, MACD hist < 0 |
+| `--color-up-soft` / `--color-down-soft` | up / down at 15 % opacity | same | flash, volume bars (40 %), area fill |
+| `--color-accent-soft` / `--color-accent-clear` | accent at 25 % / 0 % | same | area-series fill (top / bottom) |
+| `--color-up-volume` / `--color-down-volume` | up / down at 40 % | same | volume bars |
+| `--color-chart-grid` | `#161B22` | `#EEF0F3` | chart grid |
 | `--color-chart-crosshair` | `#5B6472` | `#9AA3AF` | crosshair |
 | `--color-ind-1/2/3` | `#F59E0B` / `#A855F7` / `#38BDF8` | `#D97706` / `#9333EA` / `#0284C7` | MA lines 1–3 |
 | `--color-ind-rsi` | `#A855F7` | `#9333EA` | RSI line |
 | `--color-ind-macd` / `--color-ind-signal` | `#3B82F6` / `#F97316` | `#2563EB` / `#EA580C` | MACD / signal |
 
-Rule: **green/red only for price direction** (text, candles, MACD histogram, flash). Chart reads tokens via `getComputedStyle` and calls `chart.applyOptions()` on theme change. Lightweight Charts `layout.attributionLogo` stays `true`.
+Rule: **green/red only for price direction** (text, candles, MACD histogram, volume bars, flash). Active tabs, primary buttons and "connected" status use `--color-accent` or neutral text, never green. Chart reads tokens via `getComputedStyle` and calls `chart.applyOptions()` on theme change. Lightweight Charts `layout.attributionLogo` stays `true`. Light values were kept from v0.6 (all text/background pairs ≥ 4.5:1); `--color-text-faint` dark is `#7D8997` instead of the mockup's measured `#697685` because the latter is only 3.5–4.2:1 on the dark surfaces (SPEC §6 accessibility ≥ 4.5:1).
 
 ### 11.3 Typography, spacing, shape
 
 | Item | Value |
 |---|---|
-| Font | Inter (self-hosted `@fontsource/inter`), fallback `system-ui, sans-serif`; all numbers `font-variant-numeric: tabular-nums` |
-| Sizes | 12 (meta, footer) · 13 (table rows) · 14 (body, inputs) · 16 (section titles) · 20 (price in chart header) · 24 (page titles) |
+| Fonts | **Inter** (self-hosted `@fontsource/inter`) for UI text; **Roboto Mono** (self-hosted `@fontsource/roboto-mono` 400/500, OFL) for every number (prices, changes, volumes, times, legends, chart scales via `layout.fontFamily`); fallback `system-ui, sans-serif` / `monospace` |
+| Sizes | 10 (labels, meta, status bar) · 11 (rows, numbers, chips, buttons) · 12 (body, inputs) · 13 (header nav, section titles) · 18 (pair name in chart header) · 24 (last price in chart header) |
 | Weights | 400 body · 500 labels/buttons · 600 headings, price |
 | Spacing scale | 4 · 8 · 12 · 16 · 24 · 32 px (`--space-1…6`) |
-| Radius | 4 (inputs, rows) · 6 (buttons) · 8 (cards, panels) |
-| Sizes | market row 32 px; button height 32 (sm) / 40 (md); input 40 |
-| Motion | price flash: background `--color-up`/`--color-down` at 20 % opacity, fade 600 ms; respect `prefers-reduced-motion` |
+| Radius | 3–4 (chips, inputs) · 6 (cards) |
+| Fixed heights | header 56 · market pulse bar 32 · chart toolbar 40 · status bar 28 · market row 48 (two lines) · mobile tab bar 56 |
+| Structure | Panels separated by 1 px `--color-border` lines, no gaps, no card shadows |
+| Motion | price flash: `--color-up-soft`/`--color-down-soft`, fade 600 ms; respect `prefers-reduced-motion` |
 | Focus | 2 px `--color-accent` outline, offset 2 px |
 | Empty/loading | Skeleton rows for lists, spinner for chart, translated empty states with an action button |
 
@@ -318,6 +327,7 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, fla
 | ADR-11 | Access JWT in memory + rotating refresh cookie (hashed in DB) | XSS can't read refresh token; sessions revocable | Session restore needs `/auth/refresh` on app start |
 | ADR-12 | **MockProvider + test endpoints** | Deterministic e2e for live-data features | Test endpoints must be impossible to enable in prod |
 | ADR-13 | **Git workflow**: public GitHub repo (owner decision: unlimited free CI minutes); `main` always working; one branch `phase-N-<name>` per phase, merged `--no-ff` only after CI green + review PASS, tagged `v0.N` (`v1.0` final); Conventional Commits; no force-push / history rewrite / branch or tag deletion; secrets check before every commit | Solo beginner needs safe, reversible steps and clear restore points | Undo is always `git revert` or a new branch (see ROLLBACK PROMPT) |
+| ADR-14 | 2026-11-26 · UI redesign + pages per `reviews/ui-polish.decision.md` (owner request) | Owner's mockup; v0.6 UI judged too plain | Phases 6a (redesign) and 6b (pages) before Phase 7; tokens in §11.2/§11.3 replace the v0.6 values |
 
 ## 13. Future extensions (NOT to be built now)
 

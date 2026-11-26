@@ -106,7 +106,7 @@ function PreferencesForm() {
   const { savePreferences } = usePreferenceActions();
   const [draft, setDraft] = useState(settings);
   const [busy, setBusy] = useState(false);
-  const selectClass = 'h-10 rounded-input border border-border bg-surface-2 px-3 text-body text-text';
+  const selectClass = 'h-8 rounded-input border border-border bg-surface-2 px-3 text-body text-text';
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();

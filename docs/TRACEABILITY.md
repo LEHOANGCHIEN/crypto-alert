@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 76 ACs · passing 74 · failing 0 · pending 2 · last CI run: green on phase-6-alerts (2026-11-25, run 45638142138)
+**Summary:** 93 ACs · passing 83 · failing 0 · pending 10 · last CI run: green on phase-6a-ui-redesign (2026-11-26, run 45692278705)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -30,7 +30,7 @@
 | AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
 | AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
 | AC-THEME-03 | 1 | theme.spec.ts | AC-THEME-03 theme persists for guest and account | passing | |
-| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | |
+| AC-MKT-01 | 2 | market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | edited in 6a: two-line rows, four column labels, 48 px rows (test rewritten to the new AC text) |
 | AC-MKT-02 | 2 | market.spec.ts | AC-MKT-02 search filters pairs | passing | |
 | AC-MKT-04 | 2 | market.spec.ts | AC-MKT-04 change colors and signs | passing | |
 | AC-MKT-05 | 2 | market.spec.ts | AC-MKT-05 row click opens chart | passing | |
@@ -44,7 +44,7 @@
 | AC-PROF-05 | 2 | account.spec.ts | AC-PROF-05 timezone setting changes displayed times | passing | |
 | AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
 | AC-THEME-02 | 2 | theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
-| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
+| AC-UI-01 | 2 | layout.spec.ts | AC-UI-01 desktop three-column layout | passing | edited in 6a: 240/320 columns, handles, pulse bar 32, status bar 28, header 56; guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
 | AC-UI-02 | 2 | layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
 | AC-MKT-03 | 3 | market.spec.ts | AC-MKT-03 live ticker updates row | passing | |
 | AC-RT-01 | 3 | realtime.spec.ts | AC-RT-01 open candle updates live | passing | Unit: backoff, send queue, upstream reconnect (fake WS), SubscriptionManager + caps, ticker batcher; integration: realtime.int-spec.ts |
@@ -84,3 +84,20 @@
 | AC-NOTIF-05 | 6 | notifications.spec.ts | AC-NOTIF-05 multi-tab delivery and read sync | passing | two pages of one browser context; integration: notification:read reaches every socket of the user only |
 | AC-I18N-02 | 7 | i18n.spec.ts | AC-I18N-02 every visible text switches to English | pending | |
 | AC-OPS-02 | 7 | ops.spec.ts | AC-OPS-02 seeded demo account | pending | |
+| AC-MKT-07 | 6a | market.spec.ts | AC-MKT-07 market list has All and Watchlist tabs | passing | |
+| AC-UI-05 | 6a | ui.spec.ts | AC-UI-05 side columns can be resized by drag and keyboard | passing | unit: layout.test.ts |
+| AC-UI-06 | 6a | ui.spec.ts | AC-UI-06 side columns can be collapsed and reopened | passing | |
+| AC-UI-07 | 6a | ui.spec.ts | AC-UI-07 market pulse bar shows major pairs live and links to the chart | passing | |
+| AC-UI-08 | 6a | ui.spec.ts | AC-UI-08 status bar shows connection state, last update and a clock | passing | last update = tickers query dataUpdatedAt (snapshot or live) |
+| AC-CHART-07 | 6a | chart.spec.ts | AC-CHART-07 chart type menu switches the price series | passing | |
+| AC-CHART-08 | 6a | chart.spec.ts | AC-CHART-08 volume bars overlay on the price pane | passing | unit: settings.test.ts (volume default/stored). Live update proven with tick (bar color) + close-candle (new bar, volume 0): the mock tick does not change candle volume |
+| AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name); unknown-name case covered by coin-names.test.ts (mock has no USDT pair outside the map) |
+| AC-CHART-10 | 6a | chart.spec.ts | AC-CHART-10 screenshot download and maximize | passing | unit: format.test.ts (file stamp); maximize is CSS (fixed overlay), not the Fullscreen API |
+| AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | pending | |
+| AC-ALERT-11 | 6b | alerts-panel.spec.ts | AC-ALERT-11 bottom panel | pending | |
+| AC-ALERT-12 | 6b | alerts-page.spec.ts | AC-ALERT-12 alerts page | pending | |
+| AC-NOTIF-06 | 6b | notifications-page.spec.ts | AC-NOTIF-06 notifications page | pending | |
+| AC-COIN-01 | 6b | coin.spec.ts | AC-COIN-01 coin header | pending | |
+| AC-COIN-02 | 6b | coin.spec.ts | AC-COIN-02 range chart | pending | |
+| AC-COIN-03 | 6b | coin.spec.ts | AC-COIN-03 performance tiles | pending | |
+| AC-COIN-04 | 6b | coin.spec.ts | AC-COIN-04 key stats | pending | |

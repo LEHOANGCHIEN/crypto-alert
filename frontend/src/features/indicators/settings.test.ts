@@ -15,6 +15,11 @@ describe('parseSettings', () => {
     expect(parseSettings('{oops')).toEqual(DEFAULT_INDICATOR_SETTINGS);
     expect(DEFAULT_INDICATOR_SETTINGS.ma.map((m) => m.period)).toEqual([7, 25, 99]);
   });
+  it('shows the volume overlay by default and keeps a stored choice', () => {
+    expect(DEFAULT_INDICATOR_SETTINGS.volume).toBe(true);
+    expect(parseSettings(JSON.stringify({ volume: false })).volume).toBe(false);
+    expect(parseSettings(JSON.stringify({ volume: 'no' })).volume).toBe(true);
+  });
   it('keeps valid stored values and replaces invalid ones field by field', () => {
     const s = parseSettings(JSON.stringify({ ma: [{ period: 50, enabled: true }, { period: 1, enabled: false }], rsi: true, macd: 'x' }));
     expect(s.ma).toEqual([

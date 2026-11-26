@@ -18,7 +18,11 @@ export function Header() {
 
   return (
     <header className="flex h-header shrink-0 items-center gap-4 border-b border-border bg-surface px-4">
-      <Link to="/" data-testid="logo" className="text-section font-semibold text-text">
+      <Link to="/" data-testid="logo" className="flex items-center gap-2 text-section font-semibold text-text">
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="h-6 w-6 text-accent" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 17l5-6 4 3 5-8 4 5" />
+          <circle cx="20" cy="9" r="1.5" fill="currentColor" stroke="none" />
+        </svg>
         {t('app.name')}
       </Link>
       <div className="flex-1" />
@@ -32,7 +36,7 @@ export function Header() {
             aria-pressed={i18n.language === l}
             onClick={() => changeLocale(l)}
             className={`h-8 rounded-button px-2 text-meta font-medium ${
-              i18n.language === l ? 'bg-accent text-bg' : 'bg-surface-2 text-text-muted'
+              i18n.language === l ? 'bg-surface-3 text-text' : 'text-text-muted hover:bg-surface-2'
             }`}
           >
             {t(`language.${l}`)}
@@ -53,10 +57,10 @@ export function Header() {
       {status === 'authenticated' && <UserMenu />}
       {status === 'guest' && (
         <nav className="flex gap-2">
-          <Link to="/login" className="h-8 rounded-button px-3 text-body leading-8 text-text">
+          <Link to="/login" className="h-8 rounded-button px-3 text-section leading-8 text-text">
             {t('nav.login')}
           </Link>
-          <Link to="/register" className="h-8 rounded-button bg-accent px-3 text-body font-medium leading-8 text-bg">
+          <Link to="/register" className="h-8 rounded-button bg-accent px-3 text-section font-medium leading-8 text-bg">
             {t('nav.register')}
           </Link>
         </nav>

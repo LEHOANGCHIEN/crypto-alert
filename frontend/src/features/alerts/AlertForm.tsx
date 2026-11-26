@@ -11,7 +11,7 @@ import { parseTarget, toInputText } from './lib/target';
 import { useCreateAlert } from './useAlerts';
 
 const CONDITIONS: AlertCondition[] = ['ABOVE', 'BELOW'];
-const SELECT_CLASS = 'h-10 rounded-input border border-border bg-surface-2 px-3 text-body text-text';
+const SELECT_CLASS = 'h-8 rounded-input border border-border bg-surface-2 px-3 text-body text-text';
 
 /**
  * Create-alert form (AC-ALERT-01/02): prefilled with the chart symbol, "Above" and the current price.

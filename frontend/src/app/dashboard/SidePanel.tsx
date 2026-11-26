@@ -4,6 +4,7 @@ import { useAuth } from '../../shared/auth/auth.store';
 import { WatchlistPanel } from '../../features/watchlist';
 import { AlertsPanel } from '../../features/alerts';
 import type { DashboardTab } from './MobileTabBar';
+import { CollapseButton } from './PanelToggle';
 
 /** Right panel: Watchlist / Alerts tabs for users; guests see a login prompt (SPEC §2). */
 export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' | 'alerts'; onChange: (t: DashboardTab) => void; onSelect?: () => void }) {
@@ -11,7 +12,7 @@ export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' 
   const status = useAuth((s) => s.status);
   return (
     <>
-      <div role="tablist" aria-label={t('dashboard.side.label')} className="hidden h-10 shrink-0 border-b border-border lg:flex">
+      <div role="tablist" aria-label={t('dashboard.side.label')} className="hidden h-8 shrink-0 border-b border-border lg:flex">
         {(['watchlist', 'alerts'] as const).map((tab) => (
           <button
             key={tab}
@@ -20,11 +21,14 @@ export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' 
             data-testid={`side-tab-${tab}`}
             aria-selected={active === tab}
             onClick={() => onChange(tab)}
-            className={`flex-1 text-body font-medium ${active === tab ? 'border-b-2 border-accent text-text' : 'text-text-muted'}`}
+            className={`flex-1 text-section font-medium ${active === tab ? 'border-b-2 border-accent text-text' : 'text-text-muted'}`}
           >
             {t(`dashboard.tabs.${tab}`)}
           </button>
         ))}
+        <div className="flex items-center px-2">
+          <CollapseButton side="right" />
+        </div>
       </div>
       {status === 'authenticated' ? (
         <div data-testid={`side-content-${active}`} className="flex min-h-0 flex-1 flex-col">
@@ -38,7 +42,7 @@ export function SidePanel({ active, onChange, onSelect }: { active: 'watchlist' 
               <p data-testid="login-prompt" className="text-text-muted">
                 {t('dashboard.side.loginRequired')}
               </p>
-              <Link to="/login" className="h-10 rounded-button bg-accent px-4 text-body font-medium leading-10 text-bg">
+              <Link to="/login" className="h-8 rounded-button bg-accent px-4 text-body font-medium leading-8 text-bg">
                 {t('dashboard.side.login')}
               </Link>
             </>

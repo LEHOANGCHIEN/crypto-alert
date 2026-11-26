@@ -85,6 +85,7 @@ export function IndicatorMenu() {
   const settings = useIndicatorSettings((s) => s.settings);
   const setRsi = useIndicatorSettings((s) => s.setRsi);
   const setMacd = useIndicatorSettings((s) => s.setMacd);
+  const setVolume = useIndicatorSettings((s) => s.setVolume);
 
   useEffect(() => {
     if (!open) return;
@@ -110,7 +111,7 @@ export function IndicatorMenu() {
         aria-expanded={open}
         aria-controls="indicators-menu"
         onClick={() => setOpen((o) => !o)}
-        className={`h-8 rounded-button px-3 text-body font-medium ${open ? 'bg-accent text-bg' : 'bg-surface-2 text-text-muted'}`}
+        className={`h-7 rounded-chip px-2 text-row font-medium ${open ? 'bg-surface-3 text-text' : 'text-text-muted hover:bg-surface-2'}`}
       >
         {t('indicators.button')}
       </button>
@@ -137,6 +138,7 @@ export function IndicatorMenu() {
           {settings.ma.map((_, i) => (
             <MaRow key={i} slot={i} />
           ))}
+          <Toggle id="ind-volume-toggle" label={t('indicators.volume')} checked={settings.volume} onChange={setVolume} />
           <Toggle id="ind-rsi-toggle" label={t('indicators.rsi', { period: RSI_PERIOD })} checked={settings.rsi} onChange={setRsi} />
           <Toggle
             id="ind-macd-toggle"

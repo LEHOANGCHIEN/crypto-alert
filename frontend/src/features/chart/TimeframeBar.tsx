@@ -19,7 +19,7 @@ export function TimeframeBar({ active, onChange }: { active: Interval; onChange:
           data-testid={`tf-${i}`}
           aria-pressed={active === i}
           onClick={() => onChange(i)}
-          className={`h-8 rounded-button px-3 text-body font-medium ${active === i ? 'bg-accent text-bg' : 'bg-surface-2 text-text-muted'}`}
+          className={`h-7 rounded-chip px-2 font-mono text-row font-medium ${active === i ? 'bg-surface-3 text-text' : 'text-text-muted hover:bg-surface-2'}`}
         >
           {i}
         </button>

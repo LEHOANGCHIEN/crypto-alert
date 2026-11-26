@@ -15,10 +15,12 @@
 | 4 | Indicators | `phase-4-indicators` | Opus 5.5 + High | Dec 2 | done |
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
-| 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 6–7 | not started |
-| — | Buffer for slips | — | — | Dec 8–10 | — |
+| 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | built, awaiting review |
+| 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | not started |
+| 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 8–9 | not started |
+| — | Buffer for slips | — | — | Dec 10–11 | — |
 
-Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; buffer until Dec 10.
+Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; buffer until Dec 11 (6a and 6b added by reviews/ui-polish.decision.md).
 
 **Every phase ends with:** CI green → **Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-N-review.decision.md; paste into the builder: Read reviews/phase-N-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.** → if PASS, *Merge Prompt* (Sonnet 5.5 + Medium): merge, tag `v0.N`, redeploy `main` to Railway.
 **Usage rule:** near the weekly quota limit (`/usage`) → Sonnet 5.5 + Medium for everything except Phase Review (this includes phases 3, 4, 6 and Stuck Bug sessions); the review stays Opus 5.5 + High.
@@ -194,6 +196,45 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 
 ---
 
+## Phase 6a — UI redesign
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · owner request `reviews/ui-polish.decision.md` (Phase 6a PHASE START prompt)
+**ACs:** AC-MKT-01 (edited), AC-MKT-07, AC-UI-01 (edited), AC-UI-05…08, AC-CHART-07…10
+
+- [x] Doc edits of reviews/ui-polish.decision.md §3 (SPEC, ARCHITECTURE §11/§12, PROGRESS 6a/6b, TRACEABILITY pending rows, CONTEXT) + commit the decision and `docs/design/`
+- [x] Tokens + fonts (§4), restyle of every existing screen to the mockup density
+- [x] Resizable + collapsible side columns (AC-UI-01, AC-UI-05, AC-UI-06)
+- [x] Market pulse bar + status bar (AC-UI-07, AC-UI-08)
+- [x] Two-line market rows + All/Watchlist tabs (AC-MKT-01, AC-MKT-07)
+- [x] Chart header stats + coin names (AC-CHART-09)
+- [x] Chart types + volume overlay (AC-CHART-07, AC-CHART-08)
+- [x] Screenshot + maximize (AC-CHART-10)
+- [x] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
+
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6a-review.decision.md; paste into the builder: Read reviews/phase-6a-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
+**Log:**
+- 2026-11-26 · Sonnet 5.5 + Medium · Phase 6a built: §3 doc edits (SPEC §1 + A10 + routes + 17 new ACs incl. F13, ARCHITECTURE §11/§12, PROGRESS 6a/6b + Phase 7 dates, TRACEABILITY 93 ACs, CONTEXT testids); new tokens + Inter/Roboto Mono (@fontsource/roboto-mono) and denser restyle; resizable/collapsible side columns (`crypto-alert.layout`, separators with keyboard + double-click, rails ≤ 24 px); market pulse bar + status bar; two-line market rows + All/Watchlist tabs; chart header stats + 18 coin names; chart types (candles/bars/line/area, `crypto-alert.chart-type`) + volume overlay (indicator setting `volume`); screenshot (`takeScreenshot` PNG) + CSS maximize. Tests: 9 new AC tests (AC-MKT-07, AC-UI-05…08, AC-CHART-07…10) + AC-CHART-09 + rewritten AC-MKT-01/AC-UI-01; theme/market tests updated to the new token values and `bg-*-soft` flash classes (same strictness). `npm run check` green (BE 107 + FE 106 unit, 90 integration, 83 Playwright); smoke run OK (migrate, seed, dev, health db up/binance connected). Doc changes: SPEC.md (decision §3.1 only), ARCHITECTURE §11/§12 (+ tokens accent-soft/-clear, up/down-volume; `--color-text-faint` dark = #7D8997 instead of the mockup's #697685 because that fails the 4.5:1 contrast rule of SPEC §6), PROGRESS, TRACEABILITY, frontend/CONTEXT.md; API.md/DATABASE.md untouched. Note: the mock tick does not change candle volume, so AC-CHART-08 proves live updates with a tick (bar color) + close-candle (new bar, volume 0) · last code commit d387857; flaky AC-NOTIF-03 (mark-all badge, 5 s e2e token) fixed in 01f8591 by waiting for the final non-401 `read-all` response (test-only, no assertion weakened) ; second flake class (mock tick pushed before the tickers/kline subscription was acknowledged) fixed in f2a185a by waiting for `data-live` in AC-CHART-07/09 and AC-UI-07/08 · CI green (run 45692278705 on f2a185a)
+- 2026-11-26 · Sonnet 5.5 + Medium · Phase 6a review decision applied (reviews/phase-6a-review.decision.md): text-bg on accent buttons (Header, MarketList); pulse bar fits 6 items at 1024 px + AC-UI-07 1024×768 step; AC-CHART-09 asserts chart-change value + TRACEABILITY note; panel-expand ids in frontend/CONTEXT.md; review + decision committed.
+
+---
+
+## Phase 6b — Pages
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · starts only after 6a is merged and tagged `v0.6.1`
+**ACs:** AC-UI-09, AC-ALERT-11, AC-ALERT-12, AC-NOTIF-06, AC-COIN-01…04
+
+- [ ] Header navigation + last-symbol memory (AC-UI-09)
+- [ ] Bottom panel under the chart (AC-ALERT-11)
+- [ ] `/alerts` page (AC-ALERT-12)
+- [ ] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
+- [ ] Coin overview page: header, range chart, performance tiles, key stats (AC-COIN-01…04)
+- [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
+
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6b-review.decision.md; paste into the builder: Read reviews/phase-6b-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
+**Log:**
+
+Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` / `v0.6.2` (instead of `v0.N`), deploy as usual (`railway up` run by the owner).
+
+---
+
 ## Phase 7 — Hardening, final deploy, demo account
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=7)
 **ACs:** AC-I18N-02, AC-OPS-02 (+ full regression of all ACs)
@@ -202,7 +243,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 7**; b
 - [ ] UX states: loading skeletons, empty states, error boundary, toasts; mobile pass at 390 px
 - [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
 - [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
-- [ ] All 76 ACs passing in TRACEABILITY; CI green
+- [ ] All ACs passing (93) in TRACEABILITY; CI green
 - [ ] Production deploy from this branch (`railway up`; start command runs `prisma migrate deploy`), seed demo account on production, smoke-check each feature on the live URL (the Merge Prompt redeploys from `main` afterwards)
 - [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
