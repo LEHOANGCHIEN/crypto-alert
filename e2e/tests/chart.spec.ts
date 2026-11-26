@@ -31,7 +31,7 @@ test('AC-CHART-01 chart renders with attribution logo', async ({ page, request }
   )!;
   await expect(page.getByTestId('chart-symbol')).toHaveText('BTC/USDT');
   await expect(page.getByTestId('chart-price')).toHaveText(viPrice(btc.lastPrice));
-  await expect(page.getByTestId('chart-change')).toHaveText(/^[+−]\d+,\d{2}%$/);
+  await expect(page.getByTestId('chart-change')).toHaveText(`${signed(tk.priceChangePercent)}%`);
 
   // TradingView attribution logo must be visible (licence requirement).
   const logo = page.locator('#tv-attr-logo');
@@ -142,7 +142,7 @@ test('AC-CHART-06 times shown in user timezone', async ({ page }) => {
   expect(viTime(last, 'Asia/Ho_Chi_Minh')).not.toBe(viTime(last, 'UTC')); // the check can tell the zones apart
 });
 
-type FullTicker = { symbol: string; lastPrice: number; openPrice: number; highPrice: number; lowPrice: number; volume: number; quoteVolume: number };
+type FullTicker = { symbol: string; lastPrice: number; openPrice: number; highPrice: number; lowPrice: number; volume: number; quoteVolume: number; priceChangePercent: number };
 const getTicker = async (request: import('@playwright/test').APIRequestContext, symbol: string) =>
   ((await (await request.get('/api/v1/market/tickers')).json()).data as FullTicker[]).find((t) => t.symbol === symbol)!;
 const viCompact = (v: number) => new Intl.NumberFormat('vi-VN', { notation: 'compact', maximumFractionDigits: 1 }).format(v);

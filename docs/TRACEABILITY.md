@@ -91,7 +91,7 @@
 | AC-UI-08 | 6a | ui.spec.ts | AC-UI-08 status bar shows connection state, last update and a clock | passing | last update = tickers query dataUpdatedAt (snapshot or live) |
 | AC-CHART-07 | 6a | chart.spec.ts | AC-CHART-07 chart type menu switches the price series | passing | |
 | AC-CHART-08 | 6a | chart.spec.ts | AC-CHART-08 volume bars overlay on the price pane | passing | unit: settings.test.ts (volume default/stored). Live update proven with tick (bar color) + close-candle (new bar, volume 0): the mock tick does not change candle volume |
-| AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name) |
+| AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name); unknown-name case covered by coin-names.test.ts (mock has no USDT pair outside the map) |
 | AC-CHART-10 | 6a | chart.spec.ts | AC-CHART-10 screenshot download and maximize | passing | unit: format.test.ts (file stamp); maximize is CSS (fixed overlay), not the Fullscreen API |
 | AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | pending | |
 | AC-ALERT-11 | 6b | alerts-panel.spec.ts | AC-ALERT-11 bottom panel | pending | |
