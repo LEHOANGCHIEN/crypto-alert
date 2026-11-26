@@ -122,7 +122,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
       ) : needLogin ? (
         <div data-testid="market-tab-login-prompt" className="flex flex-col items-center gap-3 p-4 text-center text-text-muted">
           <p>{t('market.watchlistLogin')}</p>
-          <Link to="/login" className="h-8 rounded-button bg-accent px-4 text-body font-medium leading-8 text-white">
+          <Link to="/login" className="h-8 rounded-button bg-accent px-4 text-body font-medium leading-8 text-bg">
             {t('market.watchlistLoginLink')}
           </Link>
         </div>

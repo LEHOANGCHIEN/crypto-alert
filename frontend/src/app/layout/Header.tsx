@@ -60,7 +60,7 @@ export function Header() {
           <Link to="/login" className="h-8 rounded-button px-3 text-section leading-8 text-text">
             {t('nav.login')}
           </Link>
-          <Link to="/register" className="h-8 rounded-button bg-accent px-3 text-section font-medium leading-8 text-white">
+          <Link to="/register" className="h-8 rounded-button bg-accent px-3 text-section font-medium leading-8 text-bg">
             {t('nav.register')}
           </Link>
         </nav>
