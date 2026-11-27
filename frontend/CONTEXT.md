@@ -6,7 +6,7 @@ Read with `CLAUDE.md`, `docs/API.md`, `docs/SPEC.md`, `docs/ARCHITECTURE.md` §7
 - Feature folders in `src/features/<feature>/` own their pages, components, hooks and API calls. Shared code only in `src/shared/`. A feature never imports another feature's internals — move shared pieces to `shared/`.
 - Components: `PascalCase.tsx`, one component per file; hooks `useXxx.ts`; pure logic in `lib/` with Vitest tests.
 - State: server data in **TanStack Query**; auth/session + preferences in a small store (`zustand`); UI-only state in components. No Redux.
-- Query keys (exact): `['symbols']`, `['tickers']`, `['klines', symbol, interval]`, `['me']`, `['watchlist']`, `['alerts']`, `['notifications']`.
+- Query keys (exact): `['symbols']`, `['tickers']`, `['klines', symbol, interval]`, coin page: `['klines', symbol, interval, limit]`, `['me']`, `['watchlist']`, `['alerts']`, `['notifications']`.
 
 ## API & errors
 - Only `shared/api/http.ts` calls `fetch`. It adds the bearer token, unwraps the envelope, throws `ApiError { code, details }`, and does single-flight refresh on `TOKEN_EXPIRED`/`UNAUTHENTICATED`.

@@ -16,7 +16,7 @@
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
 | 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | done |
-| 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | not started |
+| 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | built, awaiting recheck |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 8–9 | not started |
 | — | Buffer for slips | — | — | Dec 10–11 | — |
 
