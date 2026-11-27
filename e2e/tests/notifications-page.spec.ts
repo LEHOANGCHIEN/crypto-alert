@@ -46,7 +46,7 @@ test('AC-NOTIF-06 notifications page', async ({ page, request }) => {
   const session = apiSession(request);
   const price = await lastPrice(request, 'BTCUSDT');
   await apiCreateAlert(request, await session(), 'BTCUSDT', 'ABOVE', round(price + 100));
-  const deadline = Date.now() + 5000;
+  const deadline = Date.now() + 2000;
   await pushTick(request, 'BTCUSDT', round(price + 200));
   await expect(items(page)).toHaveCount(2, { timeout: left(deadline) });
   const [newest] = (await apiNotifications(request, await session())).items;
