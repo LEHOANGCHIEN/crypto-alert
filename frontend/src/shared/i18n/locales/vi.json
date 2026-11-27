@@ -332,5 +332,36 @@
       "notifications": "Chưa có thông báo."
     },
     "loginPrompt": "Đăng nhập để xem cảnh báo và thông báo của bạn."
+  },
+  "alertsPage": {
+    "title": "Cảnh báo giá",
+    "summary": "{{active}} đang chạy · {{triggered}} đã kích hoạt · tối đa {{max}} cảnh báo đang chạy",
+    "new": "Cảnh báo mới",
+    "filterLabel": "Lọc cảnh báo theo trạng thái",
+    "filters": {
+      "all": "Tất cả ({{count}})",
+      "active": "Đang chạy ({{count}})",
+      "triggered": "Đã kích hoạt ({{count}})"
+    },
+    "searchLabel": "Tìm cảnh báo theo cặp",
+    "searchPlaceholder": "Tìm cặp, ví dụ BTC",
+    "columns": {
+      "status": "Trạng thái"
+    },
+    "status": {
+      "ACTIVE": "Đang chạy",
+      "TRIGGERED": "Đã kích hoạt"
+    },
+    "empty": "Bạn chưa có cảnh báo nào.",
+    "emptyFiltered": "Không có cảnh báo nào khớp bộ lọc.",
+    "emptyLink": "Mở biểu đồ để tạo cảnh báo",
+    "dialog": {
+      "title": "Cảnh báo mới",
+      "ABOVE": "Giá ≥ mức",
+      "BELOW": "Giá ≤ mức",
+      "target": "Giá mục tiêu (USDT)",
+      "current": "Giá hiện tại: {{price}} USDT",
+      "cancel": "Hủy"
+    }
   }
 }

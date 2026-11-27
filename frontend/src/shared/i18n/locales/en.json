@@ -332,5 +332,36 @@
       "notifications": "No notifications."
     },
     "loginPrompt": "Log in to see your alerts and notifications."
+  },
+  "alertsPage": {
+    "title": "Price alerts",
+    "summary": "{{active}} active · {{triggered}} triggered · up to {{max}} active alerts",
+    "new": "New alert",
+    "filterLabel": "Filter alerts by status",
+    "filters": {
+      "all": "All ({{count}})",
+      "active": "Active ({{count}})",
+      "triggered": "Triggered ({{count}})"
+    },
+    "searchLabel": "Search alerts by pair",
+    "searchPlaceholder": "Search pair, e.g. BTC",
+    "columns": {
+      "status": "Status"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "TRIGGERED": "Triggered"
+    },
+    "empty": "You have no alerts yet.",
+    "emptyFiltered": "No alerts match your filter.",
+    "emptyLink": "Open the chart to create one",
+    "dialog": {
+      "title": "New alert",
+      "ABOVE": "Price ≥ target",
+      "BELOW": "Price ≤ target",
+      "target": "Target price (USDT)",
+      "current": "Current price: {{price}} USDT",
+      "cancel": "Cancel"
+    }
   }
 }
