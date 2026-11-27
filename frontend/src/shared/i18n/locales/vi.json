@@ -262,7 +262,8 @@
     },
     "createdAt": "Tạo lúc",
     "triggeredPrice": "Kích hoạt ở giá",
-    "delete": "Xóa cảnh báo {{symbol}}"
+    "delete": "Xóa cảnh báo {{symbol}}",
+    "hint": "Cảnh báo đang chạy {{count}}/{{max}} · xem ở khung dưới biểu đồ"
   },
   "notifications": {
     "ALERT_TRIGGERED": {
@@ -285,15 +286,18 @@
   "layout": {
     "resize": {
       "left": "Đổi độ rộng danh sách thị trường",
-      "right": "Đổi độ rộng bảng bên phải"
+      "right": "Đổi độ rộng bảng bên phải",
+      "bottom": "Đổi chiều cao khung cảnh báo"
     },
     "collapse": {
       "left": "Thu gọn danh sách thị trường",
-      "right": "Thu gọn bảng bên phải"
+      "right": "Thu gọn bảng bên phải",
+      "bottom": "Thu gọn khung cảnh báo"
     },
     "expand": {
       "left": "Mở lại danh sách thị trường",
-      "right": "Mở lại bảng bên phải"
+      "right": "Mở lại bảng bên phải",
+      "bottom": "Mở rộng khung cảnh báo"
     }
   },
   "statusBar": {
@@ -303,5 +307,30 @@
     "clock": "Giờ hiện tại",
     "pulse": "Nhịp thị trường",
     "pulseLabel": "Biến động nhanh"
+  },
+  "bottomPanel": {
+    "label": "Cảnh báo và thông báo",
+    "tabs": {
+      "active": "Cảnh báo đang chạy ({{count}})",
+      "triggered": "Đã kích hoạt",
+      "notifications": "Thông báo"
+    },
+    "currentOnly": "Chỉ cặp hiện tại",
+    "columns": {
+      "pair": "Cặp",
+      "condition": "Điều kiện",
+      "target": "Giá mục tiêu",
+      "current": "Giá hiện tại",
+      "distance": "Khoảng cách",
+      "createdAt": "Tạo lúc",
+      "triggeredAt": "Kích hoạt lúc",
+      "actions": "Thao tác"
+    },
+    "empty": {
+      "active": "Chưa có cảnh báo đang chạy.",
+      "triggered": "Chưa có cảnh báo đã kích hoạt.",
+      "notifications": "Chưa có thông báo."
+    },
+    "loginPrompt": "Đăng nhập để xem cảnh báo và thông báo của bạn."
   }
 }

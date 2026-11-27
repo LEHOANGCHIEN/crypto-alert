@@ -262,7 +262,8 @@
     },
     "createdAt": "Created",
     "triggeredPrice": "Triggered at",
-    "delete": "Delete {{symbol}} alert"
+    "delete": "Delete {{symbol}} alert",
+    "hint": "Active alerts {{count}}/{{max}} · see the panel under the chart"
   },
   "notifications": {
     "ALERT_TRIGGERED": {
@@ -285,15 +286,18 @@
   "layout": {
     "resize": {
       "left": "Resize market list",
-      "right": "Resize right panel"
+      "right": "Resize right panel",
+      "bottom": "Resize the alerts panel"
     },
     "collapse": {
       "left": "Collapse market list",
-      "right": "Collapse right panel"
+      "right": "Collapse right panel",
+      "bottom": "Collapse the alerts panel"
     },
     "expand": {
       "left": "Expand market list",
-      "right": "Expand right panel"
+      "right": "Expand right panel",
+      "bottom": "Expand the alerts panel"
     }
   },
   "statusBar": {
@@ -303,5 +307,30 @@
     "clock": "Current time",
     "pulse": "Market pulse",
     "pulseLabel": "Quick moves"
+  },
+  "bottomPanel": {
+    "label": "Alerts and notifications",
+    "tabs": {
+      "active": "Active alerts ({{count}})",
+      "triggered": "Triggered",
+      "notifications": "Notifications"
+    },
+    "currentOnly": "Current pair only",
+    "columns": {
+      "pair": "Pair",
+      "condition": "Condition",
+      "target": "Target price",
+      "current": "Current price",
+      "distance": "Distance",
+      "createdAt": "Created",
+      "triggeredAt": "Triggered",
+      "actions": "Actions"
+    },
+    "empty": {
+      "active": "No active alerts.",
+      "triggered": "No triggered alerts.",
+      "notifications": "No notifications."
+    },
+    "loginPrompt": "Log in to see your alerts and notifications."
   }
 }

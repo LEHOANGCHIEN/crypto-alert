@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { errorText } from '../../shared/i18n/errorText';
 import { AlertForm } from './AlertForm';
 import { AlertList } from './AlertList';
+import { MAX_ACTIVE_ALERTS } from './lib/distance';
 import { useAlerts } from './useAlerts';
 
 /** Right panel, Alerts tab (logged-in users): create form + Active / Triggered lists. */
@@ -15,6 +16,9 @@ export function AlertsPanel() {
   return (
     <div data-testid="alerts-panel" className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <AlertForm key={symbol} chartSymbol={symbol} />
+      <p data-testid="alerts-active-hint" className="hidden px-3 pb-2 text-meta text-text-muted lg:block">
+        {t('alerts.hint', { count: all.filter((a) => a.status === 'ACTIVE').length, max: MAX_ACTIVE_ALERTS })}
+      </p>
       {alerts.error ? (
         <div data-testid="alerts-error" className="flex flex-col items-center gap-3 p-4 text-center text-text-muted">
           <p>{errorText(t, alerts.error)}</p>
