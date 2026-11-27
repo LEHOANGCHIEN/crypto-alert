@@ -355,14 +355,9 @@ test('AC-UI-10 auth pages two-column layout', async ({ page }) => {
     const m = await box(root);
     expect(Math.abs(m.x - 16)).toBeLessThanOrEqual(1);
     expect(Math.abs(390 - (m.x + m.width) - 16)).toBeLessThanOrEqual(1);
-    const overflow = await page.evaluate(() => ({
-      diff: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      offenders: [...document.querySelectorAll('body *')]
-        .filter((e) => e.getBoundingClientRect().right > window.innerWidth + 1)
-        .slice(0, 8)
-        .map((e) => `${e.tagName}[${(e as HTMLElement).dataset.testid ?? e.className.toString().slice(0, 40)}] right=${Math.round(e.getBoundingClientRect().right)}`),
-    }));
-    expect(overflow.diff, `${route}: ${overflow.offenders.join(' | ')}`).toBeLessThanOrEqual(0);
-    expect(await page.evaluate(() => (document.querySelector('main') as HTMLElement).scrollWidth - (document.querySelector('main') as HTMLElement).clientWidth)).toBeLessThanOrEqual(0);
+    // The layout settles after the resize: poll (threshold unchanged: no horizontal scroll at all).
+    const overflowDiff = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    await expect.poll(overflowDiff, { message: `${route}: page scrolls horizontally` }).toBeLessThanOrEqual(0);
+    await expect.poll(() => page.evaluate(() => (document.querySelector('main') as HTMLElement).scrollWidth - (document.querySelector('main') as HTMLElement).clientWidth)).toBeLessThanOrEqual(0);
   }
 });
