@@ -42,7 +42,7 @@ export function CoinHeader({ symbol, info, ticker }: { symbol: string; info: Sym
         </Link>
       </div>
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-        <span data-testid="coin-price" className={`font-mono text-5xl font-semibold leading-none ${cls}`}>
+        <span data-testid="coin-price" className="font-mono text-coin-price font-semibold leading-none text-text">
           {ticker ? fmt.price(ticker.lastPrice, p) : dash}
         </span>
         <span className="text-section text-text-muted">{info.quoteAsset}</span>

@@ -85,7 +85,7 @@ export function CoinPage() {
                   data-testid={`coin-range-${r}`}
                   aria-pressed={range === r}
                   onClick={() => setRange(r)}
-                  className={`h-8 rounded-input px-3 text-section ${range === r ? 'bg-surface-3 font-medium text-text' : 'text-text-muted hover:text-text'}`}
+                  className={`h-7 rounded-chip px-2 font-mono text-row font-medium ${range === r ? 'bg-surface-3 text-text' : 'text-text-muted hover:bg-surface-2'}`}
                 >
                   {t(`coin.ranges.${r}`)}
                 </button>
