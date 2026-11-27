@@ -7,6 +7,7 @@ import { RealtimeConnection } from '../RealtimeConnection';
 import { ConnBanner } from './ConnBanner';
 import { PulseBar } from './PulseBar';
 import { StatusBar } from './StatusBar';
+import { LastSymbolTracker } from './LastSymbolTracker';
 import { WatchlistLoginPrompt, WatchlistSession } from '../../features/watchlist';
 import { AlertSession } from '../../features/alerts';
 import { NotificationsSession } from '../../features/notifications';
@@ -25,6 +26,7 @@ export function AppLayout() {
       <StatusBar />
       <Footer />
       <Toaster />
+      <LastSymbolTracker />
       <PreferencesSync />
       <RealtimeConnection />
       <WatchlistSession />

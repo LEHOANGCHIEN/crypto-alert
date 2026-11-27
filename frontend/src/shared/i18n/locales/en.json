@@ -5,7 +5,13 @@
   "nav": {
     "login": "Log in",
     "register": "Sign up",
-    "home": "Back to home"
+    "home": "Back to home",
+    "main": "Main navigation",
+    "menu": "Menu",
+    "chart": "Chart",
+    "overview": "Overview",
+    "alerts": "Alerts",
+    "notifications": "Notifications"
   },
   "language": {
     "label": "Language",

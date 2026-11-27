@@ -5,7 +5,13 @@
   "nav": {
     "login": "Đăng nhập",
     "register": "Đăng ký",
-    "home": "Về trang chủ"
+    "home": "Về trang chủ",
+    "main": "Điều hướng chính",
+    "menu": "Menu",
+    "chart": "Biểu đồ",
+    "overview": "Tổng quan",
+    "alerts": "Cảnh báo",
+    "notifications": "Thông báo"
   },
   "language": {
     "label": "Ngôn ngữ",
