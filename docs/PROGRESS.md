@@ -220,13 +220,14 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 
 ## Phase 6b — Pages
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · starts only after 6a is merged and tagged `v0.6.1`
-**ACs:** AC-UI-09, AC-ALERT-11, AC-ALERT-12, AC-NOTIF-06, AC-COIN-01…04
+**ACs:** AC-UI-09, AC-UI-10, AC-ALERT-11, AC-ALERT-12, AC-NOTIF-06, AC-COIN-01…04
 
 - [ ] Header navigation + last-symbol memory (AC-UI-09)
 - [ ] Bottom panel under the chart (AC-ALERT-11)
 - [ ] `/alerts` page (AC-ALERT-12)
 - [ ] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
 - [ ] Coin overview page: header, range chart, performance tiles, key stats (AC-COIN-01…04)
+- [ ] Auth pages redesign (AC-UI-10)
 - [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6b-review.decision.md; paste into the builder: Read reviews/phase-6b-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
@@ -244,7 +245,7 @@ Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` /
 - [ ] UX states: loading skeletons, empty states, error boundary, toasts; mobile pass at 390 px
 - [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
 - [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
-- [ ] All ACs passing (93) in TRACEABILITY; CI green
+- [ ] All ACs passing (94) in TRACEABILITY; CI green
 - [ ] Production deploy from this branch (`railway up`; start command runs `prisma migrate deploy`), seed demo account on production, smoke-check each feature on the live URL (the Merge Prompt redeploys from `main` afterwards)
 - [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
