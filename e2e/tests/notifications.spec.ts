@@ -34,6 +34,8 @@ test('AC-NOTIF-01 bell unread badge', async ({ page, request }) => {
 
 test('AC-NOTIF-02 notification list content and order', async ({ page, request }) => {
   await loginViaUi(page);
+  // The socket is recreated with the new token after login: push ticks only once the chart's subscription is live again.
+  await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:1h');
   const token = apiSession(request);
   const btc = await lastPrice(request, 'BTCUSDT');
   const eth = await lastPrice(request, 'ETHUSDT');
