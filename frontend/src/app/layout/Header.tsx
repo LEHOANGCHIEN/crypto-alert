@@ -59,10 +59,10 @@ export function Header() {
       {status === 'authenticated' && <UserMenu />}
       {status === 'guest' && (
         <nav className="flex gap-2">
-          <Link to="/login" className="h-8 rounded-button px-3 text-section leading-8 text-text">
+          <Link to="/login" className="h-8 whitespace-nowrap rounded-button px-2 text-section leading-8 text-text sm:px-3">
             {t('nav.login')}
           </Link>
-          <Link to="/register" className="h-8 rounded-button bg-accent px-3 text-section font-medium leading-8 text-bg">
+          <Link to="/register" className="h-8 whitespace-nowrap rounded-button bg-accent px-2 text-section font-medium leading-8 text-bg sm:px-3">
             {t('nav.register')}
           </Link>
         </nav>

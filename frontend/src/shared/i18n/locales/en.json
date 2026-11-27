@@ -377,5 +377,46 @@
     "emptyUnread": "No unread notifications.",
     "viewChart": "View chart →",
     "detail": "{{condition}} {{target}} USDT · price when triggered {{triggered}}"
+  },
+  "coin": {
+    "spot": "{{pair}} · Binance Spot",
+    "openChart": "Open full chart",
+    "updatedAt": "Updated at {{time}} ({{zone}}) · 24h change",
+    "chart": "Price chart of {{pair}}",
+    "ranges": {
+      "label": "Chart range",
+      "1D": "1D",
+      "1W": "1W",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "YTD": "YTD",
+      "1Y": "1Y"
+    },
+    "tiles": {
+      "label": "Performance",
+      "1D": "24h",
+      "1W": "1 week",
+      "1M": "1 month",
+      "3M": "3 months",
+      "6M": "6 months",
+      "YTD": "Year to date",
+      "1Y": "1 year"
+    },
+    "stats": {
+      "title": "Key statistics",
+      "open": "24h open",
+      "high": "24h high",
+      "low": "24h low",
+      "volBase": "24h vol ({{asset}})",
+      "volQuote": "24h vol (USDT)",
+      "high52": "52-week high",
+      "low52": "52-week low"
+    },
+    "notFound": {
+      "title": "Pair not found",
+      "description": "The pair you opened does not exist or is not supported.",
+      "link": "Open BTC/USDT"
+    }
   }
 }

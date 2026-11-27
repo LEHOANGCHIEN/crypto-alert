@@ -377,5 +377,46 @@
     "emptyUnread": "Không có thông báo chưa đọc.",
     "viewChart": "Xem biểu đồ →",
     "detail": "{{condition}} {{target}} USDT · giá lúc kích hoạt {{triggered}}"
+  },
+  "coin": {
+    "spot": "{{pair}} · Binance Spot",
+    "openChart": "Mở biểu đồ đầy đủ",
+    "updatedAt": "Cập nhật lúc {{time}} ({{zone}}) · thay đổi 24 giờ",
+    "chart": "Biểu đồ giá {{pair}}",
+    "ranges": {
+      "label": "Khoảng thời gian biểu đồ",
+      "1D": "1D",
+      "1W": "1W",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "YTD": "YTD",
+      "1Y": "1Y"
+    },
+    "tiles": {
+      "label": "Hiệu suất",
+      "1D": "24 giờ",
+      "1W": "1 tuần",
+      "1M": "1 tháng",
+      "3M": "3 tháng",
+      "6M": "6 tháng",
+      "YTD": "Từ đầu năm",
+      "1Y": "1 năm"
+    },
+    "stats": {
+      "title": "Thống kê chính",
+      "open": "Giá mở cửa 24h",
+      "high": "Cao nhất 24h",
+      "low": "Thấp nhất 24h",
+      "volBase": "KL 24h ({{asset}})",
+      "volQuote": "KL 24h (USDT)",
+      "high52": "Cao nhất 52 tuần",
+      "low52": "Thấp nhất 52 tuần"
+    },
+    "notFound": {
+      "title": "Không tìm thấy cặp",
+      "description": "Cặp bạn mở không tồn tại hoặc chưa được hỗ trợ.",
+      "link": "Mở BTC/USDT"
+    }
   }
 }

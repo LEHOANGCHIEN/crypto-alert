@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import type { SymbolInfo, Ticker } from '../../shared/api/types';
 import { priceDirection } from '../../shared/format';
 import { useFormat } from '../../shared/format/useFormat';
@@ -42,7 +43,13 @@ export function ChartHeaderStats({ symbol, info, ticker }: { symbol: string; inf
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
             <h1 data-testid="chart-symbol" className="text-pair font-semibold leading-tight">
-              {info ? `${info.baseAsset}/${info.quoteAsset}` : symbol}
+              {info ? (
+                <Link to={`/coin/${symbol}`} data-testid="chart-symbol-link" className="hover:text-accent">
+                  {`${info.baseAsset}/${info.quoteAsset}`}
+                </Link>
+              ) : (
+                symbol
+              )}
             </h1>
             {info && <StarButton symbol={symbol} testId={`chart-star-${symbol}`} />}
           </div>
