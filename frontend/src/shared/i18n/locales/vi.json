@@ -281,7 +281,8 @@
     "target": "Mục tiêu",
     "triggeredPrice": "Giá kích hoạt",
     "summary_one": "Bạn có {{count}} thông báo chưa đọc",
-    "summary_other": "Bạn có {{count}} thông báo chưa đọc"
+    "summary_other": "Bạn có {{count}} thông báo chưa đọc",
+    "viewAll": "Xem tất cả thông báo"
   },
   "layout": {
     "resize": {
@@ -363,5 +364,18 @@
       "current": "Giá hiện tại: {{price}} USDT",
       "cancel": "Hủy"
     }
+  },
+  "notificationsPage": {
+    "title": "Thông báo",
+    "summary_one": "{{count}} chưa đọc · hiển thị {{max}} thông báo gần nhất",
+    "summary_other": "{{count}} chưa đọc · hiển thị {{max}} thông báo gần nhất",
+    "filterLabel": "Lọc thông báo",
+    "filters": {
+      "all": "Tất cả ({{count}})",
+      "unread": "Chưa đọc ({{count}})"
+    },
+    "emptyUnread": "Không có thông báo chưa đọc.",
+    "viewChart": "Xem biểu đồ →",
+    "detail": "{{condition}} {{target}} USDT · giá lúc kích hoạt {{triggered}}"
   }
 }

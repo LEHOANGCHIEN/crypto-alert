@@ -281,7 +281,8 @@
     "target": "Target",
     "triggeredPrice": "Triggered price",
     "summary_one": "You have {{count}} unread notification",
-    "summary_other": "You have {{count}} unread notifications"
+    "summary_other": "You have {{count}} unread notifications",
+    "viewAll": "View all notifications"
   },
   "layout": {
     "resize": {
@@ -363,5 +364,18 @@
       "current": "Current price: {{price}} USDT",
       "cancel": "Cancel"
     }
+  },
+  "notificationsPage": {
+    "title": "Notifications",
+    "summary_one": "{{count}} unread · showing the latest {{max}}",
+    "summary_other": "{{count}} unread · showing the latest {{max}}",
+    "filterLabel": "Filter notifications",
+    "filters": {
+      "all": "All ({{count}})",
+      "unread": "Unread ({{count}})"
+    },
+    "emptyUnread": "No unread notifications.",
+    "viewChart": "View chart →",
+    "detail": "{{condition}} {{target}} USDT · price when triggered {{triggered}}"
   }
 }

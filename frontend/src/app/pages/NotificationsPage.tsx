@@ -1,7 +1,6 @@
-import { useTranslation } from 'react-i18next';
+import { NotificationsList } from '../../features/notifications';
 
-/** Placeholder until the full notifications page (AC-NOTIF-06) replaces it. */
+/** `/notifications` (AC-NOTIF-06). */
 export function NotificationsPage() {
-  const { t } = useTranslation();
-  return <h1 data-testid="notifications-page" className="text-section font-semibold">{t('nav.notifications')}</h1>;
+  return <NotificationsList />;
 }
