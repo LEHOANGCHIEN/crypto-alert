@@ -225,7 +225,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 - [x] Header navigation + last-symbol memory (AC-UI-09)
 - [x] Bottom panel under the chart (AC-ALERT-11)
 - [x] `/alerts` page (AC-ALERT-12)
-- [ ] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
+- [x] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
 - [ ] Coin overview page: header, range chart, performance tiles, key stats (AC-COIN-01…04)
 - [ ] Auth pages redesign (AC-UI-10)
 - [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
