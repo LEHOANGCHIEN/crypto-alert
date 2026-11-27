@@ -227,7 +227,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 - [x] `/alerts` page (AC-ALERT-12)
 - [x] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
 - [x] Coin overview page: header, range chart, performance tiles, key stats (AC-COIN-01…04)
-- [ ] Auth pages redesign (AC-UI-10)
+- [x] Auth pages redesign (AC-UI-10)
 - [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6b-review.decision.md; paste into the builder: Read reviews/phase-6b-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
