@@ -97,7 +97,7 @@ export function AlertsPage() {
           )}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-card border border-border bg-surface">
+        <div className="relative overflow-x-auto rounded-card border border-border bg-surface">
           <table data-testid="alerts-table" className="w-full min-w-3xl border-collapse">
             <thead>
               <tr className="border-b border-border bg-surface-2">
