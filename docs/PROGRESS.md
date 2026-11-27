@@ -222,7 +222,7 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · starts only after 6a is merged and tagged `v0.6.1`
 **ACs:** AC-UI-09, AC-UI-10, AC-ALERT-11, AC-ALERT-12, AC-NOTIF-06, AC-COIN-01…04
 
-- [ ] Header navigation + last-symbol memory (AC-UI-09)
+- [x] Header navigation + last-symbol memory (AC-UI-09)
 - [ ] Bottom panel under the chart (AC-ALERT-11)
 - [ ] `/alerts` page (AC-ALERT-12)
 - [ ] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
