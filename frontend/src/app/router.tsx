@@ -6,6 +6,9 @@ import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
 import { GuestOnly, RequireAuth } from '../features/auth/RequireAuth';
 import { TradePage } from './pages/TradePage';
+import { AlertsPage } from './pages/AlertsPage';
+import { NotificationsPage } from './pages/NotificationsPage';
+import { CoinPage } from '../features/coin';
 
 /** `/trade/btcusdt` → `/trade/BTCUSDT` (SPEC §4) */
 function TradeRoute() {
@@ -14,14 +17,29 @@ function TradeRoute() {
   return <TradePage />;
 }
 
+/** `/coin/btcusdt` → `/coin/BTCUSDT` */
+function CoinRoute() {
+  const { symbol = '' } = useParams();
+  if (symbol !== symbol.toUpperCase()) return <Navigate to={`/coin/${symbol.toUpperCase()}`} replace />;
+  return <CoinPage />;
+}
+
 export const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
       { path: '/', element: <Navigate to="/trade/BTCUSDT" replace /> },
       { path: '/trade/:symbol', element: <TradeRoute /> },
+      { path: '/coin/:symbol', element: <CoinRoute /> },
       { element: <GuestOnly />, children: [{ path: '/login', element: <LoginPage /> }, { path: '/register', element: <RegisterPage /> }] },
-      { element: <RequireAuth />, children: [{ path: '/account', element: <AccountPage /> }] },
+      {
+        element: <RequireAuth />,
+        children: [
+          { path: '/account', element: <AccountPage /> },
+          { path: '/alerts', element: <AlertsPage /> },
+          { path: '/notifications', element: <NotificationsPage /> },
+        ],
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import type { Notification } from '../../shared/api/types';
 import { useMarkAllRead, useMarkRead, useNotificationFormat, useNotifications } from './useNotifications';
 
@@ -89,6 +89,14 @@ export function NotificationsPanel({ onClose }: { onClose: () => void }) {
           })}
         </ul>
       )}
+      <Link
+        to="/notifications"
+        data-testid="notifications-view-all"
+        onClick={onClose}
+        className="border-t border-border px-3 py-2 text-center text-body font-medium text-accent hover:bg-surface-2"
+      >
+        {t('notifications.viewAll')}
+      </Link>
     </div>
   );
 }

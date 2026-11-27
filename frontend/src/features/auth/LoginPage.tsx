@@ -8,6 +8,7 @@ import { useForm } from '../../shared/ui/useForm';
 import { validateEmail, validateRequired, type Issue } from '../../shared/validation/rules';
 import { useAuth } from '../../shared/auth/auth.store';
 import { issueText, errorText } from '../../shared/i18n/errorText';
+import { AuthShell } from './AuthShell';
 
 type Values = { email: string; password: string };
 const validate = (v: Values): Partial<Record<keyof Values, Issue>> => {
@@ -43,26 +44,25 @@ export function LoginPage() {
   };
 
   return (
-    <section data-testid="page-login" className="mx-auto w-full max-w-100 rounded-card border border-border bg-surface p-6">
-      <h1 className="mb-4 text-page font-semibold">{t('auth.login.title')}</h1>
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+    <AuthShell testId="page-login" title={t('auth.login.title')} subtitle={t('auth.login.subtitle')}>
+      <form data-testid="auth-form" noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         {formError && (
           <p role="alert" data-testid="form-error" className="rounded-input border border-danger p-3 text-body text-danger">
             {errorText(t, formError.err)}
           </p>
         )}
-        <FormField name="email" type="email" autoComplete="email" label={t('fields.email')} value={form.values.email} error={issueText(t, form.issueOf('email'))} onChange={(e) => form.setValue('email', e.target.value)} onBlur={() => form.blur('email')} />
-        <FormField name="password" type="password" autoComplete="current-password" label={t('fields.password')} value={form.values.password} error={issueText(t, form.issueOf('password'))} onChange={(e) => form.setValue('password', e.target.value)} onBlur={() => form.blur('password')} />
-        <Button type="submit" disabled={busy} data-testid="submit-login">
+        <FormField size="lg" name="email" type="email" autoComplete="email" placeholder={t('auth.placeholders.email')} label={t('fields.email')} value={form.values.email} error={issueText(t, form.issueOf('email'))} onChange={(e) => form.setValue('email', e.target.value)} onBlur={() => form.blur('email')} />
+        <FormField size="lg" name="password" type="password" autoComplete="current-password" label={t('fields.password')} value={form.values.password} error={issueText(t, form.issueOf('password'))} onChange={(e) => form.setValue('password', e.target.value)} onBlur={() => form.blur('password')} />
+        <Button size="lg" type="submit" disabled={busy} data-testid="submit-login">
           {t('auth.login.submit')}
         </Button>
       </form>
-      <p className="mt-4 text-body text-text-muted">
+      <p className="mt-6 text-body text-text-muted">
         {t('auth.login.noAccount')}{' '}
         <Link to="/register" className="text-accent underline">
           {t('auth.login.toRegister')}
         </Link>
       </p>
-    </section>
+    </AuthShell>
   );
 }

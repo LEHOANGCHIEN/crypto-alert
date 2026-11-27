@@ -5,7 +5,13 @@
   "nav": {
     "login": "Log in",
     "register": "Sign up",
-    "home": "Back to home"
+    "home": "Back to home",
+    "main": "Main navigation",
+    "menu": "Menu",
+    "chart": "Chart",
+    "overview": "Overview",
+    "alerts": "Alerts",
+    "notifications": "Notifications"
   },
   "language": {
     "label": "Language",
@@ -95,13 +101,27 @@
       "title": "Log in",
       "submit": "Log in",
       "noAccount": "Don't have an account?",
-      "toRegister": "Sign up"
+      "toRegister": "Sign up",
+      "subtitle": "Welcome back."
     },
     "register": {
-      "title": "Sign up",
+      "title": "Create account",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
-      "toLogin": "Log in"
+      "toLogin": "Log in",
+      "subtitle": "Free. Get alerted when a price hits your level."
+    },
+    "brand": {
+      "headline": "Track the crypto market in real time",
+      "feature1": "Live candlestick charts with MA, RSI, MACD",
+      "feature2": "A watchlist synced across your devices",
+      "feature3": "Instant price alerts when a level is reached"
+    },
+    "placeholders": {
+      "email": "you@example.com",
+      "displayName": "Jane Doe",
+      "password": "At least 8 characters, with a letter and a number",
+      "confirmPassword": "Repeat your password"
     }
   },
   "account": {
@@ -256,7 +276,8 @@
     },
     "createdAt": "Created",
     "triggeredPrice": "Triggered at",
-    "delete": "Delete {{symbol}} alert"
+    "delete": "Delete {{symbol}} alert",
+    "hint": "Active alerts {{count}}/{{max}} · see the panel under the chart"
   },
   "notifications": {
     "ALERT_TRIGGERED": {
@@ -274,20 +295,24 @@
     "target": "Target",
     "triggeredPrice": "Triggered price",
     "summary_one": "You have {{count}} unread notification",
-    "summary_other": "You have {{count}} unread notifications"
+    "summary_other": "You have {{count}} unread notifications",
+    "viewAll": "View all notifications"
   },
   "layout": {
     "resize": {
       "left": "Resize market list",
-      "right": "Resize right panel"
+      "right": "Resize right panel",
+      "bottom": "Resize the alerts panel"
     },
     "collapse": {
       "left": "Collapse market list",
-      "right": "Collapse right panel"
+      "right": "Collapse right panel",
+      "bottom": "Collapse the alerts panel"
     },
     "expand": {
       "left": "Expand market list",
-      "right": "Expand right panel"
+      "right": "Expand right panel",
+      "bottom": "Expand the alerts panel"
     }
   },
   "statusBar": {
@@ -297,5 +322,115 @@
     "clock": "Current time",
     "pulse": "Market pulse",
     "pulseLabel": "Quick moves"
+  },
+  "bottomPanel": {
+    "label": "Alerts and notifications",
+    "tabs": {
+      "active": "Active alerts ({{count}})",
+      "triggered": "Triggered",
+      "notifications": "Notifications"
+    },
+    "currentOnly": "Current pair only",
+    "columns": {
+      "pair": "Pair",
+      "condition": "Condition",
+      "target": "Target price",
+      "current": "Current price",
+      "distance": "Distance",
+      "createdAt": "Created",
+      "triggeredAt": "Triggered",
+      "actions": "Actions"
+    },
+    "empty": {
+      "active": "No active alerts.",
+      "triggered": "No triggered alerts.",
+      "notifications": "No notifications."
+    },
+    "loginPrompt": "Log in to see your alerts and notifications."
+  },
+  "alertsPage": {
+    "title": "Price alerts",
+    "summary": "{{active}} active · {{triggered}} triggered · up to {{max}} active alerts",
+    "new": "New alert",
+    "filterLabel": "Filter alerts by status",
+    "filters": {
+      "all": "All ({{count}})",
+      "active": "Active ({{count}})",
+      "triggered": "Triggered ({{count}})"
+    },
+    "searchLabel": "Search alerts by pair",
+    "searchPlaceholder": "Search pair, e.g. BTC",
+    "columns": {
+      "status": "Status"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "TRIGGERED": "Triggered"
+    },
+    "empty": "You have no alerts yet.",
+    "emptyFiltered": "No alerts match your filter.",
+    "emptyLink": "Open the chart to create one",
+    "dialog": {
+      "title": "New alert",
+      "ABOVE": "Price ≥ target",
+      "BELOW": "Price ≤ target",
+      "target": "Target price (USDT)",
+      "current": "Current price: {{price}} USDT",
+      "cancel": "Cancel"
+    }
+  },
+  "notificationsPage": {
+    "title": "Notifications",
+    "summary_one": "{{count}} unread · showing the latest {{max}}",
+    "summary_other": "{{count}} unread · showing the latest {{max}}",
+    "filterLabel": "Filter notifications",
+    "filters": {
+      "all": "All ({{count}})",
+      "unread": "Unread ({{count}})"
+    },
+    "emptyUnread": "No unread notifications.",
+    "viewChart": "View chart →",
+    "detail": "{{condition}} {{target}} USDT · price when triggered {{triggered}}"
+  },
+  "coin": {
+    "spot": "{{pair}} · Binance Spot",
+    "openChart": "Open full chart",
+    "updatedAt": "Updated at {{time}} ({{zone}}) · 24h change",
+    "chart": "Price chart of {{pair}}",
+    "ranges": {
+      "label": "Chart range",
+      "1D": "1D",
+      "1W": "1W",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "YTD": "YTD",
+      "1Y": "1Y"
+    },
+    "tiles": {
+      "label": "Performance",
+      "1D": "24h",
+      "1W": "1 week",
+      "1M": "1 month",
+      "3M": "3 months",
+      "6M": "6 months",
+      "YTD": "Year to date",
+      "1Y": "1 year"
+    },
+    "stats": {
+      "title": "Key statistics",
+      "open": "24h open",
+      "high": "24h high",
+      "low": "24h low",
+      "volBase": "24h vol ({{asset}})",
+      "volQuote": "24h vol (USDT)",
+      "high52": "52-week high",
+      "low52": "52-week low"
+    },
+    "notFound": {
+      "title": "Pair not found",
+      "description": "The pair you opened does not exist or is not supported.",
+      "link": "Open BTC/USDT"
+    }
   }
 }

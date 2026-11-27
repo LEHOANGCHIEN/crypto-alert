@@ -302,3 +302,62 @@ test('AC-UI-08 status bar shows connection state, last update and a clock', asyn
     return (await clock.textContent()) === clockText(e, 'UTC');
   }).toBe(true);
 });
+
+test('AC-UI-10 auth pages two-column layout', async ({ page }) => {
+  const box = async (l: Locator) => (await l.boundingBox())!;
+  for (const route of ['login', 'register'] as const) {
+    const root = page.getByTestId(`page-${route}`);
+    const form = page.getByTestId('auth-form');
+
+    // --- 1440×900: two equal columns under the header. ---
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${route}`);
+    await expect(root).toBeVisible();
+    const panel = page.getByTestId('auth-brand-panel');
+    const column = page.getByTestId('auth-form-column');
+    await expect(panel).toBeVisible();
+    const p = await box(panel);
+    const c = await box(column);
+    expect(Math.abs(p.width - c.width)).toBeLessThanOrEqual(1);
+    expect(p.width).toBeGreaterThan(600);
+    expect(Math.abs(p.y - c.y)).toBeLessThanOrEqual(1);
+    expect(p.y).toBeGreaterThanOrEqual(56); // under the 56 px header
+
+    // Brand panel: translated headline, three feature lines, decorative line; content ≤ 520 px, centered in the panel.
+    await expect(panel.getByRole('heading', { level: 2 })).toHaveText('Theo dõi thị trường tiền mã hóa theo thời gian thực');
+    await expect(panel.locator('li')).toHaveCount(3);
+    await expect(panel.locator('svg polyline')).toHaveCount(1);
+    await expect(panel).not.toContainText('auth.brand');
+    const content = await box(page.getByTestId('auth-brand-content'));
+    expect(content.width).toBeLessThanOrEqual(520);
+    expect(Math.abs(content.x + content.width / 2 - (p.x + p.width / 2))).toBeLessThanOrEqual(2);
+
+    // Form: 440 px wide, centered horizontally and vertically (±40 px) in the right column.
+    const r = await box(root);
+    expect(Math.abs(r.width - 440)).toBeLessThanOrEqual(1);
+    expect(Math.abs(r.x + r.width / 2 - (c.x + c.width / 2))).toBeLessThanOrEqual(2);
+    expect(Math.abs(r.y + r.height / 2 - (c.y + c.height / 2))).toBeLessThanOrEqual(40);
+
+    // Title 28 px, inputs 46 px high, primary button 48 px high and as wide as the form.
+    expect(await root.getByRole('heading', { level: 1 }).evaluate((e) => getComputedStyle(e).fontSize)).toBe('28px');
+    const inputs = form.locator('input');
+    const count = await inputs.count();
+    expect(count).toBe(route === 'login' ? 2 : 4);
+    for (let i = 0; i < count; i++) expect(Math.abs((await box(inputs.nth(i))).height - 46)).toBeLessThanOrEqual(1);
+    const f = await box(form);
+    const submit = await box(page.getByTestId(`submit-${route}`));
+    expect(Math.abs(submit.height - 48)).toBeLessThanOrEqual(1);
+    expect(Math.abs(submit.width - f.width)).toBeLessThanOrEqual(1);
+
+    // --- 390×844: brand panel hidden, form full width with 16 px side margins, no horizontal scroll. ---
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(panel).toBeHidden();
+    const m = await box(root);
+    expect(Math.abs(m.x - 16)).toBeLessThanOrEqual(1);
+    expect(Math.abs(390 - (m.x + m.width) - 16)).toBeLessThanOrEqual(1);
+    // The layout settles after the resize: poll (threshold unchanged: no horizontal scroll at all).
+    const overflowDiff = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    await expect.poll(overflowDiff, { message: `${route}: page scrolls horizontally` }).toBeLessThanOrEqual(0);
+    await expect.poll(() => page.evaluate(() => (document.querySelector('main') as HTMLElement).scrollWidth - (document.querySelector('main') as HTMLElement).clientWidth)).toBeLessThanOrEqual(0);
+  }
+});

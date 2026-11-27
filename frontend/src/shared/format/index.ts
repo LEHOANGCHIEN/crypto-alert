@@ -96,3 +96,22 @@ export function formatTickMark(epochMs: number, tickType: number, locale: Format
   if (tickType === TICK_DAY) return new Intl.DateTimeFormat(intl, { timeZone, day: 'numeric' }).format(epochMs);
   return new Intl.DateTimeFormat('en-GB', { timeZone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(epochMs);
 }
+
+/** epoch ms → "GMT+7" (offset of the given IANA timezone at that moment). */
+export function formatGmtOffset(epochMs: number, timeZone: string): string {
+  const part = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'shortOffset' }).formatToParts(epochMs).find((p) => p.type === 'timeZoneName');
+  const value = part?.value ?? timeZone;
+  return value === 'GMT' ? 'GMT+0' : value; // engines differ for UTC ("GMT" vs "GMT+0")
+}
+
+/** Whole calendar days from 1 January to today in the given IANA timezone (1 Jan itself = 0). */
+export function daysSinceYearStart(epochMs: number, timeZone: string): number {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' })
+      .formatToParts(epochMs)
+      .map((x) => [x.type, x.value]),
+  );
+  const today = Date.UTC(Number(p.year), Number(p.month) - 1, Number(p.day));
+  const jan1 = Date.UTC(Number(p.year), 0, 1);
+  return Math.round((today - jan1) / 86_400_000);
+}

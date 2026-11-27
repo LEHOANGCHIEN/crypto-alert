@@ -1,4 +1,4 @@
-import { formatCompact, formatDateTime, formatPercent, formatPrice, formatTickMark, priceDirection } from './index';
+import { daysSinceYearStart, formatGmtOffset, formatCompact, formatDateTime, formatPercent, formatPrice, formatTickMark, priceDirection } from './index';
 
 describe('format helpers', () => {
   it('prices follow locale (AC-I18N-04)', () => {
@@ -49,5 +49,19 @@ describe('formatFileStamp', () => {
     const t = Date.UTC(2026, 10, 26, 7, 5, 59); // 26/11/2026 07:05:59 UTC
     expect(formatFileStamp(t, 'UTC')).toBe('20261126-0705');
     expect(formatFileStamp(t, 'Asia/Ho_Chi_Minh')).toBe('20261126-1405');
+  });
+});
+
+describe('formatGmtOffset / daysSinceYearStart', () => {
+  it('names the offset of the timezone', () => {
+    expect(formatGmtOffset(Date.UTC(2026, 10, 27, 12), 'Asia/Ho_Chi_Minh')).toBe('GMT+7');
+    expect(formatGmtOffset(Date.UTC(2026, 10, 27, 12), 'UTC')).toBe('GMT+0');
+  });
+  it('counts days since 1 January in the given timezone', () => {
+    expect(daysSinceYearStart(Date.UTC(2026, 0, 1, 5), 'UTC')).toBe(0);
+    expect(daysSinceYearStart(Date.UTC(2026, 10, 27, 5), 'UTC')).toBe(330);
+    // 2026-12-31 20:00 UTC is already 1 Jan 2027 in Ho Chi Minh City (UTC+7).
+    expect(daysSinceYearStart(Date.UTC(2026, 11, 31, 20), 'Asia/Ho_Chi_Minh')).toBe(0);
+    expect(daysSinceYearStart(Date.UTC(2026, 11, 31, 20), 'UTC')).toBe(364);
   });
 });

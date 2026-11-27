@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 93 ACs · passing 83 · failing 0 · pending 10 · last CI run: green on phase-6a-ui-redesign (2026-11-26, run 45692278705)
+**Summary:** 94 ACs · passing 92 · failing 0 · pending 2 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -93,11 +93,12 @@
 | AC-CHART-08 | 6a | chart.spec.ts | AC-CHART-08 volume bars overlay on the price pane | passing | unit: settings.test.ts (volume default/stored). Live update proven with tick (bar color) + close-candle (new bar, volume 0): the mock tick does not change candle volume |
 | AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name); unknown-name case covered by coin-names.test.ts (mock has no USDT pair outside the map) |
 | AC-CHART-10 | 6a | chart.spec.ts | AC-CHART-10 screenshot download and maximize | passing | unit: format.test.ts (file stamp); maximize is CSS (fixed overlay), not the Fullscreen API |
-| AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | pending | |
-| AC-ALERT-11 | 6b | alerts-panel.spec.ts | AC-ALERT-11 bottom panel | pending | |
-| AC-ALERT-12 | 6b | alerts-page.spec.ts | AC-ALERT-12 alerts page | pending | |
-| AC-NOTIF-06 | 6b | notifications-page.spec.ts | AC-NOTIF-06 notifications page | pending | |
-| AC-COIN-01 | 6b | coin.spec.ts | AC-COIN-01 coin header | pending | |
-| AC-COIN-02 | 6b | coin.spec.ts | AC-COIN-02 range chart | pending | |
-| AC-COIN-03 | 6b | coin.spec.ts | AC-COIN-03 performance tiles | pending | |
-| AC-COIN-04 | 6b | coin.spec.ts | AC-COIN-04 key stats | pending | |
+| AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | passing | unit: lastSymbol.test.ts; guest header app name hidden below 640 px so the header fits 390 px |
+| AC-UI-10 | 6b | ui.spec.ts | AC-UI-10 auth pages two-column layout | passing | one test, /login and /register: 1440×900 two equal columns under the 56 px header, brand panel (headline, 3 features, line; content ≤ 520 px centered), form 440 px centered (±2 horizontal, ±40 vertical), title 28 px, inputs 46 px, button 48 px = form width; 390×844 panel hidden, 16 px margins, no horizontal scroll. Existing AC-AUTH tests unchanged (testids `page-login`/`page-register`/`submit-*` kept) |
+| AC-ALERT-11 | 6b | alerts-panel.spec.ts | AC-ALERT-11 bottom panel | passing | unit: layout.test.ts (bottom limits/parse), distance.test.ts; one test covers tabs, columns, "Current pair only" on all three tabs, notification click marks read, create → row ≤ 2 s, mock trigger → Triggered, drag/keyboard/dblclick resize, collapse, reload. The right-panel Alerts tab keeps its Active/Triggered lists (AC-ALERT-01…06 unchanged) and gains the "n/20" hint; the lists in the bottom panel use `bottom-*` testids |
+| AC-ALERT-12 | 6b | alerts-page.spec.ts | AC-ALERT-12 alerts page | passing | one test: guest redirect + return-to, table columns/badges/counts, status filter + search, dialog (FAKEUSDT, already-met, empty target, valid create), delete active + triggered, symbol link, empty state for a new user |
+| AC-NOTIF-06 | 6b | notifications-page.spec.ts | AC-NOTIF-06 notifications page | passing | one test: guest redirect + return-to, list request `limit=100`, newest-first order, summary/filter counts, mock trigger → new row on top ≤ 2 s, All/Unread filter, click marks read (badge −1), mark all, bell "View all" link. The bell panel and the page share one `['notifications']` query (limit 100) |
+| AC-COIN-01 | 6b | coin.spec.ts | AC-COIN-01 coin header | passing | one test: header (avatar, name, pair, price/change formatted from the API ticker, updated-at with GMT+7), mock tick ≤ 2 s, star (guest prompt; demo user remove/add), Open full chart, trade chart header link back, lower-case URL normalized, FAKEUSDT not-found + link |
+| AC-COIN-02 | 6b | coin.spec.ts | AC-COIN-02 range chart | passing | one test: request `interval`/`limit` asserted for every range (chart requests exactly the AC values, YTD = days since 1 Jan in guest tz), attribution logo, `data-direction` / first-close / last-close vs klines fetched from the API, tooltip time + price of the hovered candle; unit: coin.test.ts (chartQuery), format.test.ts (daysSinceYearStart) |
+| AC-COIN-03 | 6b | coin.spec.ts | AC-COIN-03 performance tiles | passing | one test: all 7 tiles equal (last − first close)/first close computed independently from the API klines (24h and 1M plus the rest), up/down class, tile click selects the range and requests its klines; unit: coin.test.ts (rangeChange, tileChange slices) |
+| AC-COIN-04 | 6b | coin.spec.ts | AC-COIN-04 key stats | passing | one test: 7 stat rows equal the API ticker / daily klines, guest page, desktop chart + stats side by side, 390×844 single column and no horizontal scroll; unit: coin.test.ts (highLow) |

@@ -16,7 +16,7 @@
 | 5 | Watchlist | `phase-5-watchlist` | Sonnet 5.5 + Medium | Dec 3 | done |
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
 | 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | done |
-| 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | not started |
+| 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | built, awaiting recheck |
 | 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 8–9 | not started |
 | — | Buffer for slips | — | — | Dec 10–11 | — |
 
@@ -220,17 +220,21 @@ Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; b
 
 ## Phase 6b — Pages
 **Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · starts only after 6a is merged and tagged `v0.6.1`
-**ACs:** AC-UI-09, AC-ALERT-11, AC-ALERT-12, AC-NOTIF-06, AC-COIN-01…04
+**ACs:** AC-UI-09, AC-UI-10, AC-ALERT-11, AC-ALERT-12, AC-NOTIF-06, AC-COIN-01…04
 
-- [ ] Header navigation + last-symbol memory (AC-UI-09)
-- [ ] Bottom panel under the chart (AC-ALERT-11)
-- [ ] `/alerts` page (AC-ALERT-12)
-- [ ] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
-- [ ] Coin overview page: header, range chart, performance tiles, key stats (AC-COIN-01…04)
-- [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
+- [x] Header navigation + last-symbol memory (AC-UI-09)
+- [x] Bottom panel under the chart (AC-ALERT-11)
+- [x] `/alerts` page (AC-ALERT-12)
+- [x] `/notifications` page + "View all" in the bell panel (AC-NOTIF-06)
+- [x] Coin overview page: header, range chart, performance tiles, key stats (AC-COIN-01…04)
+- [x] Auth pages redesign (AC-UI-10)
+- [x] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
 
 **Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-6b-review.decision.md; paste into the builder: Read reviews/phase-6b-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**
+- 2026-11-27 · Sonnet 5.5 + Medium · Phase 6b session 1 (items 0–2 of 7; phase NOT finished): §3 doc edits (SPEC only AC-UI-10, ARCHITECTURE §11.1, PROGRESS, TRACEABILITY 94 ACs, CONTEXT testids) + decision and docs/design PDFs committed; header navigation + last-symbol memory (AC-UI-09; placeholder /alerts and /notifications pages until items 3/4; guest header app name hidden below 640 px so the header fits 390 px); bottom panel under the chart (AC-ALERT-11; `bottom` in `crypto-alert.layout`, right-panel Alerts tab keeps its lists and gains the n/20 hint because AC-ALERT-01…06 assert them there). AC-NOTIF-03 test: added a wait for `data-live` after login before the tick (socket is recreated with the new token; no assertion weakened). Doc changes: SPEC.md (AC-UI-10), ARCHITECTURE.md §11.1, PROGRESS.md, TRACEABILITY.md, frontend/CONTEXT.md; API.md/DATABASE.md untouched · full Playwright run 85/85 after the AC-NOTIF-03 wait · last commit ac8572f · CI green (run 46004942557 on 2721ef7; the ac8572f run was cancelled by the newer push)
+- 2026-11-27 · Sonnet 5.5 + Medium · Phase 6b session 2 (items 3–7, phase complete, awaiting review): `/alerts` page (status filter + counts, search, table with badges, new-alert dialog validating the symbol against the market list, delete, empty state; AC-ALERT-12); `/notifications` page (All/Unread, click marks read, mark all, "View all" in the bell; one shared `['notifications']` query with `limit=100`; AC-NOTIF-06); coin overview `/coin/:symbol` (header, area range chart requesting exactly the AC-COIN-02 interval×limit, dashed first-close line, crosshair tooltip, `data-direction`, 7 performance tiles from shared base queries 5m×288/1h×168/4h×180/1d×365 sliced for 3M/6M/YTD, key stats + 52-week high/low, link from the trade chart header; unit-tested helpers; AC-COIN-01…04); auth pages two-column redesign (AC-UI-10; new tokens text-auth-title/headline, input-lg, button-lg, auth-form, auth-content). Found by full regression and fixed: `/alerts` overflowed horizontally at 390 px (sr-only inside the scrolling table; wrapper now `relative`). Doc changes: TRACEABILITY.md (all 6b ACs passing), PROGRESS.md, frontend/CONTEXT.md testids; SPEC/API/DATABASE/ARCHITECTURE untouched · `npm run check` green (FE 123 + BE 107 unit, 90 integration, 92 Playwright) · smoke run OK (migrate, seed, dev, health db up / binance connected; ports 3000/5173/5555/3100 freed) · AC-UI-10 mobile overflow check was flaky once on CI (measured before the layout settled) and now polls with the same threshold · AC-NOTIF-02 (Phase 6 test) flaked once on CI for the same socket-reconnect reason and now waits for `data-live` before the ticks (no assertion weakened) · last code commit dd0882d, last test commit 754ad19 · CI green (run on 754ad19)
+- 2026-11-28 · Sonnet 5.5 + Medium · Phase 6b review fixes (reviews/phase-6b-review.decision.md, all 8 issues): AC-NOTIF-06 threshold back to 2000 ms (+ TRACEABILITY "≤ 2 s", 3/3 pass); coin range chips + non-colored `text-coin-price` token (48px); AC-UI-09 guest "Thông báo" click; AC-COIN-01 `coin-change-abs` assertion; TRACEABILITY summary/AC-UI-09 note; Status row 6b `built, awaiting recheck`; frontend/CONTEXT.md notes coin-page query key `['klines', symbol, interval, limit]`. No SPEC/API/DB change. `npm run check` green (92 e2e), smoke OK, CI green run 46054361657 on cd985d0. Last commit: docs: update traceability ci run. Not merged.
 
 Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` / `v0.6.2` (instead of `v0.N`), deploy as usual (`railway up` run by the owner).
 
@@ -244,7 +248,7 @@ Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` /
 - [ ] UX states: loading skeletons, empty states, error boundary, toasts; mobile pass at 390 px
 - [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
 - [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
-- [ ] All ACs passing (93) in TRACEABILITY; CI green
+- [ ] All ACs passing (94) in TRACEABILITY; CI green
 - [ ] Production deploy from this branch (`railway up`; start command runs `prisma migrate deploy`), seed demo account on production, smoke-check each feature on the live URL (the Merge Prompt redeploys from `main` afterwards)
 - [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)

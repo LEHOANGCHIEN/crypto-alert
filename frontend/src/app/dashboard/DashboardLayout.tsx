@@ -1,11 +1,14 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { ResizeHandle } from '../../shared/layout/ResizeHandle';
 import { useMaximized } from '../../shared/layout/maximize.store';
 import { useLayout } from '../../shared/layout/layout.store';
 import { MobileTabBar, type DashboardTab } from './MobileTabBar';
 import { CollapseButton, Rail } from './PanelToggle';
 import { SidePanel } from './SidePanel';
+import { BottomPanel } from './BottomPanel';
+import { useElementHeight } from '../../shared/layout/useElementHeight';
 
 type Props = {
   market: (select: () => void) => ReactNode;
@@ -23,6 +26,8 @@ export function DashboardLayout({ market, chart }: Props) {
   const left = useLayout((s) => s.left);
   const right = useLayout((s) => s.right);
   const maximized = useMaximized((s) => s.maximized);
+  const { symbol = 'BTCUSDT' } = useParams();
+  const [centerRef, centerHeight] = useElementHeight<HTMLElement>();
   const show = (on: boolean) => (on ? 'flex' : 'hidden');
   // Column widths are passed as CSS variables so components carry no hard-coded pixel values.
   const vars = { '--dash-left': `${left.width}px`, '--dash-right': `${right.width}px` } as CSSProperties;
@@ -44,11 +49,13 @@ export function DashboardLayout({ market, chart }: Props) {
       </section>
       {!left.collapsed && <ResizeHandle side="left" />}
       <section
+        ref={centerRef}
         data-testid="panel-chart"
         data-maximized={maximized}
         className={`${show(active === 'chart')} min-h-0 min-w-0 flex-1 flex-col bg-bg lg:flex`}
       >
         {chart}
+        {!maximized && <BottomPanel symbol={symbol} centerHeight={centerHeight} />}
       </section>
       {!right.collapsed && <ResizeHandle side="right" />}
       <section

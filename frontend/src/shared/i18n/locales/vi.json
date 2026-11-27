@@ -5,7 +5,13 @@
   "nav": {
     "login": "Đăng nhập",
     "register": "Đăng ký",
-    "home": "Về trang chủ"
+    "home": "Về trang chủ",
+    "main": "Điều hướng chính",
+    "menu": "Menu",
+    "chart": "Biểu đồ",
+    "overview": "Tổng quan",
+    "alerts": "Cảnh báo",
+    "notifications": "Thông báo"
   },
   "language": {
     "label": "Ngôn ngữ",
@@ -95,13 +101,27 @@
       "title": "Đăng nhập",
       "submit": "Đăng nhập",
       "noAccount": "Chưa có tài khoản?",
-      "toRegister": "Đăng ký"
+      "toRegister": "Đăng ký",
+      "subtitle": "Chào mừng trở lại."
     },
     "register": {
-      "title": "Đăng ký",
+      "title": "Tạo tài khoản",
       "submit": "Tạo tài khoản",
       "haveAccount": "Đã có tài khoản?",
-      "toLogin": "Đăng nhập"
+      "toLogin": "Đăng nhập",
+      "subtitle": "Miễn phí. Nhận cảnh báo khi giá chạm mức bạn đặt."
+    },
+    "brand": {
+      "headline": "Theo dõi thị trường tiền mã hóa theo thời gian thực",
+      "feature1": "Biểu đồ nến trực tiếp với MA, RSI, MACD",
+      "feature2": "Danh sách theo dõi đồng bộ trên mọi thiết bị",
+      "feature3": "Cảnh báo giá tức thì khi chạm mức bạn đặt"
+    },
+    "placeholders": {
+      "email": "ban@example.com",
+      "displayName": "Nguyễn Văn A",
+      "password": "Ít nhất 8 ký tự, có chữ và số",
+      "confirmPassword": "Nhập lại mật khẩu"
     }
   },
   "account": {
@@ -256,7 +276,8 @@
     },
     "createdAt": "Tạo lúc",
     "triggeredPrice": "Kích hoạt ở giá",
-    "delete": "Xóa cảnh báo {{symbol}}"
+    "delete": "Xóa cảnh báo {{symbol}}",
+    "hint": "Cảnh báo đang chạy {{count}}/{{max}} · xem ở khung dưới biểu đồ"
   },
   "notifications": {
     "ALERT_TRIGGERED": {
@@ -274,20 +295,24 @@
     "target": "Mục tiêu",
     "triggeredPrice": "Giá kích hoạt",
     "summary_one": "Bạn có {{count}} thông báo chưa đọc",
-    "summary_other": "Bạn có {{count}} thông báo chưa đọc"
+    "summary_other": "Bạn có {{count}} thông báo chưa đọc",
+    "viewAll": "Xem tất cả thông báo"
   },
   "layout": {
     "resize": {
       "left": "Đổi độ rộng danh sách thị trường",
-      "right": "Đổi độ rộng bảng bên phải"
+      "right": "Đổi độ rộng bảng bên phải",
+      "bottom": "Đổi chiều cao khung cảnh báo"
     },
     "collapse": {
       "left": "Thu gọn danh sách thị trường",
-      "right": "Thu gọn bảng bên phải"
+      "right": "Thu gọn bảng bên phải",
+      "bottom": "Thu gọn khung cảnh báo"
     },
     "expand": {
       "left": "Mở lại danh sách thị trường",
-      "right": "Mở lại bảng bên phải"
+      "right": "Mở lại bảng bên phải",
+      "bottom": "Mở rộng khung cảnh báo"
     }
   },
   "statusBar": {
@@ -297,5 +322,115 @@
     "clock": "Giờ hiện tại",
     "pulse": "Nhịp thị trường",
     "pulseLabel": "Biến động nhanh"
+  },
+  "bottomPanel": {
+    "label": "Cảnh báo và thông báo",
+    "tabs": {
+      "active": "Cảnh báo đang chạy ({{count}})",
+      "triggered": "Đã kích hoạt",
+      "notifications": "Thông báo"
+    },
+    "currentOnly": "Chỉ cặp hiện tại",
+    "columns": {
+      "pair": "Cặp",
+      "condition": "Điều kiện",
+      "target": "Giá mục tiêu",
+      "current": "Giá hiện tại",
+      "distance": "Khoảng cách",
+      "createdAt": "Tạo lúc",
+      "triggeredAt": "Kích hoạt lúc",
+      "actions": "Thao tác"
+    },
+    "empty": {
+      "active": "Chưa có cảnh báo đang chạy.",
+      "triggered": "Chưa có cảnh báo đã kích hoạt.",
+      "notifications": "Chưa có thông báo."
+    },
+    "loginPrompt": "Đăng nhập để xem cảnh báo và thông báo của bạn."
+  },
+  "alertsPage": {
+    "title": "Cảnh báo giá",
+    "summary": "{{active}} đang chạy · {{triggered}} đã kích hoạt · tối đa {{max}} cảnh báo đang chạy",
+    "new": "Cảnh báo mới",
+    "filterLabel": "Lọc cảnh báo theo trạng thái",
+    "filters": {
+      "all": "Tất cả ({{count}})",
+      "active": "Đang chạy ({{count}})",
+      "triggered": "Đã kích hoạt ({{count}})"
+    },
+    "searchLabel": "Tìm cảnh báo theo cặp",
+    "searchPlaceholder": "Tìm cặp, ví dụ BTC",
+    "columns": {
+      "status": "Trạng thái"
+    },
+    "status": {
+      "ACTIVE": "Đang chạy",
+      "TRIGGERED": "Đã kích hoạt"
+    },
+    "empty": "Bạn chưa có cảnh báo nào.",
+    "emptyFiltered": "Không có cảnh báo nào khớp bộ lọc.",
+    "emptyLink": "Mở biểu đồ để tạo cảnh báo",
+    "dialog": {
+      "title": "Cảnh báo mới",
+      "ABOVE": "Giá ≥ mức",
+      "BELOW": "Giá ≤ mức",
+      "target": "Giá mục tiêu (USDT)",
+      "current": "Giá hiện tại: {{price}} USDT",
+      "cancel": "Hủy"
+    }
+  },
+  "notificationsPage": {
+    "title": "Thông báo",
+    "summary_one": "{{count}} chưa đọc · hiển thị {{max}} thông báo gần nhất",
+    "summary_other": "{{count}} chưa đọc · hiển thị {{max}} thông báo gần nhất",
+    "filterLabel": "Lọc thông báo",
+    "filters": {
+      "all": "Tất cả ({{count}})",
+      "unread": "Chưa đọc ({{count}})"
+    },
+    "emptyUnread": "Không có thông báo chưa đọc.",
+    "viewChart": "Xem biểu đồ →",
+    "detail": "{{condition}} {{target}} USDT · giá lúc kích hoạt {{triggered}}"
+  },
+  "coin": {
+    "spot": "{{pair}} · Binance Spot",
+    "openChart": "Mở biểu đồ đầy đủ",
+    "updatedAt": "Cập nhật lúc {{time}} ({{zone}}) · thay đổi 24 giờ",
+    "chart": "Biểu đồ giá {{pair}}",
+    "ranges": {
+      "label": "Khoảng thời gian biểu đồ",
+      "1D": "1D",
+      "1W": "1W",
+      "1M": "1M",
+      "3M": "3M",
+      "6M": "6M",
+      "YTD": "YTD",
+      "1Y": "1Y"
+    },
+    "tiles": {
+      "label": "Hiệu suất",
+      "1D": "24 giờ",
+      "1W": "1 tuần",
+      "1M": "1 tháng",
+      "3M": "3 tháng",
+      "6M": "6 tháng",
+      "YTD": "Từ đầu năm",
+      "1Y": "1 năm"
+    },
+    "stats": {
+      "title": "Thống kê chính",
+      "open": "Giá mở cửa 24h",
+      "high": "Cao nhất 24h",
+      "low": "Thấp nhất 24h",
+      "volBase": "KL 24h ({{asset}})",
+      "volQuote": "KL 24h (USDT)",
+      "high52": "Cao nhất 52 tuần",
+      "low52": "Thấp nhất 52 tuần"
+    },
+    "notFound": {
+      "title": "Không tìm thấy cặp",
+      "description": "Cặp bạn mở không tồn tại hoặc chưa được hỗ trợ.",
+      "link": "Mở BTC/USDT"
+    }
   }
 }

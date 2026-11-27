@@ -11,7 +11,9 @@ import { toast } from '../../shared/ui/toast';
 import { withAllRead, withRead } from './lib/cache';
 
 export const NOTIFICATIONS_KEY = ['notifications'] as const;
-export const fetchNotifications = () => request<NotificationList>('GET', '/notifications');
+/** API maximum (API.md §3.6): the bell panel and the /notifications page (AC-NOTIF-06) share this list. */
+export const NOTIFICATIONS_LIMIT = 100;
+export const fetchNotifications = () => request<NotificationList>('GET', `/notifications?limit=${NOTIFICATIONS_LIMIT}`);
 
 export const useNotifications = () => {
   const authed = useAuth((s) => s.status === 'authenticated');
