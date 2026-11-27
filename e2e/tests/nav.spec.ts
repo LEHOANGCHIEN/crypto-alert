@@ -40,6 +40,10 @@ test('AC-UI-09 header navigation', async ({ page }) => {
   await expect(page.getByTestId('nav-overview')).toHaveAttribute('href', '/coin/ETHUSDT');
 
   // Guest: Alerts goes to /login and comes back after login (return-to).
+  await page.getByTestId('nav-notifications').click();
+  await expect(page).toHaveURL(/\/login$/);
+  await page.goBack();
+  await expect(page.getByTestId('nav-alerts')).toBeVisible();
   await page.getByTestId('nav-alerts').click();
   await expect(page).toHaveURL(/\/login$/);
   await page.getByTestId('field-email').fill(DEMO.email);

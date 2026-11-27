@@ -6,6 +6,8 @@ import { pricePrecision, round, viDateTime } from '../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
+const signed = (v: number, d = 2) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${viPrice(Math.abs(v), d)}`;
+
 const TZ = 'Asia/Ho_Chi_Minh'; // guest timezone
 const RANGES = ['1D', '1W', '1M', '3M', '6M', 'YTD', '1Y'] as const;
 type Range = (typeof RANGES)[number];
@@ -70,6 +72,7 @@ test('AC-COIN-01 coin header', async ({ page, request }) => {
   await expect(page.getByTestId('coin-star-BTCUSDT')).toBeVisible();
   await expect(page.getByTestId('coin-price')).toHaveText(viPrice(ticker.lastPrice, precision));
   await expect(page.getByTestId('coin-change')).toHaveText(viPercent(ticker.priceChangePercent));
+  await expect(page.getByTestId('coin-change-abs')).toHaveText(signed(ticker.lastPrice - ticker.openPrice, precision));
   const cls = (await page.getByTestId('coin-change').getAttribute('class')) ?? '';
   const parent = (await page.getByTestId('coin-change').evaluate((e) => e.parentElement?.className ?? '')) + cls;
   expect(parent).toMatch(ticker.priceChangePercent > 0 ? /text-up/ : /text-down/);
