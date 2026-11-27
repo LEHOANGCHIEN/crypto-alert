@@ -93,10 +93,10 @@
 | AC-CHART-08 | 6a | chart.spec.ts | AC-CHART-08 volume bars overlay on the price pane | passing | unit: settings.test.ts (volume default/stored). Live update proven with tick (bar color) + close-candle (new bar, volume 0): the mock tick does not change candle volume |
 | AC-CHART-09 | 6a | chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name); unknown-name case covered by coin-names.test.ts (mock has no USDT pair outside the map) |
 | AC-CHART-10 | 6a | chart.spec.ts | AC-CHART-10 screenshot download and maximize | passing | unit: format.test.ts (file stamp); maximize is CSS (fixed overlay), not the Fullscreen API |
-| AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | passing | unit: lastSymbol.test.ts; /alerts and /notifications are placeholder pages until items 3/4; guest header app name hidden below 640 px so the header fits 390 px |
+| AC-UI-09 | 6b | nav.spec.ts | AC-UI-09 header navigation | passing | unit: lastSymbol.test.ts; /alerts and /notifications are placeholder pages until items 3/4 (/alerts done in item 3); guest header app name hidden below 640 px so the header fits 390 px |
 | AC-UI-10 | 6b | ui.spec.ts | AC-UI-10 auth pages two-column layout | pending | |
 | AC-ALERT-11 | 6b | alerts-panel.spec.ts | AC-ALERT-11 bottom panel | passing | unit: layout.test.ts (bottom limits/parse), distance.test.ts; one test covers tabs, columns, "Current pair only" on all three tabs, notification click marks read, create → row ≤ 2 s, mock trigger → Triggered, drag/keyboard/dblclick resize, collapse, reload. The right-panel Alerts tab keeps its Active/Triggered lists (AC-ALERT-01…06 unchanged) and gains the "n/20" hint; the lists in the bottom panel use `bottom-*` testids |
-| AC-ALERT-12 | 6b | alerts-page.spec.ts | AC-ALERT-12 alerts page | pending | |
+| AC-ALERT-12 | 6b | alerts-page.spec.ts | AC-ALERT-12 alerts page | passing | one test: guest redirect + return-to, table columns/badges/counts, status filter + search, dialog (FAKEUSDT, already-met, empty target, valid create), delete active + triggered, symbol link, empty state for a new user |
 | AC-NOTIF-06 | 6b | notifications-page.spec.ts | AC-NOTIF-06 notifications page | pending | |
 | AC-COIN-01 | 6b | coin.spec.ts | AC-COIN-01 coin header | pending | |
 | AC-COIN-02 | 6b | coin.spec.ts | AC-COIN-02 range chart | pending | |
