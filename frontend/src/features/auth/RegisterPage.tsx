@@ -10,6 +10,7 @@ import { useTheme } from '../../shared/theme/ThemeProvider';
 import { validateConfirm, validateDisplayName, validateEmail, validatePassword, type Issue } from '../../shared/validation/rules';
 import { useAuth } from '../../shared/auth/auth.store';
 import { errorText, issueText } from '../../shared/i18n/errorText';
+import { AuthShell } from './AuthShell';
 
 type Values = { email: string; displayName: string; password: string; confirmPassword: string };
 const validate = (v: Values): Partial<Record<keyof Values, Issue>> => {
@@ -57,28 +58,27 @@ export function RegisterPage() {
   };
 
   return (
-    <section data-testid="page-register" className="mx-auto w-full max-w-100 rounded-card border border-border bg-surface p-6">
-      <h1 className="mb-4 text-page font-semibold">{t('auth.register.title')}</h1>
-      <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+    <AuthShell testId="page-register" title={t('auth.register.title')} subtitle={t('auth.register.subtitle')}>
+      <form data-testid="auth-form" noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
         {formError && (
           <p role="alert" data-testid="form-error" className="rounded-input border border-danger p-3 text-body text-danger">
             {errorText(t, formError.err)}
           </p>
         )}
-        <FormField name="email" type="email" autoComplete="email" label={t('fields.email')} value={form.values.email} error={issueText(t, form.issueOf('email'))} onChange={(e) => form.setValue('email', e.target.value)} onBlur={() => form.blur('email')} />
-        <FormField name="displayName" autoComplete="nickname" label={t('fields.displayName')} value={form.values.displayName} error={issueText(t, form.issueOf('displayName'))} onChange={(e) => form.setValue('displayName', e.target.value)} onBlur={() => form.blur('displayName')} />
-        <FormField name="password" type="password" autoComplete="new-password" label={t('fields.password')} value={form.values.password} error={issueText(t, form.issueOf('password'))} onChange={(e) => form.setValue('password', e.target.value)} onBlur={() => form.blur('password')} />
-        <FormField name="confirmPassword" type="password" autoComplete="new-password" label={t('fields.confirmPassword')} value={form.values.confirmPassword} error={issueText(t, form.issueOf('confirmPassword'))} onChange={(e) => form.setValue('confirmPassword', e.target.value)} onBlur={() => form.blur('confirmPassword')} />
-        <Button type="submit" disabled={busy} data-testid="submit-register">
+        <FormField size="lg" name="email" type="email" autoComplete="email" placeholder={t('auth.placeholders.email')} label={t('fields.email')} value={form.values.email} error={issueText(t, form.issueOf('email'))} onChange={(e) => form.setValue('email', e.target.value)} onBlur={() => form.blur('email')} />
+        <FormField size="lg" name="displayName" autoComplete="nickname" placeholder={t('auth.placeholders.displayName')} label={t('fields.displayName')} value={form.values.displayName} error={issueText(t, form.issueOf('displayName'))} onChange={(e) => form.setValue('displayName', e.target.value)} onBlur={() => form.blur('displayName')} />
+        <FormField size="lg" name="password" type="password" autoComplete="new-password" placeholder={t('auth.placeholders.password')} label={t('fields.password')} value={form.values.password} error={issueText(t, form.issueOf('password'))} onChange={(e) => form.setValue('password', e.target.value)} onBlur={() => form.blur('password')} />
+        <FormField size="lg" name="confirmPassword" type="password" autoComplete="new-password" placeholder={t('auth.placeholders.confirmPassword')} label={t('fields.confirmPassword')} value={form.values.confirmPassword} error={issueText(t, form.issueOf('confirmPassword'))} onChange={(e) => form.setValue('confirmPassword', e.target.value)} onBlur={() => form.blur('confirmPassword')} />
+        <Button size="lg" type="submit" disabled={busy} data-testid="submit-register">
           {t('auth.register.submit')}
         </Button>
       </form>
-      <p className="mt-4 text-body text-text-muted">
+      <p className="mt-6 text-body text-text-muted">
         {t('auth.register.haveAccount')}{' '}
         <Link to="/login" className="text-accent underline">
           {t('auth.register.toLogin')}
         </Link>
       </p>
-    </section>
+    </AuthShell>
   );
 }

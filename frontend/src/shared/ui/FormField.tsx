@@ -1,13 +1,15 @@
 import type { InputHTMLAttributes } from 'react';
 
-type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'size'> & {
   name: string;
   label: string;
   error?: string;
+  /** `lg` = 46 px high input of the auth pages (AC-UI-10) */
+  size?: 'md' | 'lg';
 };
 
 /** Labelled input with an inline error message (translated by the caller). */
-export function FormField({ name, label, error, className = '', ...rest }: Props) {
+export function FormField({ name, label, error, size = 'md', className = '', ...rest }: Props) {
   const errId = `${name}-error`;
   return (
     <div className="flex flex-col gap-1">
@@ -20,7 +22,7 @@ export function FormField({ name, label, error, className = '', ...rest }: Props
         data-testid={`field-${name}`}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errId : undefined}
-        className={`h-8 rounded-input border bg-surface-2 px-3 text-body text-text ${error ? 'border-danger' : 'border-border'} ${className}`}
+        className={`${size === 'lg' ? 'h-input-lg text-section' : 'h-8 text-body'} rounded-input border bg-surface-2 px-3 text-text ${error ? 'border-danger' : 'border-border'} ${className}`}
         {...rest}
       />
       {error && (

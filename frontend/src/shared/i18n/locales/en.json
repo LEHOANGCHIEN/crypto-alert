@@ -101,13 +101,27 @@
       "title": "Log in",
       "submit": "Log in",
       "noAccount": "Don't have an account?",
-      "toRegister": "Sign up"
+      "toRegister": "Sign up",
+      "subtitle": "Welcome back."
     },
     "register": {
-      "title": "Sign up",
+      "title": "Create account",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
-      "toLogin": "Log in"
+      "toLogin": "Log in",
+      "subtitle": "Free. Get alerted when a price hits your level."
+    },
+    "brand": {
+      "headline": "Track the crypto market in real time",
+      "feature1": "Live candlestick charts with MA, RSI, MACD",
+      "feature2": "A watchlist synced across your devices",
+      "feature3": "Instant price alerts when a level is reached"
+    },
+    "placeholders": {
+      "email": "you@example.com",
+      "displayName": "Jane Doe",
+      "password": "At least 8 characters, with a letter and a number",
+      "confirmPassword": "Repeat your password"
     }
   },
   "account": {

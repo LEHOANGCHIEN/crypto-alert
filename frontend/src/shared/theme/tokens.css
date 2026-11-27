@@ -43,6 +43,8 @@
   --text-pair: 18px;
   --text-price: 24px;
   --text-page: 18px;
+  --text-auth-title: 28px;
+  --text-auth-headline: 32px;
 
   --radius-input: 4px;
   --radius-chip: 3px;
@@ -57,6 +59,10 @@
   --spacing-row: 48px;
   --spacing-panel-left: 240px;
   --spacing-panel-right: 320px;
+  --spacing-input-lg: 46px;
+  --spacing-button-lg: 48px;
+  --spacing-auth-form: 440px;
+  --spacing-auth-content: 520px;
 }
 
 :root[data-theme='light'] {
