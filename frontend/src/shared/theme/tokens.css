@@ -5,14 +5,14 @@
  * so the light block below re-themes everything without rebuilding.
  */
 @theme {
-  --color-bg: #0b0e12;
-  --color-surface: #101419;
-  --color-surface-2: #161b22;
-  --color-surface-3: #1a2028;
-  --color-border: #252c35;
-  --color-text: #e8edf2;
-  --color-text-muted: #a0abb8;
-  --color-text-faint: #7d8997;
+  --color-bg: #000000;
+  --color-surface: #0f0f0f;
+  --color-surface-2: #1a1a1a;
+  --color-surface-3: #242424;
+  --color-border: #2a2a2a;
+  --color-text: #e6e6e6;
+  --color-text-muted: #a3a3a3;
+  --color-text-faint: #858585;
   --color-accent: #3b82f6;
   --color-danger: #f97316;
   --color-warning: #f59e0b;
@@ -24,7 +24,7 @@
   --color-accent-clear: rgba(59, 130, 246, 0);
   --color-up-volume: rgba(55, 201, 154, 0.4);
   --color-down-volume: rgba(239, 115, 129, 0.4);
-  --color-chart-grid: #161b22;
+  --color-chart-grid: #1c1c1c;
   --color-chart-crosshair: #5b6472;
   --color-ind-1: #f59e0b;
   --color-ind-2: #a855f7;
@@ -46,13 +46,20 @@
   --text-auth-title: 28px;
   --text-auth-headline: 32px;
   --text-coin-price: 48px;
+  --text-hub: 56px;
+  --text-site-section: 24px;
+  --text-page-title: 36px;
+  --text-breadcrumb: 15px;
+  --font-weight-breadcrumb: 500;
 
   --radius-input: 4px;
   --radius-chip: 3px;
   --radius-button: 4px;
   --radius-card: 6px;
+  --radius-site-card: 16px;
 
-  --spacing-header: 56px;
+  --spacing-header: 48px;
+  --spacing-site-header: 64px;
   --spacing-pulse: 32px;
   --spacing-toolbar: 40px;
   --spacing-statusbar: 28px;
@@ -64,6 +71,9 @@
   --spacing-button-lg: 48px;
   --spacing-auth-form: 440px;
   --spacing-auth-content: 520px;
+  --spacing-dialog: 70vh;
+  --spacing-breadcrumb-gap: 20px;
+  --container-site: 1280px;
 }
 
 :root[data-theme='light'] {

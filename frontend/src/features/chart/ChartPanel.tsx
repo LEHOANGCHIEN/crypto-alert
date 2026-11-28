@@ -54,7 +54,7 @@ export function ChartPanel() {
       <div data-testid="chart-not-found" className="flex flex-1 flex-col items-center justify-center gap-3 p-4 text-center">
         <h2 className="text-section font-semibold">{t('chart.notFound.title')}</h2>
         <p className="text-text-muted">{t('chart.notFound.description')}</p>
-        <Link to="/trade/BTCUSDT" data-testid="chart-not-found-link" className="h-8 rounded-button bg-accent px-4 text-body font-medium leading-8 text-bg">
+        <Link to="/chart/BTCUSDT" data-testid="chart-not-found-link" className="h-8 rounded-button bg-accent px-4 text-body font-medium leading-8 text-bg">
           {t('chart.notFound.link')}
         </Link>
       </div>

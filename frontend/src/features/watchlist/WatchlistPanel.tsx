@@ -40,7 +40,7 @@ export function WatchlistPanel({ onSelect }: { onSelect?: () => void }) {
     : "1h";
 
   const open = (symbol: string) => {
-    navigate(`/trade/${symbol}?tf=${tf}`);
+    navigate(`/chart/${symbol}?tf=${tf}`);
     onSelect?.();
   };
 

@@ -1,20 +1,31 @@
 import { createBrowserRouter, Navigate, useParams } from 'react-router-dom';
-import { AppLayout } from './layout/AppLayout';
+import { RootLayout } from './RootLayout';
+import { SiteShell } from './shells/site/SiteShell';
+import { ChartShell } from './shells/chart/ChartShell';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { AccountPage } from '../features/account/AccountPage';
 import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
 import { GuestOnly, RequireAuth } from '../features/auth/RequireAuth';
-import { TradePage } from './pages/TradePage';
+import { ChartPage } from './pages/ChartPage';
+import { HomePage } from './pages/HomePage';
 import { AlertsPage } from './pages/AlertsPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { CoinPage } from '../features/coin';
+import { ContentPage } from '../features/static/ContentPage';
+import { StatusPage } from '../features/static/StatusPage';
 
-/** `/trade/btcusdt` → `/trade/BTCUSDT` (SPEC §4) */
-function TradeRoute() {
+/** `/chart/btcusdt` → `/chart/BTCUSDT` (SPEC §4) */
+function ChartRoute() {
   const { symbol = '' } = useParams();
-  if (symbol !== symbol.toUpperCase()) return <Navigate to={`/trade/${symbol.toUpperCase()}${location.search}`} replace />;
-  return <TradePage />;
+  if (symbol !== symbol.toUpperCase()) return <Navigate to={`/chart/${symbol.toUpperCase()}${location.search}`} replace />;
+  return <ChartPage />;
+}
+
+/** `/trade/:symbol?tf=4h` → `/chart/:symbol?tf=4h` (SPEC §3, kept for old links) */
+function TradeRedirect() {
+  const { symbol = '' } = useParams();
+  return <Navigate to={`/chart/${symbol.toUpperCase()}${location.search}`} replace />;
 }
 
 /** `/coin/btcusdt` → `/coin/BTCUSDT` */
@@ -26,21 +37,39 @@ function CoinRoute() {
 
 export const router = createBrowserRouter([
   {
-    element: <AppLayout />,
+    element: <RootLayout />,
     children: [
-      { path: '/', element: <Navigate to="/trade/BTCUSDT" replace /> },
-      { path: '/trade/:symbol', element: <TradeRoute /> },
-      { path: '/coin/:symbol', element: <CoinRoute /> },
-      { element: <GuestOnly />, children: [{ path: '/login', element: <LoginPage /> }, { path: '/register', element: <RegisterPage /> }] },
       {
-        element: <RequireAuth />,
+        element: <ChartShell />,
+        children: [{ path: '/chart/:symbol', element: <ChartRoute /> }],
+      },
+      {
+        element: <SiteShell />,
         children: [
-          { path: '/account', element: <AccountPage /> },
-          { path: '/alerts', element: <AlertsPage /> },
-          { path: '/notifications', element: <NotificationsPage /> },
+          { path: '/', element: <HomePage /> },
+          { path: '/trade/:symbol', element: <TradeRedirect /> },
+          { path: '/coin/:symbol', element: <CoinRoute /> },
+          { element: <GuestOnly />, children: [{ path: '/login', element: <LoginPage /> }, { path: '/register', element: <RegisterPage /> }] },
+          {
+            element: <RequireAuth />,
+            children: [
+              { path: '/account', element: <AccountPage /> },
+              { path: '/alerts', element: <AlertsPage /> },
+              { path: '/notifications', element: <NotificationsPage /> },
+            ],
+          },
+          { path: '/about', element: <ContentPage id="about" /> },
+          { path: '/faq', element: <ContentPage id="faq" /> },
+          { path: '/status', element: <StatusPage /> },
+          { path: '/contact', element: <ContentPage id="contact" /> },
+          { path: '/community-rules', element: <ContentPage id="community-rules" /> },
+          { path: '/legal/terms', element: <ContentPage id="terms" /> },
+          { path: '/legal/privacy', element: <ContentPage id="privacy" /> },
+          { path: '/legal/cookies', element: <ContentPage id="cookies" /> },
+          { path: '/legal/disclaimer', element: <ContentPage id="disclaimer" /> },
+          { path: '*', element: <NotFoundPage /> },
         ],
       },
-      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]);

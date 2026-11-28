@@ -4,7 +4,7 @@ import type { Candle } from './market';
 const KLINES = /\/api\/v1\/market\/klines\?/;
 
 /** Opens a chart URL and waits until the candles the page received are drawn. Returns those candles. */
-export async function openChart(page: Page, url = '/trade/BTCUSDT'): Promise<Candle[]> {
+export async function openChart(page: Page, url = '/chart/BTCUSDT'): Promise<Candle[]> {
   const res = page.waitForResponse((r) => KLINES.test(r.url()));
   await page.goto(url);
   const candles = ((await (await res).json()) as { data: Candle[] }).data;

@@ -93,7 +93,7 @@ export function NotificationsList() {
                       triggered: price(p.symbol, p.triggeredPrice),
                     })}
                   </span>
-                  <Link to={`/trade/${p.symbol}`} data-testid="notification-chart-link" className="w-fit text-body font-medium text-accent">
+                  <Link to={`/chart/${p.symbol}`} data-testid="notification-chart-link" className="w-fit text-body font-medium text-accent">
                     {t('notificationsPage.viewChart')}
                   </Link>
                 </div>

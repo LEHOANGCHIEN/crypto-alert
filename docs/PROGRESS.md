@@ -17,12 +17,17 @@
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
 | 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | done |
 | 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | done |
-| 7 | Hardening, final deploy, demo | `phase-7-release` | Sonnet 5.5 + Medium | Dec 8–9 | not started |
-| — | Buffer for slips | — | — | Dec 10–11 | — |
+| 7a | Foundation (site shell, home, `/chart`, static pages, black tokens) | `phase-7a-foundation` | Sonnet 5.5 + Medium | — | built, awaiting review |
+| 7b | Market data (catalog, derivatives, sentiment, jobs; home v2, markets, screener, heatmap) | `phase-7b-market-data` | Sonnet 5.5 + Medium | — | not started |
+| 7c | Symbol page | `phase-7c-symbol` | Sonnet 5.5 + Medium | — | not started |
+| 7d | News + AI base | `phase-7d-news-ai` | Opus 5.5 + High | — | not started |
+| 7e | Community | `phase-7e-community` | Sonnet 5.5 + Medium | — | not started |
+| 7f | AI assistant | `phase-7f-assistant` | Opus 5.5 + High | — | not started |
+| 8 | Release (former Phase 7) | `phase-8-release` | Sonnet 5.5 + Medium | — | not started |
 
-Schedule (all 2026): Phase 0 starts Nov 24; the last phase (7) ends **Dec 9**; buffer until Dec 11 (6a and 6b added by reviews/ui-polish.decision.md).
+Schedule: see reviews/phase-7a-foundation.decision.md §2 (dates not fixed).
 
-**Every phase ends with:** CI green → **Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-N-review.decision.md; paste into the builder: Read reviews/phase-N-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.** → if PASS, *Merge Prompt* (Sonnet 5.5 + Medium): merge, tag `v0.N`, redeploy `main` to Railway.
+**Every phase ends with:** CI green → **Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-N-review.decision.md; paste into the builder: Read reviews/phase-N-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.** → if PASS, *Merge Prompt* (Sonnet 5.5 + Medium): merge, tag `v0.N`, Railway autodeploys `main` after CI.
 **Usage rule:** near the weekly quota limit (`/usage`) → Sonnet 5.5 + Medium for everything except Phase Review (this includes phases 3, 4, 6 and Stuck Bug sessions); the review stays Opus 5.5 + High.
 **Bug rule:** same bug failed 2–3 times → *Stuck Bug Prompt* with **Opus 5.5 + Extra** (near the weekly quota limit → Sonnet 5.5 + Medium).
 
@@ -241,20 +246,66 @@ Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` /
 
 ---
 
-## Phase 7 — Hardening, final deploy, demo account
-**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=7)
+## Phase 7a — Foundation
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · source of truth `reviews/phase-7a-foundation.decision.md`
+**ACs:** AC-SITE-01…05, AC-UI-01 / AC-UI-03 / AC-UI-09 (edited), AC-AUTH-01 / AC-AUTH-04 (edited) + every AC renamed `/trade`→`/chart`
+
+- [x] Doc edits of reviews/phase-7a-foundation.decision.md §3 + `git mv` design files to `docs/design/v1/` + add `docs/design/v2/*.png` + this decision (one commit `docs: open tradingview-style restructure (phase 7a)`)
+- [x] Move e2e specs into area folders (`git mv`, no test content change) + TRACEABILITY paths (`refactor(e2e): group specs by area`)
+- [x] Black dark tokens + contrast test (AC-SITE-05)
+- [x] Route restructure: chart shell at `/chart/:symbol`, `/trade` redirect, login/register default `/`, rename `/trade/`→`/chart/` in code and tests (same strictness) (AC-SITE-04, AC-AUTH-01/04, renamed ACs)
+- [x] Site shell: header with mega-menus + drawer, full footer, pulse bar/status bar only in chart shell (AC-UI-01, AC-UI-03, AC-UI-09)
+- [x] Search dialog Ctrl+K (AC-SITE-02)
+- [x] Home v1 (AC-SITE-01)
+- [x] Static pages incl. live `/status` (AC-SITE-03)
+- [x] Railway GitHub autodeploy: owner connects the service (Railway UI) — builder only documents it (ARCHITECTURE §10, PROMPTS e) and verifies after merge; no code
+- [x] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
+
+**Log:**
+- 2026-11-28 · Sonnet 5.5 + Medium · Phase 7a built: decision §3 doc edits (SPEC, CLAUDE, ARCHITECTURE §1/§7/§10/§11/§12, PROGRESS, TRACEABILITY, PROMPTS) + design files moved to docs/design/v1 + docs/design/v2 added; e2e specs grouped into core/market/chart/alerts/notifications/watchlist/coin/site; black dark tokens + contrast test (AC-SITE-05); `/chart/:symbol` chart shell, `/trade` redirect, login/register land on `/` (AC-SITE-04, AC-AUTH-01/04); site shell (64 px header, Products mega-menu + drawer, full footer) and chart shell (compact header with pair selector, pulse bar, status bar with disclaimer) (AC-UI-01/03/09); Ctrl+K search dialog with recent pairs (AC-SITE-02); home v1 with hero, market summary (klines 1h×24 sparklines) and movers (AC-SITE-01); 9 static pages in vi + en and live `/status` (AC-SITE-03); Railway autodeploy documented (ARCHITECTURE §10, PROMPTS e; the owner connects the service in the Railway UI, `railway up` never run). Existing tests changed with the same strictness: `/trade`→`/chart` URLs, login now lands on `/` (new helpers `loginToChart`/`registerToChart`, `openProductsMenu`), AC-UI-03/AC-UI-09 rewritten to the new AC text, AC-UI-01 header 44–56 px and no footer on the chart page, theme test colours = black palette, AC-NOTIF-06 waits on `site-shell[data-connected]` instead of the chart status bar. Menus/footer list only pages that exist (Markets/Community/News menus not shown yet). Doc changes: only those authorised by the decision; API.md/DATABASE.md untouched. Deviations: chart header height token 48 px (within 44–56); `coin-names` moved to `shared/market`. One flaky AC-ALERT-12 click on a full run (element re-rendered), passed 3/3 alone and in all later full runs · `npm run check` green (BE 107 + FE 135 unit, 90 integration, 97 Playwright) · smoke OK (migrate, seed, dev, health db up / binance connected; ports 3000/5173/5555/3100 freed) · last code commit 24e6422 · CI green (run 46123801635 on 624e61d)
+- 2026-11-28 · Sonnet 5.5 + Medium · Phase 7a review fixes (reviews/phase-7a-review.decision.md): site-shell overflow checks at 390×844 + `chart-disclaimer-mobile`; arbitrary values → tokens; AC-UI-01/AC-SITE-01/AC-UI-09 tightened; AC-ALERT-12 flake fixed at the root (`alerts-page[data-fetching]` wait, 25/25 + 15/15 serial runs); owner social links (`shared/config/social.ts`, simple-icons, LinkedIn uses generic icon) in footer + /contact; larger breadcrumb; docs synced (SPEC only AC-UI-03 social sentence and AC-UI-08 wording); AC-UI-03 test moved to `site/footer.spec.ts` · `npm run check` green (97 Playwright) · smoke OK, ports freed · CI green (run 46129785906 on 4dbf74b) · not merged
+
+---
+
+## Phase 7b — Market data
+Checklist and ACs: added by reviews/phase-7b-*.decision.md.
+
+---
+
+## Phase 7c — Symbol page
+Checklist and ACs: added by reviews/phase-7c-*.decision.md.
+
+---
+
+## Phase 7d — News + AI base
+Checklist and ACs: added by reviews/phase-7d-*.decision.md.
+
+---
+
+## Phase 7e — Community
+Checklist and ACs: added by reviews/phase-7e-*.decision.md.
+
+---
+
+## Phase 7f — AI assistant
+Checklist and ACs: added by reviews/phase-7f-*.decision.md.
+
+---
+
+## Phase 8 — Release (former Phase 7)
+**Settings before starting:** Sonnet 5.5 + Medium · Plan mode ON · *Phase Start Prompt* (N=8)
 **ACs:** AC-I18N-02, AC-OPS-02 (+ full regression of all ACs)
 
 - [ ] i18n sweep: every page/state in both languages; AC-I18N-02 test (no Vietnamese diacritics in EN, no exceptions; no raw keys)
 - [ ] UX states: loading skeletons, empty states, error boundary, toasts; mobile pass at 390 px
 - [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
 - [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
-- [ ] All ACs passing (94) in TRACEABILITY; CI green
-- [ ] Production deploy from this branch (`railway up`; start command runs `prisma migrate deploy`), seed demo account on production, smoke-check each feature on the live URL (the Merge Prompt redeploys from `main` afterwards)
+- [ ] All ACs passing (all IDs in TRACEABILITY); CI green
+- [ ] Production check from `main` after merge (autodeploy); seed demo data (incl. community samples) on production, smoke-check each feature on the live URL
 - [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
 - [ ] Throttle GET /market/klines per client IP (@nestjs/throttler, RATE_LIMITED + Retry-After; update API.md §3.3 errors and ARCHITECTURE security row) — from reviews/phase-2-review.decision.md R4
-- [ ] TRACEABILITY; log line (the Merge Prompt tags `v0.7` **and** `v1.0`)
+- [ ] TRACEABILITY; log line (tags `v0.8` **and** `v1.0`)
 
-**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-7-review.decision.md; paste into the builder: Read reviews/phase-7-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
+**Review settings:** Review: docs/PROMPTS.md section c, pasted into the Claude Code project 'Đồ án chuyên ngành - Review' (Opus 5.5 + High, ask before edits). If FAIL → the coordinator writes reviews/phase-8-review.decision.md; paste into the builder: Read reviews/phase-8-review.decision.md and apply the Fix instructions block exactly. Then run the decision's Recheck block in the Review project.
 **Log:**

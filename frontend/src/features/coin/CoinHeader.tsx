@@ -37,7 +37,7 @@ export function CoinHeader({ symbol, info, ticker }: { symbol: string; info: Sym
             </span>
           </div>
         </div>
-        <Link to={`/trade/${symbol}`} data-testid="coin-open-chart" className="h-9 rounded-button border border-border bg-surface-2 px-4 text-body font-medium leading-9 text-text hover:bg-surface-3">
+        <Link to={`/chart/${symbol}`} data-testid="coin-open-chart" className="h-9 rounded-button border border-border bg-surface-2 px-4 text-body font-medium leading-9 text-text hover:bg-surface-3">
           {t('coin.openChart')} ↗
         </Link>
       </div>

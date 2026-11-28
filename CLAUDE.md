@@ -1,6 +1,6 @@
 # CLAUDE.md — Crypto Alert
 
-Solo university project (UIT "đồ án chuyên ngành"): a deployed web app for tracking crypto markets with real-time candlestick charts, MA/RSI/MACD, watchlist and price alerts. **The owner is a beginner and cannot review code** — correctness is proven by Playwright tests (one per acceptance criterion), green CI, and Vietnamese manual-check lists.
+Solo university project (UIT "đồ án chuyên ngành"): a deployed TradingView-style web app for crypto markets: market pages, real-time charts with indicators, watchlist, price alerts, news, community ideas and an AI assistant. **The owner is a beginner and cannot review code** — correctness is proven by Playwright tests (one per acceptance criterion), green CI, and Vietnamese manual-check lists.
 Official title (exact, Vietnamese, in UI footer + README): **Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá**
 
 ## Stack
@@ -15,6 +15,10 @@ TypeScript everywhere · npm workspaces `backend/`, `frontend/`, `e2e/` · **BE*
 | `docs/DATABASE.md` | Prisma schema (authoritative), migration & seed policy |
 | `docs/PROGRESS.md` | Phases, checklists, session log |
 | `docs/TRACEABILITY.md` | AC → test → status |
+| `docs/design/v2/*.png` | Approved mockups (design source since Phase 7a) |
+| `docs/DATA-SOURCES.md` | External data sources, quotas, caching, attribution (from Phase 7b) |
+| `docs/AI.md` | LLM provider, tools, prompts, RAG, evaluation (from Phase 7d) |
+| `reviews/*.decision.md` | Owner/coordinator decisions; they win over older docs for their phase |
 | `backend/CONTEXT.md`, `frontend/CONTEXT.md` | Per-side coding rules |
 
 Conflict order: API.md / DATABASE.md > SPEC.md > ARCHITECTURE.md > existing code. **Never edit `docs/SPEC.md`** (AC steps, thresholds, scope, IDs): if an AC looks wrong or impossible, stop, explain in simple Vietnamese and wait for the owner. Edit API.md / DATABASE.md / ARCHITECTURE.md only to resolve a contradiction, and list every doc change in the PROGRESS.md log line.
@@ -33,8 +37,8 @@ npm run secrets:check                   # before every commit (also a pre-commit
 ## Model & effort policy (the owner switches with `/model`; you cannot)
 | Session type | Select |
 |---|---|
-| Routine phases: 0 scaffold, 1 auth, 2 market list + chart, 5 watchlist, 7 hardening/deploy | **Sonnet 5.5 + Medium** |
-| Hard phases: 3 real-time relay, 4 indicators, 6 alerts + notifications | **Opus 5.5 + High** |
+| Routine phases: 0, 1, 2, 5, 6a, 6b, 7a, 7b, 7c, 7e, 8 | **Sonnet 5.5 + Medium** |
+| Hard phases: 3, 4, 6, 7d news + AI base, 7f AI assistant | **Opus 5.5 + High** |
 | End-of-phase review (fresh session, read-only) | **Opus 5.5 + High** |
 | Same bug failed 2–3 times | **Opus 5.5 + Extra** (the effort level above High) |
 | Anything else / unsure | **Sonnet 5.5 + Medium** |
@@ -52,15 +56,19 @@ If the requested work belongs to a different row than the owner said they select
 4. Routes, field names, event names exactly as API.md. IDs `Int`; prices `Decimal` in DB, `number` in JSON.
 5. Timestamps UTC (ISO 8601 / epoch ms). Timezone + locale formatting only in `frontend/src/shared/format`.
 6. Visual values only from tokens: `✅ className="bg-surface text-up"` · `❌ style={{ color: '#26A69A' }}`
-7. Market data only through `MarketDataProvider`; notifications only through `NotificationChannel`.
+7. Market data only through `MarketDataProvider`; every other external source (CoinGecko, Binance Futures, Fear & Greed, RSS, LLM/embeddings) only through its own provider interface in its backend module, each with a real and a **mock** implementation; tests and CI always use the mocks. Notifications only through `NotificationChannel`.
 8. Schema change = new migration (`npx prisma migrate dev --name <what>`) + update DATABASE.md.
 9. Each AC has exactly one Playwright test titled with its ID: `test('AC-WL-01 star adds pair to watchlist', …)`.
 10. Config only from env vars via `ConfigService`; a new var goes into `.env.example` and ARCHITECTURE §10.1.
 
 **MUST NOT**
-- Let the browser call Binance · use `prisma db push` · use `BigInt` · edit an applied migration.
+- Let the browser call any external API (Binance, CoinGecko, RSS feeds, Gemini…) — only our backend · use `prisma db push` · use `BigInt` · edit an applied migration.
 - Return `passwordHash` or token hashes: `✅ select: { id: true, email: true, displayName: true }`.
 - Hard-code secrets, commit `.env*` (only `.env.example`), or enable test endpoints in production.
+- Render user-generated content as raw HTML (no `dangerouslySetInnerHTML` on user text; sanitize on the server).
+- Copy full news articles (store/show title, source summary, link, our AI summary only).
+- Send personal data (email, password, tokens, private alerts of other users) to an LLM, or let an AI answer show numbers that did not come from a tool result.
+- Show sample/placeholder data on a real page (mockup numbers are samples).
 - Disable the Lightweight Charts attribution logo, or use green/red for anything but price direction.
 - Make a failing test pass by skipping or weakening it (`test.skip`, looser assertions, longer timeouts without cause).
 - Edit `docs/SPEC.md`, or bypass hooks with `--no-verify` (never use `--no-verify`).
@@ -71,6 +79,7 @@ If the requested work belongs to a different row than the owner said they select
 - Before every commit: `npm run secrets:check` and `git status` — never stage `.env`, keys, tokens, real passwords. The secret check always allows `.env.example`, `package-lock.json` and `**/fixtures/**`.
 - The repo is public — a committed secret is exposed immediately; if one is ever committed, stop and tell the owner so the secret can be rotated.
 - Commits, tags and PR descriptions carry no AI attribution: no `Co-Authored-By` trailer, no "Generated with" line, no mention of Claude or AI in messages. The author is the owner's git identity.
+- Deploys: merging into `main` triggers Railway's GitHub autodeploy after CI passes (Wait for CI). Never run `railway up` unless the owner asks (fallback).
 - Commit the working tree before any risky change (refactor, migration, dependency upgrade, large deletion).
 - **NEVER** `git push --force`, `git reset --hard` on pushed work, rebase/amend pushed commits, or delete branches/tags. Undo = `git revert` or a new branch.
 

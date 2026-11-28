@@ -40,7 +40,7 @@ export function AlertsPage() {
   const price = (symbol: string, v: number) => fmt.price(v, pairs.get(symbol)?.pricePrecision ?? DEFAULT_PRECISION);
 
   return (
-    <div data-testid="alerts-page" className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4">
+    <div data-testid="alerts-page" data-fetching={String(alerts.isFetching)} className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-price font-semibold">{t('alertsPage.title')}</h1>
@@ -91,7 +91,7 @@ export function AlertsPage() {
         <div data-testid="alerts-page-empty" className="rounded-card border border-border bg-surface p-6 text-body text-text-muted">
           <p>{t(all.length === 0 ? 'alertsPage.empty' : 'alertsPage.emptyFiltered')}</p>
           {all.length === 0 && (
-            <Link to="/trade/BTCUSDT" data-testid="alerts-empty-link" className="mt-2 inline-block font-medium text-accent">
+            <Link to="/chart/BTCUSDT" data-testid="alerts-empty-link" className="mt-2 inline-block font-medium text-accent">
               {t('alertsPage.emptyLink')}
             </Link>
           )}
@@ -123,7 +123,7 @@ export function AlertsPage() {
                 return (
                   <tr key={a.id} data-testid={`alerts-row-${a.id}`} data-status={a.status} className="border-b border-border last:border-b-0">
                     <td className={`${TD} font-semibold`}>
-                      <Link to={`/trade/${a.symbol}`} data-testid="alerts-row-symbol" data-symbol={a.symbol} className="hover:text-accent">
+                      <Link to={`/chart/${a.symbol}`} data-testid="alerts-row-symbol" data-symbol={a.symbol} className="hover:text-accent">
                         {info ? `${info.baseAsset}/${info.quoteAsset}` : a.symbol}
                       </Link>
                     </td>

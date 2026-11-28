@@ -6,7 +6,7 @@ This is a **direct request of the project owner** (coordination rule 5). It adds
 
 ## 1. Design source (approved by the owner on 2026-11-26)
 - Figma file "Crypto Alert — UI Design": https://www.figma.com/design/7ypeXrPjWpbZRA1by7zOM8 (owner's account; the builder does not need Figma access).
-- Offline copy for the builder and reviewer: PDF exports in **`docs/design/`** (one file per Figma page, 1440 px wide). Open them and match the pages below. If a file is missing, stop and ask the owner.
+- Offline copy for the builder and reviewer: PDF exports in **`docs/design/v1/`** (one file per Figma page, 1440 px wide). Open them and match the pages below. If a file is missing, stop and ask the owner.
 
 | PDF file · page | Figma frame | Route / AC |
 |---|---|---|
@@ -37,7 +37,7 @@ Add to SPEC F11:
 
 ## 3. Allowed doc edits (first commit of Phase 6b)
 - docs/SPEC.md: add AC-UI-10 (text above) to F11. Nothing else.
-- docs/ARCHITECTURE.md §11.1: `/login`, `/register` row → "Two columns: brand panel + centered form 440 px (AC-UI-10); mobile: form only, 16 px margin". Rows for `/coin/:symbol`, `/alerts`, `/notifications` and the trade bottom panel: add "see the PDFs in docs/design/ (reviews/phase-6b-design.decision.md §1)".
+- docs/ARCHITECTURE.md §11.1: `/login`, `/register` row → "Two columns: brand panel + centered form 440 px (AC-UI-10); mobile: form only, 16 px margin". Rows for `/coin/:symbol`, `/alerts`, `/notifications` and the trade bottom panel: add "see the PDFs in docs/design/v1/ (reviews/phase-6b-design.decision.md §1)".
 - docs/PROGRESS.md: Phase 6b ACs add AC-UI-10; checklist add item "- [ ] Auth pages redesign (AC-UI-10)" before the Playwright item; Phase 7 "All ACs passing (93)" → "(94)".
 - docs/TRACEABILITY.md: add AC-UI-10 (pending, phase 6b); total 94.
 - frontend/CONTEXT.md: new testids.

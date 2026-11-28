@@ -21,6 +21,21 @@ export async function registerViaUi(page: Page, u = NEW_USER): Promise<void> {
   await page.getByTestId('submit-register').click();
 }
 
+/** Login, then open the BTCUSDT chart (login now lands on `/`, AC-AUTH-04; many tests start on the chart). */
+export async function loginToChart(page: Page, email = DEMO.email, password = DEMO.password): Promise<void> {
+  await loginViaUi(page, email, password);
+  await page.goto('/chart/BTCUSDT');
+  await expect(page.getByTestId('user-menu')).toBeVisible();
+}
+
+/** Register, then open the BTCUSDT chart. */
+export async function registerToChart(page: Page, u = NEW_USER): Promise<void> {
+  await registerViaUi(page, u);
+  await expect(page.getByTestId('user-menu')).toBeVisible();
+  await page.goto('/chart/BTCUSDT');
+  await expect(page.getByTestId('user-menu')).toBeVisible();
+}
+
 export async function logoutViaUi(page: Page): Promise<void> {
   await page.getByTestId('user-menu').click();
   await page.getByTestId('menu-logout').click();

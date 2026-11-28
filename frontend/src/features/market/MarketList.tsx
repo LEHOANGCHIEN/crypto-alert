@@ -55,7 +55,7 @@ export function MarketList({ onSelect }: { onSelect?: () => void }) {
   const needLogin = tab === 'watchlist' && guest;
 
   const open = (symbol: string) => {
-    navigate(`/trade/${symbol}?tf=${parseInterval(params.get('tf'))}`);
+    navigate(`/chart/${symbol}?tf=${parseInterval(params.get('tf'))}`);
     onSelect?.();
   };
 
