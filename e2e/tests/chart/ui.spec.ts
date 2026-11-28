@@ -10,7 +10,7 @@ const LAYOUT_KEY = 'crypto-alert.layout';
 
 async function openDashboard(page: Page) {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
 }
 
@@ -188,7 +188,7 @@ const PULSE = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'DOGEUSDT'
 
 test('AC-UI-07 market pulse bar shows major pairs live and links to the chart', async ({ page, request }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/trade/BTCUSDT?tf=15m');
+  await page.goto('/chart/BTCUSDT?tf=15m');
   const bar = page.getByTestId('pulse-bar');
   await expect(bar).toBeVisible();
   // Six pairs in the specified order (pairs missing from the tickers would be skipped; the mock has all six).
@@ -214,9 +214,9 @@ test('AC-UI-07 market pulse bar shows major pairs live and links to the chart', 
   await pushTick(request, 'ETHUSDT', price);
   await expect(page.getByTestId('pulse-price-ETHUSDT')).toHaveText(viPrice(price), { timeout: left(deadline) });
 
-  // Click → /trade/<SYMBOL>?tf=<current tf>.
+  // Click → /chart/<SYMBOL>?tf=<current tf>.
   await page.getByTestId('pulse-item-SOLUSDT').click();
-  await expect(page).toHaveURL(/\/trade\/SOLUSDT\?tf=15m$/);
+  await expect(page).toHaveURL(/\/chart\/SOLUSDT\?tf=15m$/);
 
   // At 1024 px all six items fit fully inside the bar.
   await page.setViewportSize({ width: 1024, height: 768 });
@@ -244,7 +244,7 @@ const clockText = (epoch: number, timeZone: string) =>
 
 test('AC-UI-08 status bar shows connection state, last update and a clock', async ({ page, context, request }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   const bar = page.getByTestId('status-bar');
   const text = page.getByTestId('status-text');
   const dot = page.getByTestId('status-dot');
@@ -296,7 +296,7 @@ test('AC-UI-08 status bar shows connection state, last update and a clock', asyn
   await page.goto('/account');
   await page.getByTestId('pref-timezone').selectOption('UTC');
   await page.getByTestId('save-preferences').click();
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect.poll(async () => {
     const e = Number(await clock.getAttribute('data-epoch'));
     return (await clock.textContent()) === clockText(e, 'UTC');

@@ -432,5 +432,8 @@
       "description": "Cặp bạn mở không tồn tại hoặc chưa được hỗ trợ.",
       "link": "Mở BTC/USDT"
     }
+  },
+  "home": {
+    "title": "Nhìn rõ thị trường trước khi quyết định"
   }
 }

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { DEMO, loginViaUi, registerViaUi } from '../../helpers/auth';
+import { DEMO, loginToChart, registerToChart } from '../../helpers/auth';
 import { left, pushTick, viPrice } from '../../helpers/market';
 import { resetApp } from '../../helpers/reset';
 import { appToast } from '../../helpers/toast';
@@ -8,7 +8,7 @@ import { clickStar, fillWatchlist, panelSymbols } from '../../helpers/watchlist'
 test.beforeEach(async ({ request }) => resetApp(request));
 
 test('AC-WL-01 star adds pair to watchlist', async ({ page }) => {
-  await registerViaUi(page); // brand-new user → empty watchlist
+  await registerToChart(page); // brand-new user → empty watchlist
   await expect(page.getByTestId('user-menu')).toBeVisible();
   await expect(page.getByTestId('watchlist-empty')).toBeVisible();
 
@@ -31,7 +31,7 @@ test('AC-WL-01 star adds pair to watchlist', async ({ page }) => {
 });
 
 test('AC-WL-02 remove from watchlist', async ({ page }) => {
-  await loginViaUi(page); // demo: BTCUSDT, ETHUSDT, SOLUSDT
+  await loginToChart(page); // demo: BTCUSDT, ETHUSDT, SOLUSDT
   await expect(page.getByTestId('watchlist-row-SOLUSDT')).toBeVisible();
   await expect(page.getByTestId('star-ETHUSDT')).toHaveAttribute('aria-pressed', 'true');
 
@@ -48,7 +48,7 @@ test('AC-WL-02 remove from watchlist', async ({ page }) => {
 });
 
 test('AC-WL-03 watchlist persists across reload and browsers', async ({ page, browser }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   await expect(page.getByTestId('watchlist-row-SOLUSDT')).toBeVisible();
   await clickStar(page, 'star-XRPUSDT', 'PUT');
   await expect(page.getByTestId('watchlist-row-XRPUSDT')).toBeVisible();
@@ -59,14 +59,14 @@ test('AC-WL-03 watchlist persists across reload and browsers', async ({ page, br
 
   const other = await browser.newContext();
   const page2 = await other.newPage();
-  await loginViaUi(page2);
+  await loginToChart(page2);
   await expect(page2.getByTestId('watchlist-row-XRPUSDT')).toBeVisible();
   expect(await panelSymbols(page2)).toEqual(['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT']);
   await other.close();
 });
 
 test('AC-WL-04 watchlist prices update live', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = page.getByTestId('watchlist-price-ETHUSDT');
   await expect(price).toHaveText('3.510,25');
   await expect(page.getByTestId('market-list')).toHaveAttribute('data-live', 'true');
@@ -78,10 +78,10 @@ test('AC-WL-04 watchlist prices update live', async ({ page, request }) => {
 });
 
 test('AC-WL-05 watchlist row opens chart', async ({ page }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   await expect(page.getByTestId('chart-symbol')).toHaveText('BTC/USDT');
   await page.getByTestId('watchlist-row-SOLUSDT').getByRole('button').first().click();
-  await expect(page).toHaveURL(/\/trade\/SOLUSDT\?tf=1h$/);
+  await expect(page).toHaveURL(/\/chart\/SOLUSDT\?tf=1h$/);
   await expect(page.getByTestId('chart-symbol')).toHaveText('SOL/USDT');
 });
 
@@ -90,7 +90,7 @@ test('AC-WL-06 guest sees login prompt', async ({ page }) => {
   page.on('request', (r) => {
     if (/\/api\/v1\/watchlist/.test(r.url())) writes.push(`${r.method()} ${r.url()}`);
   });
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('market-row-ETHUSDT')).toBeVisible();
   await page.getByTestId('star-ETHUSDT').click();
   await expect(page.getByTestId('watchlist-login-prompt')).toContainText('Đăng nhập để sử dụng danh sách theo dõi');
@@ -102,7 +102,7 @@ test('AC-WL-06 guest sees login prompt', async ({ page }) => {
   await expect(page).toHaveURL(/\/login$/);
   // Nothing was saved: after logging in as a new user the list is empty.
   await page.goto('/register');
-  await registerViaUi(page);
+  await registerToChart(page);
   await expect(page.getByTestId('watchlist-empty')).toBeVisible();
 });
 
@@ -117,13 +117,13 @@ test('AC-WL-07 isolation, no duplicates, limit 50', async ({ page, request, brow
   // User B does not see user A's watchlist.
   const ctxB = await browser.newContext();
   const pageB = await ctxB.newPage();
-  await registerViaUi(pageB);
+  await registerToChart(pageB);
   await expect(pageB.getByTestId('watchlist-empty')).toBeVisible();
   await expect(pageB.getByTestId('star-BTCUSDT')).toHaveAttribute('aria-pressed', 'false');
   await ctxB.close();
 
   // User A (demo): still exactly one XRPUSDT row (a pair that is not in the demo seed).
-  await loginViaUi(page);
+  await loginToChart(page);
   await expect(page.getByTestId('watchlist-row-SOLUSDT')).toBeVisible();
   await expect(page.locator('[data-testid="watchlist-row-XRPUSDT"]')).toHaveCount(1);
   expect(await panelSymbols(page)).toEqual(['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT']);

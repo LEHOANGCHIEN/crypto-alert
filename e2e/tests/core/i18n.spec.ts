@@ -64,7 +64,7 @@ test('AC-I18N-05 language persists for guest and account', async ({ page, browse
 });
 
 test('AC-I18N-04 number and date formats follow locale', async ({ page }) => {
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
   const legendTime = async () => page.getByTestId('legend-time').textContent();
   const openTime = Number(await page.getByTestId('chart-legend').getAttribute('data-time'));

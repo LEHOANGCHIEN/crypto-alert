@@ -14,7 +14,7 @@ import { NotificationsSession } from '../../features/notifications';
 
 export function AppLayout() {
   // The dashboard uses the full area; other pages are padded and scrollable.
-  const isDashboard = useMatch('/trade/:symbol') !== null;
+  const isDashboard = useMatch('/chart/:symbol') !== null;
   // Auth pages are two full-bleed columns (AC-UI-10): no padding, the page fills the area.
   const isLogin = useMatch('/login') !== null;
   const isRegister = useMatch('/register') !== null;

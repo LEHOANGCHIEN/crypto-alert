@@ -38,7 +38,7 @@ test('AC-NOTIF-06 notifications page', async ({ page, request }) => {
   const seeded = items(page).first();
   await expect(seeded).toHaveAttribute('data-unread', 'true');
   await expect(seeded.getByTestId('notification-text')).toContainText('SOLUSDT');
-  await expect(seeded.getByTestId('notification-chart-link')).toHaveAttribute('href', '/trade/SOLUSDT');
+  await expect(seeded.getByTestId('notification-chart-link')).toHaveAttribute('href', '/chart/SOLUSDT');
 
   // --- A new notification (mock trigger) appears at the top within 2 s. ---
   // The socket is recreated with the new token after login: push the tick only when the status bar shows "connected".
@@ -81,7 +81,7 @@ test('AC-NOTIF-06 notifications page', async ({ page, request }) => {
 
   // --- Bell panel has a "View all" link to this page. ---
   await page.getByTestId('nav-chart').click();
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT/);
+  await expect(page).toHaveURL(/\/chart\/BTCUSDT/);
   await page.getByTestId('bell').click();
   await expect(page.getByTestId('notifications-view-all')).toHaveText('Xem tất cả thông báo');
   await page.getByTestId('notifications-view-all').click();

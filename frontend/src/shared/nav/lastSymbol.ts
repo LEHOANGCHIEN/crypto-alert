@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-/** "Last symbol" = last pair opened on /trade or /coin (AC-UI-09); stored in localStorage. */
+/** "Last symbol" = last pair opened on /chart or /coin (AC-UI-09); stored in localStorage. */
 export const LAST_SYMBOL_KEY = 'crypto-alert.last-symbol';
 export const DEFAULT_SYMBOL = 'BTCUSDT';
 

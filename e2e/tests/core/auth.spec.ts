@@ -7,7 +7,7 @@ test.beforeEach(async ({ request }) => resetApp(request));
 
 test('AC-AUTH-01 register success', async ({ page }) => {
   await registerViaUi(page);
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
+  await expect(page).toHaveURL(/:\/\/[^/]+\/$/);
   await expect(page.getByTestId('user-display-name')).toHaveText(NEW_USER.displayName);
   await expect(page.getByTestId('user-menu')).toBeVisible();
 });
@@ -59,7 +59,7 @@ test('AC-AUTH-03 register validation errors', async ({ page, request }) => {
 
 test('AC-AUTH-04 login success with return-to', async ({ page }) => {
   await loginViaUi(page);
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/); // default destination
+  await expect(page).toHaveURL(/:\/\/[^/]+\/$/); // default destination
   await expect(page.getByTestId('user-display-name')).toHaveText(DEMO.displayName);
   await logoutViaUi(page);
   await page.goto('/account'); // protected page → login → back to the page originally requested
@@ -90,7 +90,7 @@ test('AC-AUTH-06 session survives reload and token expiry', async ({ page }) => 
   await loginViaUi(page);
   await page.reload();
   await expect(page.getByTestId('user-display-name')).toHaveText(DEMO.displayName); // no login screen
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
+  await expect(page).toHaveURL(/:\/\/[^/]+\/$/);
 
   await page.waitForTimeout(6000); // e2e access-token TTL is 5 s: the token is now expired
   await page.getByTestId('user-menu').click();

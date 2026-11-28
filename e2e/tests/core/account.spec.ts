@@ -101,7 +101,7 @@ test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => 
   };
 
   await loginViaUi(page); // demo user: Asia/Ho_Chi_Minh
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   const before = await legendNow('Asia/Ho_Chi_Minh');
 
   await page.goto('/account');
@@ -110,7 +110,7 @@ test('AC-PROF-05 timezone setting changes displayed times', async ({ page }) => 
   await page.getByTestId('save-preferences').click();
   await expect(appToast(page)).toBeVisible();
 
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   const after = await legendNow('UTC');
   expect(after.openTime).toBe(before.openTime); // same candle
   expect(toMs(before.text) - toMs(after.text)).toBe(7 * 3_600_000); // UTC shows it 7 h earlier

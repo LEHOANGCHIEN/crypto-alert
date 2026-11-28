@@ -101,9 +101,9 @@ test('AC-COIN-01 coin header', async ({ page, request }) => {
   expect((await added).ok()).toBe(true);
   await expect(page.getByTestId('coin-star-BTCUSDT')).toHaveAttribute('aria-pressed', 'true');
 
-  // "Open full chart" → the trade page; the pair name in the trade chart header links back here.
+  // "Open full chart" → the chart page; the pair name in the chart header links back here.
   await page.getByTestId('coin-open-chart').click();
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
+  await expect(page).toHaveURL(/\/chart\/BTCUSDT$/);
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:1h');
   await page.getByTestId('chart-symbol-link').click();
   await expect(page).toHaveURL(/\/coin\/BTCUSDT$/);

@@ -34,7 +34,7 @@ export function PulseBar() {
         return (
           <Link
             key={info.symbol}
-            to={`/trade/${info.symbol}?tf=${tf}`}
+            to={`/chart/${info.symbol}?tf=${tf}`}
             data-testid={`pulse-item-${info.symbol}`}
             data-direction={dir}
             className="flex shrink-0 items-center gap-2 rounded-chip px-1 hover:bg-surface-3"

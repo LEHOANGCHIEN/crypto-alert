@@ -11,7 +11,7 @@ function useNavItems(): NavItem[] {
   const { pathname } = useLocation();
   const is = (prefix: string) => pathname === prefix || pathname.startsWith(`${prefix}/`);
   return [
-    { id: 'chart', to: `/trade/${symbol}`, active: is('/trade') },
+    { id: 'chart', to: `/chart/${symbol}`, active: is('/chart') },
     { id: 'overview', to: `/coin/${symbol}`, active: is('/coin') },
     { id: 'alerts', to: '/alerts', active: is('/alerts') },
     { id: 'notifications', to: '/notifications', active: is('/notifications') },

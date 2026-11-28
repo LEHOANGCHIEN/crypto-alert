@@ -253,7 +253,7 @@ Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` /
 - [x] Doc edits of reviews/phase-7a-foundation.decision.md §3 + `git mv` design files to `docs/design/v1/` + add `docs/design/v2/*.png` + this decision (one commit `docs: open tradingview-style restructure (phase 7a)`)
 - [x] Move e2e specs into area folders (`git mv`, no test content change) + TRACEABILITY paths (`refactor(e2e): group specs by area`)
 - [x] Black dark tokens + contrast test (AC-SITE-05)
-- [ ] Route restructure: chart shell at `/chart/:symbol`, `/trade` redirect, login/register default `/`, rename `/trade/`→`/chart/` in code and tests (same strictness) (AC-SITE-04, AC-AUTH-01/04, renamed ACs)
+- [x] Route restructure: chart shell at `/chart/:symbol`, `/trade` redirect, login/register default `/`, rename `/trade/`→`/chart/` in code and tests (same strictness) (AC-SITE-04, AC-AUTH-01/04, renamed ACs)
 - [ ] Site shell: header with mega-menus + drawer, full footer, pulse bar/status bar only in chart shell (AC-UI-01, AC-UI-03, AC-UI-09)
 - [ ] Search dialog Ctrl+K (AC-SITE-02)
 - [ ] Home v1 (AC-SITE-01)

@@ -8,7 +8,7 @@ const TICKER_STREAM = '!miniTicker@arr';
 
 test('AC-RT-01 open candle updates live', async ({ page, request }) => {
   await pinOpenCandle(request, 'BTCUSDT');
-  const candles = await openLiveChart(page, '/trade/BTCUSDT?tf=1m', 'BTCUSDT:1m');
+  const candles = await openLiveChart(page, '/chart/BTCUSDT?tf=1m', 'BTCUSDT:1m');
   const last = candles[candles.length - 1];
   expect(last.isClosed).toBe(false);
   const root = page.getByTestId('chart-root');
@@ -28,7 +28,7 @@ test('AC-RT-01 open candle updates live', async ({ page, request }) => {
 
 test('AC-RT-02 closed candle starts a new one', async ({ page, request }) => {
   await pinOpenCandle(request, 'BTCUSDT');
-  const candles = await openLiveChart(page, '/trade/BTCUSDT?tf=1m', 'BTCUSDT:1m');
+  const candles = await openLiveChart(page, '/chart/BTCUSDT?tf=1m', 'BTCUSDT:1m');
   const root = page.getByTestId('chart-root');
 
   const deadline = Date.now() + 2_000;
@@ -43,7 +43,7 @@ test('AC-RT-02 closed candle starts a new one', async ({ page, request }) => {
 });
 
 test('AC-RT-03 subscriptions follow the viewed chart', async ({ page, request }) => {
-  await openLiveChart(page, '/trade/BTCUSDT', 'BTCUSDT:1h');
+  await openLiveChart(page, '/chart/BTCUSDT', 'BTCUSDT:1h');
   await page.getByTestId('tf-15m').click();
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:15m');
   await page.getByTestId('market-row-ETHUSDT').click();
@@ -56,8 +56,8 @@ test('AC-RT-03 subscriptions follow the viewed chart', async ({ page, request })
 test('AC-RT-04 shared upstream subscription ref-count', async ({ context, request }) => {
   const tab1 = await context.newPage();
   const tab2 = await context.newPage();
-  await openLiveChart(tab1, '/trade/BTCUSDT', 'BTCUSDT:1h');
-  await openLiveChart(tab2, '/trade/BTCUSDT', 'BTCUSDT:1h');
+  await openLiveChart(tab1, '/chart/BTCUSDT', 'BTCUSDT:1h');
+  await openLiveChart(tab2, '/chart/BTCUSDT', 'BTCUSDT:1h');
   const one = [TICKER_STREAM, 'btcusdt@kline_1h'];
   expect(await upstreamStreams(request)).toEqual(one);
 
@@ -83,7 +83,7 @@ test('AC-RT-04 shared upstream subscription ref-count', async ({ context, reques
 });
 
 test('AC-RT-05 browser reconnect banner and resync', async ({ page, context, request }) => {
-  const candles = await openLiveChart(page, '/trade/BTCUSDT', 'BTCUSDT:1h');
+  const candles = await openLiveChart(page, '/chart/BTCUSDT', 'BTCUSDT:1h');
   const root = page.getByTestId('chart-root');
   const banner = page.getByTestId('conn-banner');
   await expect(banner).toBeHidden();
@@ -115,7 +115,7 @@ test('AC-RT-05 browser reconnect banner and resync', async ({ page, context, req
 
 test('AC-RT-06 upstream disconnect badge and recovery', async ({ page, request }) => {
   await pinOpenCandle(request, 'BTCUSDT');
-  await openLiveChart(page, '/trade/BTCUSDT?tf=1m', 'BTCUSDT:1m');
+  await openLiveChart(page, '/chart/BTCUSDT?tf=1m', 'BTCUSDT:1m');
   const badge = page.getByTestId('market-status-badge');
   await expect(badge).toBeHidden();
 

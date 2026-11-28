@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
-import { loginViaUi } from '../../helpers/auth';
+import { loginToChart } from '../../helpers/auth';
 
 const TITLE = 'Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá';
 
@@ -34,13 +34,13 @@ test('AC-UI-04 unknown route shows 404', async ({ page }) => {
   await expect(page.getByTestId('page-not-found')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy trang' })).toBeVisible();
   await page.getByRole('link', { name: 'Về trang chủ' }).click();
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
+  await expect(page).toHaveURL(/:\/\/[^/]+\/$/);
 });
 
 test.describe('dashboard layout', () => {
   test('AC-UI-01 desktop three-column layout', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('/trade/BTCUSDT');
+    await page.goto('/chart/BTCUSDT');
 
     const market = page.getByTestId('panel-market');
     const chart = page.getByTestId('panel-chart');
@@ -91,8 +91,8 @@ test.describe('dashboard layout', () => {
 
     // Logged in: the header also shows the notifications bell and the user menu (reviews/phase-2-ui-01-bell.decision.md).
     await expect(page.locator('header').getByTestId('bell')).toHaveCount(0);
-    await loginViaUi(page);
-    await expect(page).toHaveURL(/\/trade\/BTCUSDT/);
+    await loginToChart(page);
+    await expect(page).toHaveURL(/\/chart\/BTCUSDT/);
     await expect(page.locator('header').getByTestId('bell')).toBeVisible();
     await expect(page.locator('header').getByTestId('user-menu')).toBeVisible();
     await expect(page.getByTestId('panel-side')).toBeVisible();
@@ -100,7 +100,7 @@ test.describe('dashboard layout', () => {
 
   test('AC-UI-02 mobile bottom tabs', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/trade/BTCUSDT');
+    await page.goto('/chart/BTCUSDT');
 
     const tabs = page.getByTestId('mobile-tabs');
     await expect(tabs).toBeVisible();

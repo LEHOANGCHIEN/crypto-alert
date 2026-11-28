@@ -6,7 +6,7 @@ test.beforeEach(async ({ request }) => resetApp(request));
 
 test('AC-UI-09 header navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
 
   // Default last symbol = BTCUSDT; the link of the current page is highlighted.
@@ -15,7 +15,7 @@ test('AC-UI-09 header navigation', async ({ page }) => {
   await expect(nav.getByTestId('nav-overview')).toHaveText('Tổng quan');
   await expect(nav.getByTestId('nav-alerts')).toHaveText('Cảnh báo');
   await expect(nav.getByTestId('nav-notifications')).toHaveText('Thông báo');
-  await expect(page.getByTestId('nav-chart')).toHaveAttribute('href', '/trade/BTCUSDT');
+  await expect(page.getByTestId('nav-chart')).toHaveAttribute('href', '/chart/BTCUSDT');
   await expect(page.getByTestId('nav-overview')).toHaveAttribute('href', '/coin/BTCUSDT');
   await expect(page.getByTestId('nav-alerts')).toHaveAttribute('href', '/alerts');
   await expect(page.getByTestId('nav-notifications')).toHaveAttribute('href', '/notifications');
@@ -26,14 +26,14 @@ test('AC-UI-09 header navigation', async ({ page }) => {
 
   // Last opened symbol: Chart and Overview follow it.
   await page.getByTestId('market-row-ETHUSDT').click();
-  await expect(page).toHaveURL(/\/trade\/ETHUSDT/);
-  await expect(page.getByTestId('nav-chart')).toHaveAttribute('href', '/trade/ETHUSDT');
+  await expect(page).toHaveURL(/\/chart\/ETHUSDT/);
+  await expect(page.getByTestId('nav-chart')).toHaveAttribute('href', '/chart/ETHUSDT');
   await expect(page.getByTestId('nav-overview')).toHaveAttribute('href', '/coin/ETHUSDT');
 
   // An unknown pair is not remembered.
-  await page.goto('/trade/FAKEUSDT');
+  await page.goto('/chart/FAKEUSDT');
   await expect(page.getByTestId('chart-not-found')).toBeVisible();
-  await expect(page.getByTestId('nav-chart')).toHaveAttribute('href', '/trade/ETHUSDT');
+  await expect(page.getByTestId('nav-chart')).toHaveAttribute('href', '/chart/ETHUSDT');
 
   // The memory survives a reload (localStorage).
   await page.reload();
@@ -60,7 +60,7 @@ test('AC-UI-09 header navigation', async ({ page }) => {
   await expect(page.getByTestId('nav-alerts')).not.toHaveAttribute('aria-current', 'page');
 
   await page.getByTestId('nav-chart').click();
-  await expect(page).toHaveURL(/\/trade\/ETHUSDT$/);
+  await expect(page).toHaveURL(/\/chart\/ETHUSDT$/);
   await expect(page.getByTestId('nav-chart')).toHaveAttribute('aria-current', 'page');
 
   // Below 1024 px the links move into a menu button.

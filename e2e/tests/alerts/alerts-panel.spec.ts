@@ -1,6 +1,6 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
-import { loginViaUi } from '../../helpers/auth';
+import { loginToChart } from '../../helpers/auth';
 import { lastPrice, left, pushTick, viPrice } from '../../helpers/market';
 import { apiAlerts, apiNotifications, apiSession, createAlertViaUi, openAlertsTab, round, viDateTime, type Alert } from '../../helpers/alerts';
 
@@ -11,7 +11,7 @@ const saved = (page: Page) => page.evaluate((k) => JSON.parse(localStorage.getIt
 
 async function openTrade(page: Page, symbol = 'BTCUSDT') {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(`/trade/${symbol}`);
+  await page.goto(`/chart/${symbol}`);
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', `${symbol}:1h`);
 }
 
@@ -45,7 +45,7 @@ test('AC-ALERT-11 bottom panel', async ({ page, request }) => {
   await expect(page.getByTestId('bottom-login-link')).toHaveAttribute('href', '/login');
 
   // --- Logged in: Active alerts tab (seed: BTCUSDT above 1,000,000 and ETHUSDT below 100). ---
-  await loginViaUi(page);
+  await loginToChart(page);
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:1h');
   const session = apiSession(request);
   const alerts = await apiAlerts(request, await session());
@@ -89,7 +89,7 @@ test('AC-ALERT-11 bottom panel', async ({ page, request }) => {
 
   // The filter follows the opened pair: on SOLUSDT the triggered alert and its notification show, the active tab is empty.
   await page.getByTestId('market-row-SOLUSDT').click();
-  await expect(page).toHaveURL(/\/trade\/SOLUSDT/);
+  await expect(page).toHaveURL(/\/chart\/SOLUSDT/);
   await expect(page.getByTestId('bottom-active-empty')).toBeVisible();
   await expect(tab(page, 'active')).toHaveText('Cảnh báo đang chạy (0)');
   await tab(page, 'triggered').click();
@@ -119,7 +119,7 @@ test('AC-ALERT-11 bottom panel', async ({ page, request }) => {
   await expect(page.getByTestId('bell-badge')).toHaveCount(0);
 
   // --- Creating an alert in the right panel shows it in the bottom panel within 2 s; a mock trigger moves it to Triggered. ---
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:1h');
   await openAlertsTab(page);
   await tab(page, 'active').click();

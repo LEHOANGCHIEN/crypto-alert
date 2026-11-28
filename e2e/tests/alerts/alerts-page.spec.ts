@@ -101,7 +101,7 @@ test('AC-ALERT-12 alerts page', async ({ page, request }) => {
   const first = rows(page).first().getByTestId('alerts-row-symbol');
   const symbol = (await first.getAttribute('data-symbol')) as string;
   await first.click();
-  await expect(page).toHaveURL(new RegExp(`/trade/${symbol}`));
+  await expect(page).toHaveURL(new RegExp(`/chart/${symbol}`));
 
   // --- Empty state with a link to the chart (new user without alerts). ---
   await logoutViaUi(page);
@@ -110,5 +110,5 @@ test('AC-ALERT-12 alerts page', async ({ page, request }) => {
   await page.getByTestId('nav-alerts').click();
   await expect(page.getByTestId('alerts-page-empty')).toBeVisible();
   await page.getByTestId('alerts-empty-link').click();
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT/);
+  await expect(page).toHaveURL(/\/chart\/BTCUSDT/);
 });

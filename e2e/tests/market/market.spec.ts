@@ -12,7 +12,7 @@ const rowSymbols = (page: Page) =>
   page.locator('[data-testid^="market-row-"]').evaluateAll((els) => els.map((e) => e.getAttribute('data-testid')!.replace('market-row-', '')));
 
 test('AC-MKT-01 list shows only USDT pairs sorted by volume', async ({ page, request }) => {
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('market-row-BTCUSDT')).toBeVisible();
 
   // Column header names all four columns: Pair, 24h volume (left) and Last price, 24h change (right).
@@ -59,7 +59,7 @@ test('AC-MKT-01 list shows only USDT pairs sorted by volume', async ({ page, req
 test('AC-MKT-07 market list has All and Watchlist tabs', async ({ page, browser }) => {
   // Demo user watches BTCUSDT, ETHUSDT, SOLUSDT; remove SOLUSDT so exactly BTCUSDT and ETHUSDT remain.
   await loginViaUi(page);
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('market-row-SOLUSDT')).toBeVisible();
   await expect(page.getByTestId('market-tab-all')).toHaveAttribute('aria-selected', 'true');
   const removed = page.waitForResponse((r) => r.request().method() === 'DELETE' && r.url().includes('/watchlist/SOLUSDT') && r.status() !== 401);
@@ -82,8 +82,8 @@ test('AC-MKT-07 market list has All and Watchlist tabs', async ({ page, browser 
   await expect.poll(async () => (await rowSymbols(page)).length).toBe(USDT.length);
 
   // Guest: Watchlist tab shows a translated login prompt with a link to /login.
-  const guest = await (await browser.newContext({ baseURL: page.url().split('/trade')[0] })).newPage();
-  await guest.goto('/trade/BTCUSDT');
+  const guest = await (await browser.newContext({ baseURL: page.url().split('/chart')[0] })).newPage();
+  await guest.goto('/chart/BTCUSDT');
   await expect(guest.getByTestId('market-row-BTCUSDT')).toBeVisible();
   await guest.getByTestId('market-tab-watchlist').click();
   const prompt = guest.getByTestId('market-tab-login-prompt');
@@ -95,7 +95,7 @@ test('AC-MKT-07 market list has All and Watchlist tabs', async ({ page, browser 
 });
 
 test('AC-MKT-02 search filters pairs', async ({ page }) => {
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('market-row-BTCUSDT')).toBeVisible();
 
   await page.getByTestId('market-search').fill('eth');
@@ -112,7 +112,7 @@ test('AC-MKT-02 search filters pairs', async ({ page }) => {
 });
 
 test('AC-MKT-04 change colors and signs', async ({ page }) => {
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   // Mock data: ETH up (+3.24 %), SOL down (−5.10 %), XRP unchanged (0.00 %).
   const up = page.getByTestId('market-change-ETHUSDT');
   const down = page.getByTestId('market-change-SOLUSDT');
@@ -128,16 +128,16 @@ test('AC-MKT-04 change colors and signs', async ({ page }) => {
 
 test('AC-MKT-05 row click opens chart', async ({ page }) => {
   // Without ?tf= the current timeframe (default 1h) is written into the URL.
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('market-row-BTCUSDT')).toHaveAttribute('aria-selected', 'true');
   await page.getByTestId('market-row-ETHUSDT').click();
-  await expect(page).toHaveURL(/\/trade\/ETHUSDT\?tf=1h$/);
+  await expect(page).toHaveURL(/\/chart\/ETHUSDT\?tf=1h$/);
 
-  await page.goto('/trade/BTCUSDT?tf=15m');
+  await page.goto('/chart/BTCUSDT?tf=15m');
   await expect(page.getByTestId('market-row-BTCUSDT')).toHaveAttribute('aria-selected', 'true');
 
   await page.getByTestId('market-row-ETHUSDT').click();
-  await expect(page).toHaveURL(/\/trade\/ETHUSDT\?tf=15m$/);
+  await expect(page).toHaveURL(/\/chart\/ETHUSDT\?tf=15m$/);
   await expect(page.getByTestId('market-row-ETHUSDT')).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByTestId('market-row-BTCUSDT')).toHaveAttribute('aria-selected', 'false');
 
@@ -151,7 +151,7 @@ test('AC-MKT-05 row click opens chart', async ({ page }) => {
 test('AC-MKT-06 unknown pair shows not found', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/trade/FAKEUSDT');
+  await page.goto('/chart/FAKEUSDT');
 
   await expect(page.getByTestId('chart-not-found')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Không tìm thấy cặp giao dịch' })).toBeVisible();
@@ -159,13 +159,13 @@ test('AC-MKT-06 unknown pair shows not found', async ({ page }) => {
   // The app keeps working: the market list is still there and the link goes to BTCUSDT.
   await expect(page.getByTestId('market-row-BTCUSDT')).toBeVisible();
   await page.getByTestId('chart-not-found-link').click();
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT$/);
+  await expect(page).toHaveURL(/\/chart\/BTCUSDT$/);
   await expect(page.getByTestId('chart-root')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
 test('AC-MKT-03 live ticker updates row', async ({ page, request }) => {
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   const price = page.getByTestId('market-price-ETHUSDT');
   await expect(price).toHaveText('3.510,25');
   // Wait until the page is subscribed to live tickers, so the push below cannot be missed.

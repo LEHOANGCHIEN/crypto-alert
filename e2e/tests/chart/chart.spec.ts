@@ -11,7 +11,7 @@ type Candle = { openTime: number; closeTime: number; open: number; high: number;
 const KLINES = /\/api\/v1\/market\/klines\?/;
 
 /** Opens the chart and returns the klines the page itself received. */
-async function openChart(page: Page, url = '/trade/BTCUSDT'): Promise<Candle[]> {
+async function openChart(page: Page, url = '/chart/BTCUSDT'): Promise<Candle[]> {
   const responsePromise = page.waitForResponse((r) => KLINES.test(r.url()));
   await page.goto(url);
   const candles = ((await (await responsePromise).json()) as { data: Candle[] }).data;
@@ -48,7 +48,7 @@ test('AC-CHART-02 timeframe switch and URL sync', async ({ page }) => {
   const req = page.waitForRequest((r) => KLINES.test(r.url()) && r.url().includes('interval=15m'));
   await page.getByTestId('tf-15m').click();
   await req;
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT\?tf=15m$/);
+  await expect(page).toHaveURL(/\/chart\/BTCUSDT\?tf=15m$/);
   await expect(page.getByTestId('tf-15m')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByTestId('tf-1h')).toHaveAttribute('aria-pressed', 'false');
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-candle-count', '1000');
@@ -167,12 +167,12 @@ test('AC-CHART-09 chart header shows coin name and 24h stats', async ({ page, re
 
   // A pair outside the static name map shows no name (the mock has no such USDT pair, so check the map's other side:
   // a mapped pair shows its name).
-  await page.goto('/trade/ADAUSDT');
+  await page.goto('/chart/ADAUSDT');
   await expect(page.getByTestId('chart-name')).toHaveText('Cardano');
   await expect(page.getByTestId('chart-avatar')).toHaveText('A');
 
   // A tick above the 24h high updates High (and the last price) within 2 s.
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   await expect(page.getByTestId('chart-high')).toHaveText(viPrice(tk.highPrice));
   await expect(page.getByTestId('market-list')).toHaveAttribute('data-live', 'true'); // tickers subscription acknowledged
   const price = Math.round((tk.highPrice + 500) * 100) / 100;
@@ -250,7 +250,7 @@ test('AC-CHART-07 chart type menu switches the price series', async ({ page, req
 
 test('AC-CHART-08 volume bars overlay on the price pane', async ({ page, request }) => {
   await pinOpenCandle(request, 'BTCUSDT');
-  const candles = await openLiveChart(page, '/trade/BTCUSDT', 'BTCUSDT:1h');
+  const candles = await openLiveChart(page, '/chart/BTCUSDT', 'BTCUSDT:1h');
   const root = page.getByTestId('chart-root');
   const upVol = await cssVar(page, '--color-up-volume');
   const downVol = await cssVar(page, '--color-down-volume');
@@ -316,7 +316,7 @@ const stamp = (epoch: number, timeZone: string) => {
 
 test('AC-CHART-10 screenshot download and maximize', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await openChart(page, '/trade/BTCUSDT?tf=15m');
+  await openChart(page, '/chart/BTCUSDT?tf=15m');
   const root = page.getByTestId('chart-root');
 
   // Camera → the browser downloads <SYMBOL>-<tf>-<yyyyMMdd-HHmm>.png (a real PNG).

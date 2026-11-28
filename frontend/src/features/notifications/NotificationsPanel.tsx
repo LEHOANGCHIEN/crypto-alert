@@ -19,7 +19,7 @@ export function NotificationsPanel({ onClose }: { onClose: () => void }) {
 
   const open = (n: Notification) => {
     if (n.readAt === null) markRead.mutate(n.id);
-    navigate(`/trade/${n.payload.symbol}?tf=${tf}`);
+    navigate(`/chart/${n.payload.symbol}?tf=${tf}`);
     onClose();
   };
 

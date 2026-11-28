@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
-import { NEW_USER, loginViaUi, registerViaUi } from '../../helpers/auth';
+import { NEW_USER, loginToChart, registerToChart } from '../../helpers/auth';
 import { lastPrice, left, pushTick, upstreamStreams, viPrice } from '../../helpers/market';
 import { notificationToast } from '../../helpers/toast';
 import {
@@ -38,7 +38,7 @@ const activeRow = (page: Page, id: number) => page.getByTestId('alerts-active').
 const triggeredRow = (page: Page, id: number) => page.getByTestId('alerts-triggered').getByTestId(`alert-row-${id}`);
 
 test('AC-ALERT-01 create alert', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   await openAlertsTab(page);
 
@@ -63,7 +63,7 @@ test('AC-ALERT-01 create alert', async ({ page, request }) => {
 });
 
 test('AC-ALERT-02 alert validation and already-met', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   await openAlertsTab(page);
   let posts = 0;
@@ -105,7 +105,7 @@ test('AC-ALERT-02 alert validation and already-met', async ({ page, request }) =
 });
 
 test('AC-ALERT-03 above alert triggers toast within 5s', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   await page.getByTestId('lang-en').click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const price = await lastPrice(request, 'BTCUSDT');
@@ -134,7 +134,7 @@ test('AC-ALERT-03 above alert triggers toast within 5s', async ({ page, request 
 });
 
 test('AC-ALERT-04 below alert triggers toast within 5s', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   await openAlertsTab(page);
   await expect(page.getByTestId('bell-badge')).toHaveText('1');
@@ -154,7 +154,7 @@ test('AC-ALERT-04 below alert triggers toast within 5s', async ({ page, request 
 
 test('AC-ALERT-05 alert is one-shot', async ({ page, request }) => {
   await recordToasts(page);
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   const eth = await lastPrice(request, 'ETHUSDT');
   await openAlertsTab(page);
@@ -184,7 +184,7 @@ test('AC-ALERT-05 alert is one-shot', async ({ page, request }) => {
 
 test('AC-ALERT-06 deleted alert never triggers', async ({ page, request }) => {
   await recordToasts(page);
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   const eth = await lastPrice(request, 'ETHUSDT');
   await openAlertsTab(page);
@@ -214,7 +214,7 @@ test('AC-ALERT-06 deleted alert never triggers', async ({ page, request }) => {
 });
 
 test('AC-ALERT-07 active alert limit 20', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   const token = apiSession(request);
   // 2 seeded ACTIVE alerts + 18 = 20.
@@ -233,11 +233,11 @@ test('AC-ALERT-07 active alert limit 20', async ({ page, request }) => {
 
 test('AC-ALERT-08 alerts isolated between users', async ({ page, browser, request }) => {
   // A = demo user, B = a new user in another browser context.
-  await loginViaUi(page);
+  await loginToChart(page);
   const contextB = await browser.newContext();
   const pageB = await contextB.newPage();
   await recordToasts(pageB);
-  await registerViaUi(pageB);
+  await registerToChart(pageB);
   await expect(pageB.getByTestId('user-menu')).toBeVisible();
 
   const price = await lastPrice(request, 'BTCUSDT');
@@ -271,7 +271,7 @@ test('AC-ALERT-08 alerts isolated between users', async ({ page, browser, reques
 });
 
 test('AC-ALERT-09 alerts survive worker reload', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   await openAlertsTab(page);
   const target = round(price + 100);
@@ -287,8 +287,8 @@ test('AC-ALERT-09 alerts survive worker reload', async ({ page, request }) => {
 });
 
 test('AC-ALERT-10 alert on a symbol not being viewed', async ({ page, request }) => {
-  await loginViaUi(page); // lands on the BTCUSDT chart
-  await expect(page).toHaveURL(/\/trade\/BTCUSDT/);
+  await loginToChart(page); // lands on the BTCUSDT chart
+  await expect(page).toHaveURL(/\/chart\/BTCUSDT/);
   const doge = await lastPrice(request, 'DOGEUSDT');
   const d = await pricePrecision(request, 'DOGEUSDT');
   await openAlertsTab(page);

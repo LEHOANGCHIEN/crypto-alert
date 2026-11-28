@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../shared/auth/auth.store';
 
-export const DEFAULT_AFTER_LOGIN = '/trade/BTCUSDT';
+export const DEFAULT_AFTER_LOGIN = '/';
 
 /** Protected routes: guests go to /login and come back afterwards (return-to). */
 export function RequireAuth() {
@@ -14,7 +14,7 @@ export function RequireAuth() {
   return <Outlet />;
 }
 
-/** /login and /register: logged-in users are redirected to the return-to page (default /trade/BTCUSDT). */
+/** /login and /register: logged-in users are redirected to the return-to page (default /). */
 export function GuestOnly() {
   const status = useAuth((s) => s.status);
   const location = useLocation();

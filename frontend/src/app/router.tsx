@@ -5,16 +5,23 @@ import { AccountPage } from '../features/account/AccountPage';
 import { LoginPage } from '../features/auth/LoginPage';
 import { RegisterPage } from '../features/auth/RegisterPage';
 import { GuestOnly, RequireAuth } from '../features/auth/RequireAuth';
-import { TradePage } from './pages/TradePage';
+import { ChartPage } from './pages/ChartPage';
+import { HomePage } from './pages/HomePage';
 import { AlertsPage } from './pages/AlertsPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { CoinPage } from '../features/coin';
 
-/** `/trade/btcusdt` → `/trade/BTCUSDT` (SPEC §4) */
-function TradeRoute() {
+/** `/chart/btcusdt` → `/chart/BTCUSDT` (SPEC §4) */
+function ChartRoute() {
   const { symbol = '' } = useParams();
-  if (symbol !== symbol.toUpperCase()) return <Navigate to={`/trade/${symbol.toUpperCase()}${location.search}`} replace />;
-  return <TradePage />;
+  if (symbol !== symbol.toUpperCase()) return <Navigate to={`/chart/${symbol.toUpperCase()}${location.search}`} replace />;
+  return <ChartPage />;
+}
+
+/** `/trade/:symbol?tf=4h` → `/chart/:symbol?tf=4h` (SPEC §3, kept for old links) */
+function TradeRedirect() {
+  const { symbol = '' } = useParams();
+  return <Navigate to={`/chart/${symbol.toUpperCase()}${location.search}`} replace />;
 }
 
 /** `/coin/btcusdt` → `/coin/BTCUSDT` */
@@ -28,8 +35,9 @@ export const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { path: '/', element: <Navigate to="/trade/BTCUSDT" replace /> },
-      { path: '/trade/:symbol', element: <TradeRoute /> },
+      { path: '/', element: <HomePage /> },
+      { path: '/chart/:symbol', element: <ChartRoute /> },
+      { path: '/trade/:symbol', element: <TradeRedirect /> },
       { path: '/coin/:symbol', element: <CoinRoute /> },
       { element: <GuestOnly />, children: [{ path: '/login', element: <LoginPage /> }, { path: '/register', element: <RegisterPage /> }] },
       {

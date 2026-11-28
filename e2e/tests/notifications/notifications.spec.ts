@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
-import { loginViaUi, logoutViaUi } from '../../helpers/auth';
+import { loginToChart, logoutViaUi } from '../../helpers/auth';
 import { lastPrice, left, pushTick, viPrice } from '../../helpers/market';
 import { notificationToast } from '../../helpers/toast';
 import { apiCreateAlert, apiMarkRead, apiSession, apiNotifications, createAlertViaUi, openAlertsTab, round, viDateTime } from '../../helpers/alerts';
@@ -13,7 +13,7 @@ const badge = (page: Page) => page.getByTestId('bell-badge');
 const item = (page: Page, id: number) => page.getByTestId(`notification-item-${id}`);
 
 test('AC-NOTIF-01 bell unread badge', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   await expect(page.locator('header').getByTestId('bell')).toBeVisible();
   await expect(badge(page)).toHaveText('1'); // seeded unread notification
 
@@ -33,7 +33,7 @@ test('AC-NOTIF-01 bell unread badge', async ({ page, request }) => {
 });
 
 test('AC-NOTIF-02 notification list content and order', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   // The socket is recreated with the new token after login: push ticks only once the chart's subscription is live again.
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:1h');
   const token = apiSession(request);
@@ -81,7 +81,7 @@ test('AC-NOTIF-02 notification list content and order', async ({ page, request }
 });
 
 test('AC-NOTIF-03 mark read and mark all read', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   // The socket is recreated with the new token after login: push the tick only once the chart's subscription is live again.
   await expect(page.getByTestId('chart-root')).toHaveAttribute('data-live', 'BTCUSDT:1h');
   const token = apiSession(request);
@@ -94,7 +94,7 @@ test('AC-NOTIF-03 mark read and mark all read', async ({ page, request }) => {
   // Click one → read, badge −1, chart opens that symbol.
   await page.getByTestId('bell').click();
   await item(page, seeded.id).click();
-  await expect(page).toHaveURL(/\/trade\/SOLUSDT\?tf=1h$/);
+  await expect(page).toHaveURL(/\/chart\/SOLUSDT\?tf=1h$/);
   await expect(page.getByTestId('chart-symbol')).toHaveText('SOL/USDT');
   await expect(badge(page)).toHaveText('1');
   await page.getByTestId('bell').click();
@@ -120,7 +120,7 @@ test('AC-NOTIF-03 mark read and mark all read', async ({ page, request }) => {
 });
 
 test('AC-NOTIF-04 offline trigger shown on next login', async ({ page, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const price = await lastPrice(request, 'BTCUSDT');
   await openAlertsTab(page);
   const target = round(price + 100);
@@ -131,7 +131,7 @@ test('AC-NOTIF-04 offline trigger shown on next login', async ({ page, request }
   const token = apiSession(request);
   await expect.poll(async () => (await apiNotifications(request, await token())).unreadCount).toBe(2); // seeded + new, stored while offline
 
-  await loginViaUi(page);
+  await loginToChart(page);
   await expect(notificationToast(page)).toHaveText('Bạn có 2 thông báo chưa đọc');
   await expect(badge(page)).toHaveText('2');
   await page.getByTestId('bell').click();
@@ -139,9 +139,9 @@ test('AC-NOTIF-04 offline trigger shown on next login', async ({ page, request }
 });
 
 test('AC-NOTIF-05 multi-tab delivery and read sync', async ({ page, context, request }) => {
-  await loginViaUi(page);
+  await loginToChart(page);
   const tab2 = await context.newPage();
-  await tab2.goto('/trade/BTCUSDT');
+  await tab2.goto('/chart/BTCUSDT');
   await expect(tab2.getByTestId('user-menu')).toBeVisible(); // same session
   await expect(badge(page)).toHaveText('1');
   await expect(badge(tab2)).toHaveText('1');

@@ -3,8 +3,8 @@ import { MarketList } from '../../features/market/MarketList';
 import { DashboardLayout } from '../dashboard/DashboardLayout';
 import { useLiveTickers } from '../../shared/market/useLiveMarket';
 
-/** `/trade/:symbol` — market list (left), chart (center), watchlist/alerts (right). */
-export function TradePage() {
+/** `/chart/:symbol` — market list (left), chart (center), watchlist/alerts (right). */
+export function ChartPage() {
   useLiveTickers();
   return (
     <DashboardLayout

@@ -59,7 +59,7 @@ const hexToRgb = (hex: string) => {
 };
 
 test('AC-THEME-02 toggle applies to page and chart', async ({ page }) => {
-  await page.goto('/trade/BTCUSDT');
+  await page.goto('/chart/BTCUSDT');
   const root = page.getByTestId('chart-root');
   await expect(root).toHaveAttribute('data-candle-count', '1000');
   const token = (name: string) => page.evaluate((n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim(), name);

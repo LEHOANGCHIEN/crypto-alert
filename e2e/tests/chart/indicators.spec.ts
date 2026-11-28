@@ -185,7 +185,7 @@ test('AC-IND-06 values match golden file', async ({ page }) => {
 
 test('AC-IND-07 indicators update live', async ({ page, request }) => {
   await pinOpenCandle(request, 'BTCUSDT');
-  const candles = await openLiveChart(page, '/trade/BTCUSDT', 'BTCUSDT:1h');
+  const candles = await openLiveChart(page, '/chart/BTCUSDT', 'BTCUSDT:1h');
   await enableOscillators(page);
   await page.mouse.move(2, 2);
   const legend = page.getByTestId('chart-legend');
