@@ -1,5 +1,6 @@
 import { test, expect, type APIRequestContext } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
+import { expectNoSiteOverflow } from '../../helpers/overflow';
 import { loginViaUi } from '../../helpers/auth';
 import { left, pushTick, viPrice, type Candle, type Ticker } from '../../helpers/market';
 
@@ -116,5 +117,5 @@ test('AC-SITE-01 home shows hero, market summary and movers', async ({ page, req
   await expect(rows).toHaveCount(6);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.getByTestId('summary-card-SOLUSDT')).toBeVisible();
-  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  await expectNoSiteOverflow(page, '/');
 });

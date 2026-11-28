@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
 import { DEMO } from '../../helpers/auth';
+import { expectNoSiteOverflow } from '../../helpers/overflow';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
@@ -25,6 +26,15 @@ test('AC-UI-09 site header and mega-menu', async ({ page }) => {
   await expect(page.getByTestId('lang-switcher')).toBeVisible();
   await expect(page.getByTestId('theme-toggle')).toBeVisible();
   await expect(header.getByRole('link', { name: 'Đăng nhập' })).toBeVisible();
+
+  // Guest header on a phone (390×844): Login and Register stay visible and nothing overflows (site-shell included).
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await expect(header.getByRole('link', { name: 'Đăng nhập' })).toBeVisible();
+  await expect(header.getByRole('link', { name: 'Đăng ký' })).toBeVisible();
+  await expectNoSiteOverflow(page, 'guest header at 390');
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
 
   // Mega-menu: only pages that exist; each item with icon + label + one-line description; Esc closes.
   const products = page.getByTestId('nav-products');
@@ -120,5 +130,5 @@ test('AC-UI-09 site header and mega-menu', async ({ page }) => {
   await page.getByTestId('nav-alerts').click();
   await expect(page).toHaveURL(/\/alerts$/);
   await expect(page.getByTestId('nav-main')).toHaveCount(0);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await expectNoSiteOverflow(page, '/alerts at 390');
 });

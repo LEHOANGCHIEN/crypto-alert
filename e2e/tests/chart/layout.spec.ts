@@ -52,6 +52,13 @@ test('AC-UI-03 site footer shows texts and every link opens an existing page', a
   await expect(page.getByTestId('status-bar')).toBeVisible();
   await expect(page.getByTestId('site-footer')).toHaveCount(0);
   await expect(page.getByTestId('statusbar-disclaimer')).toHaveText('Information is for reference only and is not investment advice.');
+  // Phone (390×844): the status bar is hidden, so a compact disclaimer line sits above the tab bar; no horizontal scroll.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/chart/BTCUSDT');
+  await expect(page.getByTestId('chart-disclaimer-mobile')).toBeVisible();
+  await expect(page.getByTestId('chart-disclaimer-mobile')).toHaveText('Information is for reference only and is not investment advice.');
+  await expect(page.getByTestId('status-bar')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
 });
 
 test('AC-UI-04 unknown route shows 404', async ({ page }) => {

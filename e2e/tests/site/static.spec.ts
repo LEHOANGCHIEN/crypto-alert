@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
+import { expectNoSiteOverflow } from '../../helpers/overflow';
 import { viDateTime } from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
@@ -68,7 +69,7 @@ test('AC-SITE-03 static pages and live status', async ({ page }) => {
   for (const p of PAGES) {
     await page.goto(p.path);
     await expect(page.getByTestId(`static-${p.id}`), p.path).toBeVisible();
-    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), p.path).toBeLessThanOrEqual(0);
+    await expectNoSiteOverflow(page, p.path);
   }
   await page.setViewportSize({ width: 1440, height: 900 });
 

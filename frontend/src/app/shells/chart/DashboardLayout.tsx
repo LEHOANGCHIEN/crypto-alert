@@ -67,6 +67,12 @@ export function DashboardLayout({ market, chart }: Props) {
         <SidePanel active={active === 'alerts' ? 'alerts' : 'watchlist'} onChange={setActive} onSelect={() => setActive('chart')} />
       </section>
       {right.collapsed && <Rail side="right" />}
+      <p
+        data-testid="chart-disclaimer-mobile"
+        className="shrink-0 truncate border-t border-border bg-surface px-3 py-1 text-center text-meta text-text-faint lg:hidden"
+      >
+        {t('statusBar.disclaimer')}
+      </p>
       <MobileTabBar active={active} onChange={setActive} />
     </div>
   );
