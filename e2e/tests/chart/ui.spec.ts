@@ -1,8 +1,8 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { loginViaUi } from '../helpers/auth';
-import { cssVar } from '../helpers/chart';
-import { left, lastPrice, pushTick, upstreamDisconnect, viPrice } from '../helpers/market';
+import { resetApp } from '../../helpers/reset';
+import { loginViaUi } from '../../helpers/auth';
+import { cssVar } from '../../helpers/chart';
+import { left, lastPrice, pushTick, upstreamDisconnect, viPrice } from '../../helpers/market';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

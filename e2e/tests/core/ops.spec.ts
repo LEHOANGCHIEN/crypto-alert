@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
+import { resetApp } from '../../helpers/reset';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

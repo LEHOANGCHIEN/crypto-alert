@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { lastPrice, left, pushTick } from '../helpers/market';
-import { apiCreateAlert, apiNotifications, apiSession, round } from '../helpers/alerts';
+import { resetApp } from '../../helpers/reset';
+import { lastPrice, left, pushTick } from '../../helpers/market';
+import { apiCreateAlert, apiNotifications, apiSession, round } from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

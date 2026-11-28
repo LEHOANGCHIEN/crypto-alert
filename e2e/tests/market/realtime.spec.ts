@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { closeCandle, left, openLiveChart, pinOpenCandle, pushTick, upstreamDisconnect, upstreamStreams, viPrice } from '../helpers/market';
+import { resetApp } from '../../helpers/reset';
+import { closeCandle, left, openLiveChart, pinOpenCandle, pushTick, upstreamDisconnect, upstreamStreams, viPrice } from '../../helpers/market';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

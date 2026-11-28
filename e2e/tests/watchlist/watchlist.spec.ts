@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { DEMO, loginViaUi, registerViaUi } from '../helpers/auth';
-import { left, pushTick, viPrice } from '../helpers/market';
-import { resetApp } from '../helpers/reset';
-import { appToast } from '../helpers/toast';
-import { clickStar, fillWatchlist, panelSymbols } from '../helpers/watchlist';
+import { DEMO, loginViaUi, registerViaUi } from '../../helpers/auth';
+import { left, pushTick, viPrice } from '../../helpers/market';
+import { resetApp } from '../../helpers/reset';
+import { appToast } from '../../helpers/toast';
+import { clickStar, fillWatchlist, panelSymbols } from '../../helpers/watchlist';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

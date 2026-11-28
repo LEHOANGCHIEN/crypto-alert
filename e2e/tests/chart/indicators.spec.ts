@@ -1,12 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { cssVar, hoverCandle, meanClose, openChart } from '../helpers/chart';
-import { left, openLiveChart, pinOpenCandle, pushTick, viPrice } from '../helpers/market';
+import { resetApp } from '../../helpers/reset';
+import { cssVar, hoverCandle, meanClose, openChart } from '../../helpers/chart';
+import { left, openLiveChart, pinOpenCandle, pushTick, viPrice } from '../../helpers/market';
 
 type Golden = { index: number; close: number; ma7: number; ma25: number; ma99: number; rsi14: number; macd: number; signal: number; hist: number };
-const golden = JSON.parse(readFileSync(join(__dirname, '..', 'fixtures', 'indicators.golden.json'), 'utf8')) as Golden;
+const golden = JSON.parse(readFileSync(join(__dirname, '..', '..', 'fixtures', 'indicators.golden.json'), 'utf8')) as Golden;
 
 /** Turns RSI and MACD on through the Indicators menu, then closes the menu. */
 async function enableOscillators(page: Page): Promise<void> {

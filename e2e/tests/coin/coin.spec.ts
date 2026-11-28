@@ -1,8 +1,8 @@
 import { test, expect, type APIRequestContext, type Page, type Request } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { loginViaUi } from '../helpers/auth';
-import { pinOpenCandle, pushTick, lastPrice, left, viPrice, type Candle, type Ticker } from '../helpers/market';
-import { pricePrecision, round, viDateTime } from '../helpers/alerts';
+import { resetApp } from '../../helpers/reset';
+import { loginViaUi } from '../../helpers/auth';
+import { pinOpenCandle, pushTick, lastPrice, left, viPrice, type Candle, type Ticker } from '../../helpers/market';
+import { pricePrecision, round, viDateTime } from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

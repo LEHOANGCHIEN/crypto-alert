@@ -1,9 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { loginViaUi, logoutViaUi } from '../helpers/auth';
-import { lastPrice, left, pushTick, viPrice } from '../helpers/market';
-import { notificationToast } from '../helpers/toast';
-import { apiCreateAlert, apiMarkRead, apiSession, apiNotifications, createAlertViaUi, openAlertsTab, round, viDateTime } from '../helpers/alerts';
+import { resetApp } from '../../helpers/reset';
+import { loginViaUi, logoutViaUi } from '../../helpers/auth';
+import { lastPrice, left, pushTick, viPrice } from '../../helpers/market';
+import { notificationToast } from '../../helpers/toast';
+import { apiCreateAlert, apiMarkRead, apiSession, apiNotifications, createAlertViaUi, openAlertsTab, round, viDateTime } from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

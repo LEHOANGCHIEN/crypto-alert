@@ -1,8 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { NEW_USER, loginViaUi, registerViaUi } from '../helpers/auth';
-import { lastPrice, left, pushTick, upstreamStreams, viPrice } from '../helpers/market';
-import { notificationToast } from '../helpers/toast';
+import { resetApp } from '../../helpers/reset';
+import { NEW_USER, loginViaUi, registerViaUi } from '../../helpers/auth';
+import { lastPrice, left, pushTick, upstreamStreams, viPrice } from '../../helpers/market';
+import { notificationToast } from '../../helpers/toast';
 import {
   apiAlerts,
   apiCreateAlert,
@@ -18,7 +18,7 @@ import {
   shownToasts,
   viDateTime,
   workerReload,
-} from '../helpers/alerts';
+} from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

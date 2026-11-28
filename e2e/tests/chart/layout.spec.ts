@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { loginViaUi } from '../helpers/auth';
+import { resetApp } from '../../helpers/reset';
+import { loginViaUi } from '../../helpers/auth';
 
 const TITLE = 'Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá';
 

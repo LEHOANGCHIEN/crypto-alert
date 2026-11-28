@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { appToast } from '../helpers/toast';
-import { DEMO, NEW_USER, VI, loginViaUi, logoutViaUi, registerViaUi } from '../helpers/auth';
+import { resetApp } from '../../helpers/reset';
+import { appToast } from '../../helpers/toast';
+import { DEMO, NEW_USER, VI, loginViaUi, logoutViaUi, registerViaUi } from '../../helpers/auth';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 

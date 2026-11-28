@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { closeCandle, left, pinOpenCandle, openLiveChart, pushTick } from '../helpers/market';
-import { cssVar, hoverCandle } from '../helpers/chart';
+import { resetApp } from '../../helpers/reset';
+import { closeCandle, left, pinOpenCandle, openLiveChart, pushTick } from '../../helpers/market';
+import { cssVar, hoverCandle } from '../../helpers/chart';
 import { readFileSync } from 'node:fs';
 
 test.beforeEach(async ({ request }) => resetApp(request));

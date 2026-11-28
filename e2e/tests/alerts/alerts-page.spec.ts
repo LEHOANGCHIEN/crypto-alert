@@ -1,8 +1,8 @@
 import { test, expect, type Page } from '@playwright/test';
-import { resetApp } from '../helpers/reset';
-import { logoutViaUi, registerViaUi } from '../helpers/auth';
-import { lastPrice } from '../helpers/market';
-import { apiAlerts, apiSession, round, type Alert } from '../helpers/alerts';
+import { resetApp } from '../../helpers/reset';
+import { logoutViaUi, registerViaUi } from '../../helpers/auth';
+import { lastPrice } from '../../helpers/market';
+import { apiAlerts, apiSession, round, type Alert } from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
