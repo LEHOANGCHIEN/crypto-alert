@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 99 ACs · passing 98 · failing 0 · pending 1 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
+**Summary:** 99 ACs · passing 97 · failing 0 · pending 2 · last CI run: see PROGRESS log (phase-7a-foundation)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|

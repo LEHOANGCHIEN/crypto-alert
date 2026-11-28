@@ -17,7 +17,7 @@
 | 6 | Alerts + notifications | `phase-6-alerts` | Opus 5.5 + High | Dec 4–5 | done |
 | 6a | UI redesign | `phase-6a-ui-redesign` | Sonnet 5.5 + Medium | Dec 6 | done |
 | 6b | Pages (nav, bottom panel, /alerts, /notifications, /coin) | `phase-6b-pages` | Sonnet 5.5 + Medium | Dec 7 | done |
-| 7a | Foundation (site shell, home, `/chart`, static pages, black tokens) | `phase-7a-foundation` | Sonnet 5.5 + Medium | — | in progress |
+| 7a | Foundation (site shell, home, `/chart`, static pages, black tokens) | `phase-7a-foundation` | Sonnet 5.5 + Medium | — | built, awaiting review |
 | 7b | Market data (catalog, derivatives, sentiment, jobs; home v2, markets, screener, heatmap) | `phase-7b-market-data` | Sonnet 5.5 + Medium | — | not started |
 | 7c | Symbol page | `phase-7c-symbol` | Sonnet 5.5 + Medium | — | not started |
 | 7d | News + AI base | `phase-7d-news-ai` | Opus 5.5 + High | — | not started |
@@ -258,10 +258,11 @@ Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` /
 - [x] Search dialog Ctrl+K (AC-SITE-02)
 - [x] Home v1 (AC-SITE-01)
 - [x] Static pages incl. live `/status` (AC-SITE-03)
-- [ ] Railway GitHub autodeploy: owner connects the service (Railway UI) — builder only documents it (ARCHITECTURE §10, PROMPTS e) and verifies after merge; no code
-- [ ] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
+- [x] Railway GitHub autodeploy: owner connects the service (Railway UI) — builder only documents it (ARCHITECTURE §10, PROMPTS e) and verifies after merge; no code
+- [x] Playwright for this phase's ACs, full regression, TRACEABILITY, CONTEXT testids, log line
 
 **Log:**
+- 2026-11-28 · Sonnet 5.5 + Medium · Phase 7a built: decision §3 doc edits (SPEC, CLAUDE, ARCHITECTURE §1/§7/§10/§11/§12, PROGRESS, TRACEABILITY, PROMPTS) + design files moved to docs/design/v1 + docs/design/v2 added; e2e specs grouped into core/market/chart/alerts/notifications/watchlist/coin/site; black dark tokens + contrast test (AC-SITE-05); `/chart/:symbol` chart shell, `/trade` redirect, login/register land on `/` (AC-SITE-04, AC-AUTH-01/04); site shell (64 px header, Products mega-menu + drawer, full footer) and chart shell (compact header with pair selector, pulse bar, status bar with disclaimer) (AC-UI-01/03/09); Ctrl+K search dialog with recent pairs (AC-SITE-02); home v1 with hero, market summary (klines 1h×24 sparklines) and movers (AC-SITE-01); 9 static pages in vi + en and live `/status` (AC-SITE-03); Railway autodeploy documented (ARCHITECTURE §10, PROMPTS e; the owner connects the service in the Railway UI, `railway up` never run). Existing tests changed with the same strictness: `/trade`→`/chart` URLs, login now lands on `/` (new helpers `loginToChart`/`registerToChart`, `openProductsMenu`), AC-UI-03/AC-UI-09 rewritten to the new AC text, AC-UI-01 header 44–56 px and no footer on the chart page, theme test colours = black palette, AC-NOTIF-06 waits on `site-shell[data-connected]` instead of the chart status bar. Menus/footer list only pages that exist (Markets/Community/News menus not shown yet). Doc changes: only those authorised by the decision; API.md/DATABASE.md untouched. Deviations: chart header height token 48 px (within 44–56); `coin-names` moved to `shared/market`. One flaky AC-ALERT-12 click on a full run (element re-rendered), passed 3/3 alone and in all later full runs · `npm run check` green (BE 107 + FE 135 unit, 90 integration, 97 Playwright) · smoke OK (migrate, seed, dev, health db up / binance connected; ports 3000/5173/5555/3100 freed) · last code commit 24e6422
 
 ---
 
