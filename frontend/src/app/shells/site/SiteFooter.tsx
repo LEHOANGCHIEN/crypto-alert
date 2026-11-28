@@ -47,7 +47,7 @@ export function SiteFooter({ flush = false }: { flush?: boolean }) {
   ];
   return (
     <footer data-testid="site-footer" className={`${flush ? '' : 'mt-16'} shrink-0 border-t border-border bg-bg px-4 py-10 text-body text-text-muted lg:px-8`}>
-      <div className="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-[1.4fr_2.6fr]">
+      <div className="mx-auto grid max-w-site gap-10 lg:grid-cols-footer">
         <div className="flex flex-col gap-2">
           <p className="text-section font-semibold text-text">{t('footer.brand')}</p>
           <p data-testid="footer-title" className="text-text">{t('footer.title')}</p>

@@ -114,7 +114,7 @@ function SearchPanel() {
         aria-label={t('search.title')}
         data-testid="search-dialog"
         onKeyDown={onKeyDown}
-        className="flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-card border border-border bg-surface"
+        className="flex max-h-dialog w-full max-w-xl flex-col overflow-hidden rounded-card border border-border bg-surface"
       >
         <input
           ref={inputRef}

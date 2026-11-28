@@ -8,7 +8,7 @@ export function Hero() {
   const show = useSearch((s) => s.show);
   return (
     <section data-testid="home-hero" className="flex flex-col items-center gap-6 pb-4 pt-10 text-center lg:pt-16">
-      <h1 data-testid="home-title" className="max-w-3xl text-4xl font-extrabold leading-tight text-text lg:text-hub">
+      <h1 data-testid="home-title" className="max-w-3xl text-page-title font-extrabold leading-tight text-text lg:text-hub">
         {t('home.title')}
       </h1>
       <p className="max-w-2xl text-section text-text-muted">{t('home.subtitle')}</p>

@@ -9,7 +9,7 @@ export function HomePage() {
   useLiveTickers();
   const live = useConnection((s) => s.tickersLive);
   return (
-    <div data-testid="page-home" data-live={String(live)} className="mx-auto w-full max-w-[1280px] px-0 sm:px-4 lg:px-8">
+    <div data-testid="page-home" data-live={String(live)} className="mx-auto w-full max-w-site px-0 sm:px-4 lg:px-8">
       <Hero />
       <MarketSummary />
       <Movers />

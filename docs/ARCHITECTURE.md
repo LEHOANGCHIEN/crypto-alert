@@ -324,7 +324,7 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, vol
 | Fixed heights | header 56 · market pulse bar 32 · chart toolbar 40 · status bar 28 · market row 48 (two lines) · mobile tab bar 56 |
 | Structure | Panels separated by 1 px `--color-border` lines, no gaps, no card shadows |
 | Motion | price flash: `--color-up-soft`/`--color-down-soft`, fade 600 ms; respect `prefers-reduced-motion` |
-| Site pages | Container max 1280 px (+32 px side padding); hub title 56–64 px / 800; section title 24–26 px / 700 with a `›` link; cards radius 16 px with 1 px border, no shadow; pill tabs (active = filled); spacing between sections 48–56 px. Chart shell keeps the dense 6a values |
+| Site pages | Container max 1280 px (+32 px side padding; token `--container-site` → `max-w-site`); hub title 56–64 px / 800; page/static title 36 px (`--text-page-title`); footer columns utility `grid-cols-footer`; dialog max height `--spacing-dialog` (70vh → `max-h-dialog`); section title 24–26 px / 700 with a `›` link; cards radius 16 px with 1 px border, no shadow; pill tabs (active = filled); spacing between sections 48–56 px. Chart shell keeps the dense 6a values |
 | Focus | 2 px `--color-accent` outline, offset 2 px |
 | Empty/loading | Skeleton rows for lists, spinner for chart, translated empty states with an action button |
 

@@ -48,6 +48,7 @@
   --text-coin-price: 48px;
   --text-hub: 56px;
   --text-site-section: 24px;
+  --text-page-title: 36px;
 
   --radius-input: 4px;
   --radius-chip: 3px;
@@ -68,6 +69,8 @@
   --spacing-button-lg: 48px;
   --spacing-auth-form: 440px;
   --spacing-auth-content: 520px;
+  --spacing-dialog: 70vh;
+  --container-site: 1280px;
 }
 
 :root[data-theme='light'] {

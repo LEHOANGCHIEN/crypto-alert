@@ -10,7 +10,7 @@ export function StaticPage({ id, children }: { id: StaticPageId; children: React
   return (
     <article data-testid={`static-${id}`} className="mx-auto w-full max-w-3xl px-0 py-8 sm:px-4 lg:py-12">
       <Breadcrumb items={[{ label: title }]} />
-      <h1 data-testid="static-title" className="mb-6 text-4xl font-extrabold text-text">
+      <h1 data-testid="static-title" className="mb-6 text-page-title font-extrabold text-text">
         {title}
       </h1>
       <div className="flex flex-col gap-4 text-section leading-relaxed text-text-muted">{children}</div>
