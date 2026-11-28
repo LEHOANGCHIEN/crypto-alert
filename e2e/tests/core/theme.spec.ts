@@ -7,8 +7,8 @@ test.beforeEach(async ({ request }) => resetApp(request));
 test('AC-THEME-01 dark theme by default', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  // token really applied: page background is the dark --color-bg (#0B0E12)
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(11, 14, 18)');
+  // token really applied: page background is the dark --color-bg (#000000)
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
 });
 
 test('AC-THEME-03 theme persists for guest and account', async ({ page, browser, baseURL }) => {
@@ -67,9 +67,9 @@ test('AC-THEME-02 toggle applies to page and chart', async ({ page }) => {
   // Dark: chart colours are the dark tokens and the canvas is really painted with them.
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   expect(await root.getAttribute('data-chart-background')).toBe(await token('--color-bg'));
-  expect(hexToRgb((await root.getAttribute('data-chart-background'))!)).toBe('rgb(11, 14, 18)');
+  expect(hexToRgb((await root.getAttribute('data-chart-background'))!)).toBe('rgb(0, 0, 0)');
   expect(await root.getAttribute('data-chart-grid')).toBe(await token('--color-chart-grid'));
-  await expect.poll(() => paneBackgroundPixel(page)).toBe('rgb(11, 14, 18)');
+  await expect.poll(() => paneBackgroundPixel(page)).toBe('rgb(0, 0, 0)');
   expect(await root.getAttribute('data-chart-text')).toBe(await token('--color-text-muted'));
   const darkText = await root.getAttribute('data-chart-text');
   const darkUp = await root.getAttribute('data-chart-up');
@@ -106,6 +106,6 @@ test('AC-THEME-02 toggle applies to page and chart', async ({ page }) => {
   // And back to dark.
   await page.getByTestId('theme-toggle').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect.poll(() => paneBackgroundPixel(page)).toBe('rgb(11, 14, 18)');
+  await expect.poll(() => paneBackgroundPixel(page)).toBe('rgb(0, 0, 0)');
   await expect.poll(async () => root.getAttribute('data-chart-text')).toBe(darkText);
 });

@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 99 ACs · passing 92 · failing 0 · pending 7 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
+**Summary:** 99 ACs · passing 93 · failing 0 · pending 6 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -106,4 +106,4 @@
 | AC-SITE-02 | 7a | site/ | (pending) | pending | |
 | AC-SITE-03 | 7a | site/ | (pending) | pending | |
 | AC-SITE-04 | 7a | site/ | (pending) | pending | |
-| AC-SITE-05 | 7a | site/ | (pending) | pending | |
+| AC-SITE-05 | 7a | site/tokens.spec.ts | AC-SITE-05 dark theme is black and text tokens keep 4.5:1 contrast in both themes | passing | computes WCAG contrast from computed CSS variables, 3 text tokens × 3 surfaces, dark + light |
