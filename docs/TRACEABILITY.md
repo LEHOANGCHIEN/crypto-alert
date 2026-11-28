@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 94 ACs · passing 92 · failing 0 · pending 2 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
+**Summary:** 99 ACs · passing 92 · failing 0 · pending 7 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -102,3 +102,8 @@
 | AC-COIN-02 | 6b | coin.spec.ts | AC-COIN-02 range chart | passing | one test: request `interval`/`limit` asserted for every range (chart requests exactly the AC values, YTD = days since 1 Jan in guest tz), attribution logo, `data-direction` / first-close / last-close vs klines fetched from the API, tooltip time + price of the hovered candle; unit: coin.test.ts (chartQuery), format.test.ts (daysSinceYearStart) |
 | AC-COIN-03 | 6b | coin.spec.ts | AC-COIN-03 performance tiles | passing | one test: all 7 tiles equal (last − first close)/first close computed independently from the API klines (24h and 1M plus the rest), up/down class, tile click selects the range and requests its klines; unit: coin.test.ts (rangeChange, tileChange slices) |
 | AC-COIN-04 | 6b | coin.spec.ts | AC-COIN-04 key stats | passing | one test: 7 stat rows equal the API ticker / daily klines, guest page, desktop chart + stats side by side, 390×844 single column and no horizontal scroll; unit: coin.test.ts (highLow) |
+| AC-SITE-01 | 7a | site/ | (pending) | pending | |
+| AC-SITE-02 | 7a | site/ | (pending) | pending | |
+| AC-SITE-03 | 7a | site/ | (pending) | pending | |
+| AC-SITE-04 | 7a | site/ | (pending) | pending | |
+| AC-SITE-05 | 7a | site/ | (pending) | pending | |

@@ -43,7 +43,11 @@ flowchart LR
   Browser --> SPA
 ```
 
-**Golden rule:** browsers never talk to Binance. The backend keeps **one** upstream WebSocket and fans out via Socket.IO rooms.
+**Frontend shells (since 7a):** the SPA has two shells. The **site shell** (`app/shells/site/`: SiteHeader + MegaMenu, SiteFooter, SearchDialog) wraps every site page (home, coin overview, alerts, notifications, account, auth, static pages). The **chart shell** (`app/shells/chart/`: compact ChartHeader, PulseBar, three-column dashboard, BottomPanel, StatusBar with the disclaimer, no footer) wraps `/chart/:symbol` only.
+
+**Planned (phases 7b–7f), not built yet:** backend modules `catalog`, `derivatives`, `sentiment`, `jobs`, `screener` (7b), `news` and `ai` (7d, 7f), `community` (7e) — see §7. Each external source sits behind its own provider interface with a real and a mock implementation.
+
+**Golden rule:** browsers never talk to Binance (or any other external API). The backend keeps **one** upstream WebSocket and fans out via Socket.IO rooms.
 
 ## 2. Components
 
@@ -165,18 +169,27 @@ On every socket `connect` (first connect and every reconnect, including after lo
       alerts/         controller · service · alert-worker.service · alert-index · dto/
       notifications/  controller · service · channels/ (notification-channel.interface.ts, in-app.channel.ts)
       health/         controller
+      rate-limit/     throttler setup
       test-support/   controller (imported ONLY when ENABLE_TEST_ENDPOINTS=true AND MARKET_DATA_PROVIDER=mock)
+      catalog/        (phase 7b) providers coingecko | mock
+      derivatives/    (phase 7b) providers binance-futures | mock
+      sentiment/      (phase 7b) providers alternative-me | mock; community votes in 7e
+      jobs/           (phase 7b) @nestjs/schedule
+      screener/       (phase 7b)
+      news/           (phase 7d) providers rss | mock
+      ai/             (phase 7d/7f) llm/{gemini,mock} · embeddings/ · tools/ · insights/ · rag/ · assistant/ · screener-nl/ · moderation/ · eval/
+      community/      (phase 7e)
+      search/         (7a: frontend only; backend in 7e if needed)
   test/               integration/*.int-spec.ts (real Postgres test DB) · helpers/
 /frontend
   src/
-    app/              App · router · providers · layout/ (Header, Footer, DashboardLayout, MobileTabBar)
+    app/              router · providers
+      shells/
+        site/         SiteHeader · MegaMenu · SiteFooter · SearchDialog
+        chart/        DashboardLayout · SidePanel · BottomPanel · MobileTabBar · PulseBar · StatusBar · ChartHeader (compact)
+    pages/            thin route components: home · chart · coin · alerts · notifications · account · auth · static/ · errors/ (later: markets · screener · heatmap · symbol · news · ideas · users)
     features/
-      auth/           LoginPage · RegisterPage · RequireAuth · auth.store · api
-      account/        AccountPage (profile, password, preferences)
-      market/         MarketList · useTickers · symbols
-      chart/          CandleChart · TimeframeBar · ChartLegend · chart-theme
-      indicators/     lib/ (sma, rsi, macd — pure functions) · IndicatorMenu · useIndicatorSettings
-      watchlist/ · alerts/ · notifications/
+      auth/ · account/ · market/ · chart/ · indicators/ (lib/: sma, rsi, macd — pure functions) · watchlist/ · alerts/ · notifications/ · coin/ (later features per phase)
     shared/
       api/            http client · envelope & error types · DTO types (mirror API.md)
       socket/         socket client · useSocketEvent · connection status
@@ -184,9 +197,10 @@ On every socket `connect` (first connect and every reconnect, including after lo
       format/         formatPrice · formatPercent · formatCompact · formatDateTime (Intl, locale + timezone aware)
       theme/          tokens.css · ThemeProvider
       preferences/    guest (localStorage) ↔ account (API) sync
-      ui/             Button · Input · Select · Tabs · Toast · Badge · Modal · Spinner · EmptyState
-/e2e                  playwright.config.ts · tests/<feature>.spec.ts · fixtures/indicators.golden.json · helpers/ (mock control, login)
-/docs                 SPEC · ARCHITECTURE · API · DATABASE · PROGRESS · TRACEABILITY · PROMPTS
+      ui/             Button · Input · Select · Tabs · Toast · Badge · Modal · Spinner · EmptyState · Card · Pill · SectionHeader · Breadcrumb · CoinAvatar · Sparkline · Dialog
+/e2e                  playwright.config.ts · fixtures/indicators.golden.json · helpers/ (mock control, login)
+  tests/              core/ (auth, account, i18n, theme, ops) · market/ (market, realtime) · chart/ (chart, indicators, layout, ui chart-shell tests) · alerts/ (alerts, alerts-page, alerts-panel) · notifications/ (notifications, notifications-page) · watchlist/ · coin/ · site/ (nav, home, search, footer, static pages, routes, tokens) · later markets/ · symbol/ · news/ · community/ · ai/
+/docs                 SPEC · ARCHITECTURE · API · DATABASE · PROGRESS · TRACEABILITY · PROMPTS · design/v1 (history) · design/v2 (approved mockups)
 ```
 
 Layering (BE): controller (HTTP + DTO validation) → service (business rules, throws `AppError(code)`) → Prisma. No Prisma in controllers/gateways. Feature modules talk via exported services or PriceBus events only.
@@ -221,7 +235,7 @@ Layering (BE): controller (HTTP + DTO validation) → service (business rules, t
 | Host | Railway, region **Singapore** (`asia-southeast1`), Hobby plan. One web service + Railway PostgreSQL in the same region. Binance returns HTTP 451 for US IPs → never deploy to a US region. |
 | Topology | Same origin: NestJS serves `/api/v1/*`, `/socket.io/*` and the built SPA (Express static middleware + SPA fallback to `index.html` in `backend/src/configure-app.ts`; `/api` and `/socket.io` excluded). No CORS and simple cookies in prod. Dev: Vite proxies `/api` and `/socket.io` to the backend. |
 | Start | Root `npm start` = `cd backend && npx prisma migrate deploy && node dist/main.js` (Railpack runs root `npm run build` then `npm start`). Healthcheck `GET /api/v1/health` and restart policy On Failure ×5 are set in Railway service settings (dashboard). No railway.json/railway.toml: Railway Config as Code is deprecated (cutoff 2026-12-01). |
-| Deploy method | Railway CLI `railway up`, run by Claude Code: from the phase branch for the Phase 0 smoke deploy and the Phase 7 pre-release check, from `main` after every merge (Merge Prompt). The owner only creates the account, logs in and picks the Singapore region. |
+| Deploy method | Railway GitHub autodeploy from `main` (Wait for CI on, all GitHub Actions on the commit must pass). Fallback: `railway up --ci -s web` from a clean `main`, only on the owner's request. The owner connects the service to the GitHub repo in the Railway UI (Service → Settings → Source → connect repo, branch `main`, enable "Wait for CI"). |
 | Seed | `npm run db:seed -w backend` run once manually after first deploy (idempotent upsert of demo data). |
 | Binance check (Phase 0) | `/api/v1/health` reports provider connected + recent `lastMessageAt`; if not → region is wrong. |
 | Fallback | Render, Singapore region (free tier sleeps after 15 min idle → worker paused; demo only). |
@@ -251,35 +265,37 @@ Layering (BE): controller (HTTP + DTO validation) → service (business rules, t
 
 ## 11. UI guidelines
 
-Visual reference: owner's mockup `docs/design/mockup-trading-terminal.png` (layout, density, colors). Names/logos in the mockup are not used. Every visual value comes from a token (CSS variable) — no raw hex/px in components (Tailwind v4 `@theme` maps tokens to utilities). A future redesign = change token values + component styles only.
+Visual reference: the approved mockups `docs/design/v2/*.png` (layout, hierarchy, density, colors); the v1 files in `docs/design/v1/` are history. Numbers, names and texts in the mockups are samples; names/logos are not used. Every visual value comes from a token (CSS variable) — no raw hex/px in components (Tailwind v4 `@theme` maps tokens to utilities). A future redesign = change token values + component styles only.
 
 ### 11.1 Layout per page
 
 | Page | Desktop (≥ 1024 px) | Mobile (< 1024 px) |
 |---|---|---|
-| Header (all pages, 56 px) | Logo + app name · (spacer) · market-data status badge · language switcher (VI/EN) · theme toggle · bell · user menu or Login/Register | Same, compact; bell + menu icons only |
-| `/trade/:symbol` | Header 56 · market pulse bar 32 · 3 columns: **Market list** (default 240 px; search, All/Watchlist tabs, two-line rows 48 px) · **Chart flex** (header with avatar, pair, name, last price 24 px and 24h stats → toolbar 40 px: timeframes, chart type, Indicators, screenshot, maximize → price pane with volume overlay → RSI pane → MACD pane) · **Right panel** (default 320 px) tabs *Watchlist / Alerts*; left and right columns are resizable (left 180–480, right 260–520) and collapsible to a ≤ 24 px rail, state in localStorage `crypto-alert.layout` · status bar 28 · footer | Bottom tab bar *Markets / Chart / Watchlist / Alerts* (56 px); one panel at a time; chart fills height; no pulse bar, no resize handles |
-| `/coin/:symbol` (Phase 6b) | Coin overview: header (avatar, name, pair, star, large price, 24h change, updated-at, "Open full chart") · range area chart (1D…1Y) + performance tiles + key stats card (AC-COIN-01…04); see the PDFs in docs/design/ (reviews/phase-6b-design.decision.md §1) | Single column |
-| `/alerts` (Phase 6b) | Table of all alerts, Status filter + symbol search, New alert button (AC-ALERT-12); see the PDFs in docs/design/ (reviews/phase-6b-design.decision.md §1) | Full width |
-| `/notifications` (Phase 6b) | Latest 100 notifications, All/Unread filter, mark all as read (AC-NOTIF-06); see the PDFs in docs/design/ (reviews/phase-6b-design.decision.md §1) | Full width |
-| `/trade/:symbol` bottom panel (Phase 6b) | Tabs Active alerts / Triggered / Notifications under the chart (AC-ALERT-11); see the PDFs in docs/design/ (reviews/phase-6b-design.decision.md §1) | Not shown |
+| Site header (site pages, 64 px) | Logo → `/` · search button (Ctrl+K) · menus Products / Markets / Community / News with mega-menu panels · (spacer) · language · theme · bell · avatar menu or Login/Register | Menu button opens a drawer; bell + avatar stay |
+| `/chart/:symbol` (former `/trade`, 04-chart.png; chart shell: compact header, pulse bar, 3 columns, bottom panel, status bar with disclaimer) | Compact chart header 44–56 · market pulse bar 32 · 3 columns: **Market list** (default 240 px; search, All/Watchlist tabs, two-line rows 48 px) · **Chart flex** (header with avatar, pair, name, last price 24 px and 24h stats → toolbar 40 px: timeframes, chart type, Indicators, screenshot, maximize → price pane with volume overlay → RSI pane → MACD pane) · **Right panel** (default 320 px) tabs *Watchlist / Alerts*; left and right columns are resizable (left 180–480, right 260–520) and collapsible to a ≤ 24 px rail, state in localStorage `crypto-alert.layout` · status bar 28 (with disclaimer; no site footer) | Bottom tab bar *Markets / Chart / Watchlist / Alerts* (56 px); one panel at a time; chart fills height; no pulse bar, no resize handles |
+| `/coin/:symbol` (Phase 6b) | Coin overview: header (avatar, name, pair, star, large price, 24h change, updated-at, "Open full chart") · range area chart (1D…1Y) + performance tiles + key stats card (AC-COIN-01…04); see the PDFs in docs/design/v1/ (reviews/phase-6b-design.decision.md §1) | Single column |
+| `/alerts` (Phase 6b) | Table of all alerts, Status filter + symbol search, New alert button (AC-ALERT-12); see the PDFs in docs/design/v1/ (reviews/phase-6b-design.decision.md §1) | Full width |
+| `/notifications` (Phase 6b) | Latest 100 notifications, All/Unread filter, mark all as read (AC-NOTIF-06); see the PDFs in docs/design/v1/ (reviews/phase-6b-design.decision.md §1) | Full width |
+| `/chart/:symbol` bottom panel (Phase 6b) | Tabs Active alerts / Triggered / Notifications under the chart (AC-ALERT-11); see the PDFs in docs/design/v1/ (reviews/phase-6b-design.decision.md §1) | Not shown |
 | `/login`, `/register` | Two columns: brand panel + centered form 440 px (AC-UI-10) | Form only, 16 px margin |
 | `/account` | Single column 640 px: Profile · Change password · Preferences (language, theme, timezone) | Full width |
 | 404 | Centered message + Home button | same |
-| Footer (all pages) | Official title (`data-testid="footer-title"`) · translated disclaimer (`footer-disclaimer`) · course line (`footer-course`); all translated: vi = Vietnamese title + "Đồ án chuyên ngành — UIT", en = English title + "Specialized Project — UIT" (12 px, muted). Close button (`footer-close`); hidden state stored in localStorage `crypto-alert.footer-hidden` | same, wraps |
+| Site footer (site pages) | Brand column: official title (`footer-title`), course line (`footer-course`), disclaimer (`footer-disclaimer`), data attribution, © year · link columns (`footer-col-*`), every link opens an existing page (docs/design/v2/01-home.png). No close button | Columns stack |
+| `/` home (01-home.png) | Hero, search field, Open Supercharts, Market summary cards with sparklines, Movers tabs (AC-SITE-01) | Single column |
+| Static pages | Breadcrumb, `h1`, translated body, site footer; `/status` live health (AC-SITE-03) | Single column |
 
 ### 11.2 Color tokens
 
 | Token | Dark (default) | Light | Use |
 |---|---|---|---|
-| `--color-bg` | `#0B0E12` | `#F7F8FA` | page background, chart background |
-| `--color-surface` | `#101419` | `#FFFFFF` | header, panels, side columns, status bar |
-| `--color-surface-2` | `#161B22` | `#F0F2F5` | inputs, search box, badges, selected row |
-| `--color-surface-3` | `#1A2028` | `#E6E9EE` | hover, active timeframe chip, avatar |
-| `--color-border` | `#252C35` | `#DDE1E6` | all 1 px dividers |
-| `--color-text` | `#E8EDF2` | `#12161C` | primary text, numbers |
-| `--color-text-muted` | `#A0ABB8` | `#5B6472` | secondary text, inactive tabs/buttons |
-| `--color-text-faint` | `#7D8997` | `#5F6877` | labels, column headers, placeholders, `/USDT` suffix |
+| `--color-bg` | `#000000` | `#F7F8FA` | page background, chart background |
+| `--color-surface` | `#0F0F0F` | `#FFFFFF` | header, panels, side columns, status bar |
+| `--color-surface-2` | `#1A1A1A` | `#F0F2F5` | inputs, search box, badges, selected row |
+| `--color-surface-3` | `#242424` | `#E6E9EE` | hover, active timeframe chip, avatar |
+| `--color-border` | `#2A2A2A` | `#DDE1E6` | all 1 px dividers |
+| `--color-text` | `#E6E6E6` | `#12161C` | primary text, numbers |
+| `--color-text-muted` | `#A3A3A3` | `#5B6472` | secondary text, inactive tabs/buttons |
+| `--color-text-faint` | `#858585` | `#5F6877` | labels, column headers, placeholders, `/USDT` suffix |
 | `--color-accent` | `#3B82F6` | `#2563EB` | active tab underline, primary buttons, links, focus ring, "connected" dot, info/success toasts, line/area series |
 | `--color-danger` | `#F97316` | `#C2410C` | errors, destructive buttons (**orange — red is reserved for price down**) |
 | `--color-warning` | `#F59E0B` | `#B45309` | "Reconnecting…", "Market data delayed" |
@@ -288,13 +304,13 @@ Visual reference: owner's mockup `docs/design/mockup-trading-terminal.png` (layo
 | `--color-up-soft` / `--color-down-soft` | up / down at 15 % opacity | same | flash, volume bars (40 %), area fill |
 | `--color-accent-soft` / `--color-accent-clear` | accent at 25 % / 0 % | same | area-series fill (top / bottom) |
 | `--color-up-volume` / `--color-down-volume` | up / down at 40 % | same | volume bars |
-| `--color-chart-grid` | `#161B22` | `#EEF0F3` | chart grid |
+| `--color-chart-grid` | `#1C1C1C` | `#EEF0F3` | chart grid |
 | `--color-chart-crosshair` | `#5B6472` | `#9AA3AF` | crosshair |
 | `--color-ind-1/2/3` | `#F59E0B` / `#A855F7` / `#38BDF8` | `#D97706` / `#9333EA` / `#0284C7` | MA lines 1–3 |
 | `--color-ind-rsi` | `#A855F7` | `#9333EA` | RSI line |
 | `--color-ind-macd` / `--color-ind-signal` | `#3B82F6` / `#F97316` | `#2563EB` / `#EA580C` | MACD / signal |
 
-Rule: **green/red only for price direction** (text, candles, MACD histogram, volume bars, flash). Active tabs, primary buttons and "connected" status use `--color-accent` or neutral text, never green. Chart reads tokens via `getComputedStyle` and calls `chart.applyOptions()` on theme change. Lightweight Charts `layout.attributionLogo` stays `true`. Light values were kept from v0.6 (all text/background pairs ≥ 4.5:1); `--color-text-faint` dark is `#7D8997` instead of the mockup's measured `#697685` because the latter is only 3.5–4.2:1 on the dark surfaces (SPEC §6 accessibility ≥ 4.5:1).
+Rule: **green/red only for price direction** (text, candles, MACD histogram, volume bars, flash). Active tabs, primary buttons and "connected" status use `--color-accent` or neutral text, never green. Chart reads tokens via `getComputedStyle` and calls `chart.applyOptions()` on theme change. Lightweight Charts `layout.attributionLogo` stays `true`. Light values were kept from v0.6 (all text/background pairs ≥ 4.5:1); dark values follow reviews/phase-7a-foundation.decision.md §3.3 (`--color-text-faint` `#858585` ≥ 4.5:1 on surface-2); AC-SITE-05 tests the contrast.
 
 ### 11.3 Typography, spacing, shape
 
@@ -308,6 +324,7 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, vol
 | Fixed heights | header 56 · market pulse bar 32 · chart toolbar 40 · status bar 28 · market row 48 (two lines) · mobile tab bar 56 |
 | Structure | Panels separated by 1 px `--color-border` lines, no gaps, no card shadows |
 | Motion | price flash: `--color-up-soft`/`--color-down-soft`, fade 600 ms; respect `prefers-reduced-motion` |
+| Site pages | Container max 1280 px (+32 px side padding); hub title 56–64 px / 800; section title 24–26 px / 700 with a `›` link; cards radius 16 px with 1 px border, no shadow; pill tabs (active = filled); spacing between sections 48–56 px. Chart shell keeps the dense 6a values |
 | Focus | 2 px `--color-accent` outline, offset 2 px |
 | Empty/loading | Skeleton rows for lists, spinner for chart, translated empty states with an action button |
 
@@ -329,6 +346,8 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, vol
 | ADR-12 | **MockProvider + test endpoints** | Deterministic e2e for live-data features | Test endpoints must be impossible to enable in prod |
 | ADR-13 | **Git workflow**: public GitHub repo (owner decision: unlimited free CI minutes); `main` always working; one branch `phase-N-<name>` per phase, merged `--no-ff` only after CI green + review PASS, tagged `v0.N` (`v1.0` final); Conventional Commits; no force-push / history rewrite / branch or tag deletion; secrets check before every commit | Solo beginner needs safe, reversible steps and clear restore points | Undo is always `git revert` or a new branch (see ROLLBACK PROMPT) |
 | ADR-14 | 2026-11-26 · UI redesign + pages per `reviews/ui-polish.decision.md` (owner request) | Owner's mockup; v0.6 UI judged too plain | Phases 6a (redesign) and 6b (pages) before Phase 7; tokens in §11.2/§11.3 replace the v0.6 values |
+| ADR-15 | 2026-11-28 · TradingView-style restructure (owner request): website first, chart as separate full-screen shell; new modules for market data, news, community, AI | Owner found v0.6 too simple | Phases 7a–7f + 8; routes in SPEC §3 |
+| ADR-16 | Railway GitHub autodeploy with Wait for CI | auto mode blocks railway up; main only receives reviewed merges | No manual deploy step |
 
 ## 13. Future extensions (NOT to be built now)
 

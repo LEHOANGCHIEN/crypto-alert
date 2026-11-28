@@ -40,13 +40,13 @@ Finish only when the Definition of Done in CLAUDE.md is met: npm run check passe
 
 ## b. PHASE START PROMPT (template)
 
-Settings per phase (copy the matching SETTINGS line):
+Settings per phase (copy the matching SETTINGS line). Branch name examples: `phase-7a-foundation`, `phase-7b-market-data`.
 
 | Phase | SETTINGS line |
 |---|---|
 | 0 scaffold (any session after KICKOFF) | `SETTINGS: Sonnet 5.5 + Medium, Plan mode ON` |
-| 1 auth · 2 market+chart · 5 watchlist · 7 release | `SETTINGS: Sonnet 5.5 + Medium, Plan mode ON` |
-| 3 real-time · 4 indicators · 6 alerts | `SETTINGS: Opus 5.5 + High, Plan mode ON` (near the weekly quota limit → Sonnet 5.5 + Medium for everything except Phase Review) |
+| 1 auth · 2 market+chart · 5 watchlist · 6a · 6b · 7a · 7b · 7c · 7e · 8 release | `SETTINGS: Sonnet 5.5 + Medium, Plan mode ON` |
+| 3 real-time · 4 indicators · 6 alerts · 7d · 7f | `SETTINGS: Opus 5.5 + High, Plan mode ON` (near the weekly quota limit → Sonnet 5.5 + Medium for everything except Phase Review) |
 
 ```text
 SETTINGS: <paste the SETTINGS line for phase N from the table above>
@@ -78,7 +78,7 @@ Review Phase <N> of crypto-alert on branch phase-<N>-<name> (folder ~/Projects/c
 2. git diff main...phase-<N>-<name> --stat, then read the changed files and the docs diff. A change to docs/SPEC.md not authorized by a reviews/*.decision.md file, or a contract change that makes an AC easier to pass, is Major.
 3. CI: gh run list --branch phase-<N>-<name> --limit 3 (latest run green and for the latest commit). Run npm run check; if the environment blocks part of it, say which part and rely on CI.
 4. For every AC ID listed for Phase <N> in docs/PROGRESS.md: a Playwright test titled with that ID exists, really checks what SPEC.md says (no trivial, skipped or weakened assertions), and TRACEABILITY.md is correct.
-5. Contracts and rules: API.md routes/fields/events/error codes; DATABASE.md schema and migrations (no db push, no edited migrations); CLAUDE.md hard rules; no secrets committed; PROGRESS.md checklist + log line; Conventional Commits; no commit message contains "Co-Authored-By", "Generated with", or mentions Claude/AI (git log main..phase-<N>-<name> --format=%B). Scripts in the root and workspace package.json files that CLAUDE.md Commands relies on (dev, start:dev, db:migrate, db:seed, build, start) must use valid syntax for the CLI tools actually installed (check the tool's own help/source in node_modules); a broken local script is Major.
+5. Compare screens with docs/design/v2/*.png. Contracts and rules: API.md routes/fields/events/error codes; DATABASE.md schema and migrations (no db push, no edited migrations); CLAUDE.md hard rules; no secrets committed; PROGRESS.md checklist + log line; Conventional Commits; no commit message contains "Co-Authored-By", "Generated with", or mentions Claude/AI (git log main..phase-<N>-<name> --format=%B). Scripts in the root and workspace package.json files that CLAUDE.md Commands relies on (dev, start:dev, db:migrate, db:seed, build, start) must use valid syntax for the CLI tools actually installed (check the tool's own help/source in node_modules); a broken local script is Major.
 6. Live app: GET <URL>/api/v1/health → db up, provider binance, connected true; POST <URL>/api/v1/test/reset → 404.
 7. Assess every deviation the builder declared in the PROGRESS.md log line.
 
@@ -122,8 +122,8 @@ The Phase Review for Phase <N> returned VERDICT: PASS. Merge it safely:
 2. git switch main && git pull --ff-only.
 3. git merge --no-ff phase-<N>-<name> -m "chore: merge phase <N> <name>" and push main. If there is a conflict, stop and explain in Vietnamese; do not resolve by deleting work.
 4. Wait for CI on main to be green (gh run watch). If red, stop and tell me to use the ROLLBACK or STUCK BUG prompt.
-5. Create annotated tag v0.<N> on the merge commit ("Phase <N> complete") and push the tag. For Phase 7 also create and push tag v1.0.
-6. Redeploy main to Railway (railway up from a clean checkout of main) and check GET /api/v1/health on the live URL (status ok, provider binance, connected true).
+5. Create annotated tag v0.<N> on the merge commit ("Phase <N> complete") and push the tag. For Phase 8 also create and push tag v1.0 (and v0.8).
+6. Railway autodeploys `main` once CI on the merge commit passes. Wait (poll up to 15 min) until GET <URL>/api/v1/health returns ok with the new version/behaviour; if no new deployment appears, stop and ask the owner (fallback: owner runs `railway up --ci -s web`).
 7. On main, append to docs/PROGRESS.md the merge log line: "- YYYY-MM-DD · MERGED into main · merge <short-hash> · tag v0.<N> · CI green · deployed", set the phase state to "done" in the Status table, commit "docs: log phase <N> merge", push.
 Never force-push, rewrite history, or delete branches or tags. End with a 3-line Vietnamese summary and the next prompt to use (PHASE START PROMPT for phase <N+1>, with its settings).
 ```

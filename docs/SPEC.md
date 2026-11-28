@@ -22,22 +22,22 @@
 | C1 | Title "XÂY DỰNG WEBSITE …" | "Xây dựng ứng dụng web …" (exact string above) | Owner's instruction |
 | C2 | Backend Node.js + Express ("subject to change") | NestJS | Structure; see ADR-01 in ARCHITECTURE.md |
 | C3 | "WebSocket" to browsers | Raw WS to Binance, **Socket.IO** to browsers | Rooms, reconnect; ADR-02 |
-| C4 | Extensions: paper trading, market overview | **Out of scope** (documented as future extensions only) | Time |
+| C4 | Extensions: paper trading, market overview | Market overview, news, community and AI assistant are **in scope** since 2026-11-28 (owner request, reviews/phase-7a-foundation.decision.md); paper trading stays out | Owner request |
 | C5 | "Quản lý tài khoản" (unspecified) | Register, login, logout, change password, update profile. **No forgot-password** (no email sending) | Scope |
 | C6 | 15-week plan | 2–3 weeks, phases in PROGRESS.md | Real deadline |
 
 ## 1. Scope
 
-**In scope (core):** F1 Account · F2 Market list · F3 Candlestick chart · F4 Real-time updates · F5 Indicators (MA, RSI, MACD) · F6 Watchlist · F7 Price alerts · F8 Notifications · F9 i18n (vi/en) · F10 Themes (dark/light) · F11 Layout & responsiveness · F12 Operations (health, seed) · F13 Coin overview.
+**In scope:** F1 Account · F2 Market list · F3 Candlestick chart · F4 Real-time updates · F5 Indicators · F6 Watchlist · F7 Price alerts · F8 Notifications · F9 i18n · F10 Themes · F11 Layout · F12 Operations · F13 Coin overview (becomes the symbol page in 7c) · **F14 Site shell & home (7a)** · F15 Markets, screener, heatmap (7b) · F16 Symbol page (7c) · F17 News (7d) · F18 Community (7e) · F19 AI assistant & AI features (7d, 7f). ACs of F15–F19 are added by their phase decision files.
 
-**Out of scope — MUST NOT be built:** paper trading, backtesting, market overview page (top gainers/losers), real-money trading, exchange account linking, drawing tools, email/Telegram/push notifications, forgot/reset password, admin pages, column sorting in market list, infinite scroll-back of chart history, order book, trade history, order entry and wallet UI; chart range shortcuts on the trading chart; market-wide statistics (fear & greed, dominance, total market cap); coin fundamentals (market cap, rank, news).
+**Out of scope — MUST NOT be built:** real-money trading, order entry, wallets, exchange account linking, paper trading, backtesting, drawing tools, email/Telegram/push notifications, forgot/reset password, admin pages, on-chain metrics, ETF data, analyst ratings/price targets, copying full news articles (title + source summary + link only), Pine-like scripting, ads/broker/affiliate content, infinite scroll-back of chart history, chart range shortcuts on the trading chart.
 
 ## 2. Roles and access
 
 | Feature | Guest | Logged-in user |
 |---|---|---|
-| Market list, chart, indicators, language, theme | ✅ | ✅ |
-| Watchlist, alerts, notifications, account page | ❌ → shows "Log in to use this" prompt with Login button | ✅ |
+| Home, markets, screener, heatmap, symbol pages, chart, indicators, news, reading ideas/comments/profiles, search, language, theme, static pages | ✅ | ✅ |
+| Watchlist, alerts, notifications, account, posting ideas/comments/minds, likes, follows, votes, reports, AI assistant and other AI actions | ❌ → translated "Log in to use this" prompt with Login button (pages: redirect to `/login` with return-to) | ✅ |
 
 `role` column exists (`user`/`admin`) but no admin features exist.
 
@@ -45,13 +45,14 @@
 
 | Path | Page | Access |
 |---|---|---|
-| `/` | Redirect → `/trade/BTCUSDT` | public |
-| `/trade/:symbol?tf=1h` | Main dashboard (market list · chart · watchlist/alerts; bottom panel on desktop) | public |
-| `/coin/:symbol` | Coin overview | public |
-| `/login`, `/register` | Auth pages (logged-in users are redirected to `/trade/BTCUSDT`) | public |
-| `/account` | Profile, change password, preferences | protected |
-| `/alerts` | Alerts page | protected |
-| `/notifications` | Notifications page | protected |
+| `/` | Home (F14) | public |
+| `/chart/:symbol?tf=1h` | Supercharts: the former trade dashboard, full-screen chart shell | public |
+| `/trade/:symbol` | Redirect → `/chart/:symbol` keeping the query string | public |
+| `/coin/:symbol` | Coin overview (F13) [until 7c; then redirect → `/symbols/:symbol`] | public |
+| `/markets/crypto`, `/screener`, `/heatmap` [7b] · `/symbols/:symbol[/tab]` [7c] · `/news`, `/news/:id` [7d] · `/ideas`, `/ideas/:id`, `/ideas/new`, `/minds`, `/u/:username` [7e] | see their phases | public (posting: protected) |
+| `/about`, `/faq`, `/status`, `/contact`, `/community-rules`, `/legal/terms`, `/legal/privacy`, `/legal/cookies`, `/legal/disclaimer` | Static pages (F14) | public |
+| `/login`, `/register` | Auth pages (logged-in users are redirected to `/`) | public |
+| `/account`, `/alerts`, `/notifications` | unchanged | protected |
 | anything else | 404 page with link home | public |
 
 ## 4. Domain rules (shared by frontend and backend)
@@ -91,10 +92,10 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 
 | ID | Steps → expected result |
 |---|---|
-| AC-AUTH-01 | On `/register` enter valid email, display name, password, confirm password → submit → redirected to `/trade/BTCUSDT`, header shows display name and avatar menu. |
+| AC-AUTH-01 | On `/register` enter valid email, display name, password, confirm password → submit → redirected to `/`, header shows display name and avatar menu. |
 | AC-AUTH-02 | Register with an email that already exists (any letter case) → form shows translated `EMAIL_TAKEN` message; no account created. |
 | AC-AUTH-03 | Register with invalid email / weak password / mismatched confirmation → inline translated field errors appear before submit; submit button does nothing. Bypassing the client (direct API call) returns `VALIDATION_ERROR` with field codes. |
-| AC-AUTH-04 | On `/login` enter correct credentials → redirected to the page originally requested (default `/trade/BTCUSDT`); header shows display name. |
+| AC-AUTH-04 | On `/login` enter correct credentials → redirected to the page originally requested (default `/`); header shows display name. |
 | AC-AUTH-05 | Login with wrong password or unknown email → same translated `INVALID_CREDENTIALS` message in both cases; password field cleared. |
 | AC-AUTH-06 | Logged in → reload page → still logged in (no login screen). With test access-token TTL of 5 s, wait 6 s, then on `/account` change the display name and save → succeeds without re-login (silent refresh). |
 | AC-AUTH-07 | Click Logout → header shows Login/Register buttons; opening `/account` redirects to `/login`; reload → still logged out. |
@@ -111,19 +112,19 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 
 | ID | Steps → expected result |
 |---|---|
-| AC-MKT-01 | Open `/trade/BTCUSDT` → left panel lists pairs; each row shows Pair (base asset bold + `/USDT` muted), Last price, 24h change and 24h volume (two-line row: pair over volume on the left, price over change on the right); column header labels name all four; only `…USDT` pairs appear (mock non-USDT pairs `ETHBTC`, `BTCUSDC` are absent); default order = 24h quote volume descending. |
+| AC-MKT-01 | Open `/chart/BTCUSDT` → left panel lists pairs; each row shows Pair (base asset bold + `/USDT` muted), Last price, 24h change and 24h volume (two-line row: pair over volume on the left, price over change on the right); column header labels name all four; only `…USDT` pairs appear (mock non-USDT pairs `ETHBTC`, `BTCUSDC` are absent); default order = 24h quote volume descending. |
 | AC-MKT-02 | Type `eth` in search → only pairs whose symbol contains `ETH` remain (case-insensitive); type `zzz` → translated empty-state message; clear → full list back. |
 | AC-MKT-03 | Mock pushes a new ticker for ETHUSDT → its row's last price, change % and volume update within 2 s without reload; the price cell briefly flashes green (up) or red (down). |
 | AC-MKT-04 | Change % > 0 shown green with `+`, < 0 red with `−`, = 0 neutral color. |
-| AC-MKT-05 | Click the ETHUSDT row → URL becomes `/trade/ETHUSDT?tf=<current tf>`, chart and header switch to ETHUSDT, row is highlighted as selected. |
-| AC-MKT-06 | Open `/trade/FAKEUSDT` → chart area shows translated "Pair not found" with a link to BTCUSDT; app does not crash. |
+| AC-MKT-05 | Click the ETHUSDT row → URL becomes `/chart/ETHUSDT?tf=<current tf>`, chart and header switch to ETHUSDT, row is highlighted as selected. |
+| AC-MKT-06 | Open `/chart/FAKEUSDT` → chart area shows translated "Pair not found" with a link to BTCUSDT; app does not crash. |
 | AC-MKT-07 | Market list has tabs **All** (default) and **Watchlist**. Logged-in user with BTCUSDT and ETHUSDT in the watchlist clicks Watchlist → only those two rows remain (search still filters within them); All → full list. Guest clicks Watchlist → translated login prompt with a link to `/login`. |
 
 ### F3 Candlestick chart — `AC-CHART`
 
 | ID | Steps → expected result |
 |---|---|
-| AC-CHART-01 | Open `/trade/BTCUSDT` → candlestick chart renders; chart header shows symbol, last price, 24h change; **TradingView attribution logo is visible** on the chart. |
+| AC-CHART-01 | Open `/chart/BTCUSDT` → candlestick chart renders; chart header shows symbol, last price, 24h change; **TradingView attribution logo is visible** on the chart. |
 | AC-CHART-02 | Timeframe buttons `1m 5m 15m 1h 4h 1d` visible; `1h` active by default. Click `15m` → candles reload, button highlighted, URL has `?tf=15m`; reload page → `15m` still selected. |
 | AC-CHART-03 | Each load requests and renders 1000 candles (network response of klines endpoint has 1000 items; last item is the open candle). |
 | AC-CHART-04 | Load BTCUSDT 1h twice (navigate away and back) → mock REST-call counter shows the second load fetched ≤ 2 recent candles from the provider (rest came from DB cache). |
@@ -183,8 +184,8 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 | AC-ALERT-08 | User B cannot see user A's alerts; B calling delete on A's alert ID gets `ALERT_NOT_FOUND`; when A's alert triggers, B receives nothing. |
 | AC-ALERT-09 | Create alert → call test endpoint "reload worker" (simulates backend restart: in-memory state rebuilt from DB) → mock crosses threshold → alert still triggers. |
 | AC-ALERT-10 | Alerts work for symbols not currently open in any chart (price source = all-market ticker stream). |
-| AC-ALERT-11 | On `/trade/:symbol` (desktop), a bottom panel under the chart has tabs **Active alerts (n)**, **Triggered**, **Notifications**. Active: symbol, condition, target price, current price, distance % to target, created at, delete button. Triggered: symbol, condition, target price, triggered at. Notifications: the latest notifications with unread marker; click marks read. Checkbox "Current pair only" filters all three tabs. Guest → translated login prompt. The panel can be collapsed to its tab row and resized by dragging (min 120 px, max 60 % of the center height); state kept in `crypto-alert.layout`. Creating an alert in the right panel shows it in the bottom panel within 2 s; a mock trigger moves it to Triggered within 2 s. |
-| AC-ALERT-12 | `/alerts` (protected): table of all the user's alerts with filters Status (All / Active / Triggered) and symbol search; columns as AC-ALERT-11 plus status; a "New alert" button opens the alert form with a symbol field validated against the market list (translated errors as AC-ALERT-02…); delete with the same rules as the Alerts tab; clicking a symbol opens `/trade/<SYMBOL>`; empty state with a link to the chart. |
+| AC-ALERT-11 | On `/chart/:symbol` (desktop), a bottom panel under the chart has tabs **Active alerts (n)**, **Triggered**, **Notifications**. Active: symbol, condition, target price, current price, distance % to target, created at, delete button. Triggered: symbol, condition, target price, triggered at. Notifications: the latest notifications with unread marker; click marks read. Checkbox "Current pair only" filters all three tabs. Guest → translated login prompt. The panel can be collapsed to its tab row and resized by dragging (min 120 px, max 60 % of the center height); state kept in `crypto-alert.layout`. Creating an alert in the right panel shows it in the bottom panel within 2 s; a mock trigger moves it to Triggered within 2 s. |
+| AC-ALERT-12 | `/alerts` (protected): table of all the user's alerts with filters Status (All / Active / Triggered) and symbol search; columns as AC-ALERT-11 plus status; a "New alert" button opens the alert form with a symbol field validated against the market list (translated errors as AC-ALERT-02…); delete with the same rules as the Alerts tab; clicking a symbol opens `/chart/<SYMBOL>`; empty state with a link to the chart. |
 
 ### F8 Notifications — `AC-NOTIF`
 
@@ -219,15 +220,15 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 
 | ID | Steps → expected result |
 |---|---|
-| AC-UI-01 | Viewport 1440×900, no saved layout → three columns: market list (left, 240 px), chart (center), Watchlist/Alerts tabs (right, 320 px); header with logo, language switcher, theme toggle, bell, user menu; market pulse bar under the header; status bar and footer visible. |
+| AC-UI-01 | Viewport 1440×900, no saved layout, `/chart/BTCUSDT` → compact chart header (44–56 px: logo linking to `/`, pair selector, language switcher, theme toggle, bell, user menu or Login/Register), market pulse bar under it, three columns: market list (left, 240 px), chart (center), Watchlist/Alerts tabs (right, 320 px); status bar at the bottom. The chart page has no site footer (see AC-UI-03). |
 | AC-UI-02 | Viewport 390×844 → single column with bottom tab bar Markets / Chart / Watchlist / Alerts; each tab shows its panel; no horizontal page scroll. |
-| AC-UI-03 | Footer is visible by default. vi: Vietnamese official title, vi disclaimer, "Đồ án chuyên ngành — UIT". en: English official title, en disclaimer, "Specialized Project — UIT" (testids `footer-title`, `footer-course` and the existing disclaimer testid). Footer has a close button (`data-testid="footer-close"`, translated aria-label); clicking it hides the footer; after reload it stays hidden (stored in localStorage, same for guests and logged-in users). |
+| AC-UI-03 | Every site page (all pages except `/chart/*`) ends with the full footer (docs/design/v2/01-home.png): brand column with the official title (`footer-title`, vi/en as before), course line (`footer-course`), disclaimer (`footer-disclaimer`), data attribution line (Binance; plus each source added by later phases) and © year; link columns (`footer-col-*`). **Every footer link opens an existing page** (the test visits each link: none is 404, external links open in a new tab with `rel="noopener noreferrer"`). The chart page shows the disclaimer in its status bar (`statusbar-disclaimer`). No close button any more. |
 | AC-UI-04 | Unknown route `/abc` → translated 404 page with link to home. |
 | AC-UI-05 | Drag the handle between market list and chart 100 px right → market list 340 px (±2) and the chart canvas redraws to the new width; drag the handle between chart and right panel 80 px left → right panel 400 px (±2); reload → both widths kept (localStorage `crypto-alert.layout`). Limits while open: left 180–480 px, right 260–520 px. Handles have `role="separator"`, are focusable, and ←/→ change the width by 16 px. Double-click a handle → that panel returns to its default width. |
 | AC-UI-06 | Click the collapse button in the market list header → the market list is hidden completely (not visible, not in tab order), a reopen rail ≤ 24 px with an expand button stays at the left edge, the chart takes the freed width. Click expand → the panel returns at its previous width. Same for the right panel (rail at the right edge). Dragging a handle below the panel's minimum collapses it. Collapsed state is kept after reload. At 390×844 nothing changes (AC-UI-02 still passes). |
-| AC-UI-07 | Under the header, a market pulse bar shows BTCUSDT, ETHUSDT, SOLUSDT, BNBUSDT, XRPUSDT, DOGEUSDT (pairs missing from tickers are skipped) as `BTC/USDT  <price>  <change %>` with AC-MKT-04 colors; a mock tick for ETHUSDT updates its price within 2 s; clicking an item opens `/trade/<SYMBOL>?tf=<current tf>`. Hidden below 1024 px. |
+| AC-UI-07 | Under the header, a market pulse bar shows BTCUSDT, ETHUSDT, SOLUSDT, BNBUSDT, XRPUSDT, DOGEUSDT (pairs missing from tickers are skipped) as `BTC/USDT  <price>  <change %>` with AC-MKT-04 colors; a mock tick for ETHUSDT updates its price within 2 s; clicking an item opens `/chart/<SYMBOL>?tf=<current tf>`. Hidden below 1024 px. |
 | AC-UI-08 | A status bar above the footer shows a dot + translated market-data status (en "Connected" / "Reconnecting…" / "Market data delayed"; vi "Đã kết nối" / existing vi texts, same states as AC-RT-05/06; dot `--color-accent` or `--color-warning`, never green/red), the time of the last market update and a clock in the user's timezone (ticks every second). Going offline → "Reconnecting…" within 5 s; online → "Connected". |
-| AC-UI-09 | Header shows navigation links Chart → `/trade/<last symbol>`, Overview → `/coin/<last symbol>`, Alerts → `/alerts`, Notifications → `/notifications` (translated; "last symbol" = last opened, default BTCUSDT); the link of the current page has `aria-current="page"` and is highlighted. Below 1024 px the links move into a menu button. Guests clicking Alerts/Notifications go to `/login` with return-to. |
+| AC-UI-09 | Site header (all site pages, 64 px): logo → `/`; search button "Search (Ctrl+K)" (AC-SITE-02); top menus **Products / Markets / Community / News** — each opens a mega-menu panel (hover or click; Esc closes; keyboard reachable) listing only pages that exist in the current phase, each item with icon + translated label + one-line description; the menu of the current section has `aria-current="page"`; right side: language, theme, bell (logged in), avatar menu or Login/Register. Below 1024 px the menus move into a menu button (drawer). Guests opening a protected item (Alerts, Notifications) go to `/login` with return-to. In 7a, Products = Supercharts (`/chart/<last symbol>`), Coin overview (`/coin/<last symbol>`), Price alerts (`/alerts`), Notifications (`/notifications`); Markets/Community/News menus appear when their first page exists. |
 | AC-UI-10 | Viewport 1440×900: `/login` and `/register` show two columns of equal width under the header — left a brand panel (translated headline, three translated feature lines, decorative line; content in a column ≤ 520 px centered in the panel), right the form centered both horizontally and vertically (vertical center of the form within ±40 px of the vertical center of the right column). Form width 440 px; title 28 px; inputs 46 px high; primary button 48 px high and full form width. Viewport 390×844: brand panel hidden, form full width with 16 px side margins, no horizontal scroll. All existing AC-AUTH tests still pass unchanged. |
 
 ### F12 Operations — `AC-OPS`
@@ -241,10 +242,20 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 
 | ID | Steps → expected result |
 |---|---|
-| AC-COIN-01 | `/coin/BTCUSDT`: coin avatar, full name (when known) and pair, star button (watchlist rules of F6), large last price, 24h change (absolute and %, colored), "updated at HH:mm:ss" in the user's timezone, and an "Open full chart" button → `/trade/BTCUSDT`. A mock tick updates the price within 2 s. The pair name in the trade chart header links to this page. `/coin/FAKEUSDT` → translated "Pair not found" with a link to `/coin/BTCUSDT`. |
+| AC-COIN-01 | `/coin/BTCUSDT`: coin avatar, full name (when known) and pair, star button (watchlist rules of F6), large last price, 24h change (absolute and %, colored), "updated at HH:mm:ss" in the user's timezone, and an "Open full chart" button → `/chart/BTCUSDT`. A mock tick updates the price within 2 s. The pair name in the trade chart header links to this page. `/coin/FAKEUSDT` → translated "Pair not found" with a link to `/coin/BTCUSDT`. |
 | AC-COIN-02 | Area chart with range buttons 1D / 1W / 1M / 3M / 6M / YTD / 1Y (default 1D). Each range loads klines: 1D = 5m × 288, 1W = 1h × 168, 1M = 4h × 180, 3M = 1d × 90, 6M = 1d × 180, YTD = 1d × days since 1 Jan (user timezone, min 1), 1Y = 1d × 365 (network requests show these `interval`/`limit` values). Area and line are colored up/down by the range's change; a dashed line marks the range's first close; attribution logo visible; crosshair tooltip shows time + price. |
 | AC-COIN-03 | Performance tiles 24h, 1W, 1M, 3M, 6M, YTD, 1Y show `(last − first close of range) / first close` in % with sign and up/down color; on the mock fixture they equal the values computed by a unit-tested helper (e2e checks 24h and 1M); clicking a tile selects that range in the chart. |
 | AC-COIN-04 | Key stats card: 24h open, 24h high, 24h low, 24h volume (base), 24h volume (USDT), 52-week high and low (from 1d klines). Layout: chart + stats side by side on desktop, single column at 390×844 with no horizontal scroll. Page works for guests. |
+
+### F14 Site shell & home — `AC-SITE`
+
+| ID | Steps → expected result |
+|---|---|
+| AC-SITE-01 | `/` (guest and user) shows, per docs/design/v2/01-home.png: hero (translated headline + subline), large search field (opens AC-SITE-02 with the typed text), buttons "Open Supercharts" → `/chart/BTCUSDT`; **Market summary** with cards for BTCUSDT, ETHUSDT, BNBUSDT, SOLUSDT (pairs missing from tickers skipped): avatar, name, pair, last price, 24h change % (AC-MKT-04 colors) and a 24h sparkline from klines `1h × 24` (colored by its own change); **Movers** with tabs Gainers / Losers: top 6 USDT pairs by 24h change % from tickers (desc / asc), each row links to `/coin/<SYMBOL>`. A mock tick on ETHUSDT updates its card price within 2 s. No section shows placeholder or sample data. |
+| AC-SITE-02 | Ctrl+K (Cmd+K on macOS) or the header search button opens a search dialog (`role="dialog"`, focus in the input). Typing `eth` lists ETHUSDT first among pairs (match on symbol, base asset, known name), plus matching pages (e.g. "Supercharts", "Price alerts"); ↑/↓ move the selection, Enter opens it (pair → `/coin/<SYMBOL>` until 7c), Esc closes and focus returns to the trigger. Empty query shows recent pairs (last 5 opened, localStorage `crypto-alert.recent-symbols`). Translated; no result → translated empty state. |
+| AC-SITE-03 | Static pages `/about`, `/faq`, `/status`, `/contact`, `/community-rules`, `/legal/terms`, `/legal/privacy`, `/legal/cookies`, `/legal/disclaimer`: each has breadcrumb, translated `h1` and translated body (no lorem ipsum; facts about this project only), and the site footer. `/status` shows live values from `GET /api/v1/health` (DB, market-data provider, connected, last message time in the user's timezone, version) and refreshes every 30 s. `/contact` shows the project GitHub repository link (no form). |
+| AC-SITE-04 | `/trade/ETHUSDT?tf=4h` redirects to `/chart/ETHUSDT?tf=4h`; `/chart/ethusdt` → `/chart/ETHUSDT`; the chart page uses the chart shell (AC-UI-01) and never shows the site header or footer; the site pages never show the market pulse bar or the chart status bar. Back/forward between `/` and `/chart/BTCUSDT` keeps working. |
+| AC-SITE-05 | Dark theme uses the black tokens of ARCHITECTURE §11.2 (`--color-bg` = `#000000`). For `--color-text`, `--color-text-muted`, `--color-text-faint` on `--color-bg`, `--color-surface` and `--color-surface-2`, the computed contrast ratio is ≥ 4.5:1 in both themes (test reads computed CSS variables). |
 
 ## 6. Non-functional requirements
 
@@ -255,19 +266,22 @@ Notation: "mock" = test-mode MockProvider controlled by test-only endpoints (see
 | Security | Passwords hashed (argon2id); refresh token httpOnly cookie, hashed in DB; never return hashes; login rate limit; all inputs validated server-side; test endpoints disabled in production. |
 | Browsers | Latest Chrome/Edge/Firefox; Playwright runs Chromium. |
 | Accessibility | Visible focus ring; text contrast ≥ 4.5:1 in both themes; up/down not conveyed by color alone (`+`/`−` sign). |
-| Compliance | Lightweight Charts attribution logo enabled; disclaimer in footer (visible by default; the user may close the footer). |
+| Compliance | Lightweight Charts attribution logo enabled; disclaimer in footer (site footer on every site page; status bar on the chart page). |
+| External data | Every external source is called only by the backend, cached, and has a mock provider used in tests/CI; a failing source degrades its section to a translated "temporarily unavailable" state, never a broken page. |
+| Attribution | Each external data source is credited in the footer (and where its data is shown when its terms require it). |
 
 ## 7. Assumptions & defaults (veto any of these early)
 
 | # | Assumption |
 |---|---|
-| A1 | Guests can view market list, chart, indicators; login only needed for watchlist, alerts, notifications, account. |
-| A2 | 24h volume shown = quote volume in USDT. Market list has no column sorting (default by volume). |
+| A1 | Guests can view all public pages (see §2); login is needed for personal and posting features. |
+| A2 | 24h volume shown = quote volume in USDT. The market list on the chart page has no column sorting; the screener (7b) has sorting. |
 | A3 | Indicator settings (MA periods, which indicators shown) are stored per browser (localStorage), not in the DB. Language/theme/timezone are stored per user in DB. |
 | A4 | Creating an alert whose condition is already met is rejected (`ALERT_CONDITION_ALREADY_MET`) instead of triggering instantly. Alerts cannot be edited (delete + create). |
 | A5 | Email cannot be changed. Changing password revokes all *other* sessions. |
 | A6 | Access token 15 min, refresh token 7 days with rotation. |
 | A7 | Demo account `demo@example.com` / `Demo@123456`. |
-| A8 | Hosting: Railway Hobby (~5 USD/month), **Singapore** region, one service serving API + Socket.IO + built frontend, plus Railway PostgreSQL. Free fallback: Render Singapore (free tier sleeps after 15 min idle, which pauses the alert worker — acceptable only for a demo). |
+| A8 | Hosting: Railway Hobby (~5 USD/month), **Singapore** region, one service serving API + Socket.IO + built frontend, plus Railway PostgreSQL. Free fallback: Render Singapore (free tier sleeps after 15 min idle, which pauses the alert worker — acceptable only for a demo).  Deploys happen automatically from `main` via Railway's GitHub integration with **Wait for CI** (§10 ARCHITECTURE); `railway up` stays as a manual fallback. |
 | A9 | Playwright suite lives in a root `e2e/` workspace (alongside `/backend`, `/frontend`, `/docs`). |
 | A10 | Chart history is a fixed 1000-candle window; no lazy loading of older candles; no separate volume pane (volume is an overlay on the price pane, AC-CHART-08). |
+| A11 | Search, recent symbols and last symbol are stored per browser (localStorage). |

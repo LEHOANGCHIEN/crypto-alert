@@ -1,6 +1,6 @@
 # Decision — UI polish: redesign + new pages (owner request)
 
-Date: 2026-11-26 · Decided by: project coordinator (on behalf of the owner) · Source: owner request in the coordination chat after Phase 6 (v0.6), with a Figma mockup made by the owner (`docs/design/mockup-trading-terminal.png`) and a TradingView symbol overview page as references.
+Date: 2026-11-26 · Decided by: project coordinator (on behalf of the owner) · Source: owner request in the coordination chat after Phase 6 (v0.6), with a Figma mockup made by the owner (`docs/design/v1/mockup-trading-terminal.png`) and a TradingView symbol overview page as references.
 
 This is a **direct request of the project owner** (coordination rule 5). It changes scope, so the SPEC edits listed in §3 are **explicitly allowed** for the session that applies this decision. Nothing outside §3 may change SPEC.md.
 
@@ -30,7 +30,7 @@ All CLAUDE.md hard rules stay: tokens only, i18n for every string, **green/red o
 3. Replace AC-MKT-01 and AC-UI-01 with the texts in §5, and add every new AC of §5 and §6 under its feature (F2, F3, F7, F8, F11, and a new **F13 Coin overview — `AC-COIN`** after F12).
 
 ### 3.2 docs/ARCHITECTURE.md §11
-- Replace the "No Figma…" sentence with: "Visual reference: owner's mockup `docs/design/mockup-trading-terminal.png` (layout, density, colors). Names/logos in the mockup are not used."
+- Replace the "No Figma…" sentence with: "Visual reference: owner's mockup `docs/design/v1/mockup-trading-terminal.png` (layout, density, colors). Names/logos in the mockup are not used."
 - §11.1: update the `/trade/:symbol` row (header 56 · market pulse bar 32 · columns left default 240 px / chart flex / right default 320 px, resizable and collapsible · status bar 28 · footer); add rows for `/coin/:symbol`, `/alerts`, `/notifications` (Phase 6b) as described in §6.
 - §11.2: dark values from §4 of this decision; light values chosen by the builder so that every text/background pair keeps WCAG AA contrast (keep current light values unless they clash). Add the new tokens.
 - §11.3: typography and sizes from §4.
@@ -102,7 +102,7 @@ Visual restyle (no AC, checked by the owner and the reviewer against the mockup)
 ## 7. PROGRESS checklists
 
 **Phase 6a — UI redesign** · Settings: Sonnet 5.5 + Medium · Plan mode ON · ACs: AC-MKT-01 (edited), AC-MKT-07, AC-UI-01 (edited), AC-UI-05…08, AC-CHART-07…10
-- [ ] Doc edits of reviews/ui-polish.decision.md §3 (SPEC, ARCHITECTURE §11/§12, PROGRESS 6a/6b, TRACEABILITY pending rows, CONTEXT) + commit the decision and `docs/design/`
+- [ ] Doc edits of reviews/ui-polish.decision.md §3 (SPEC, ARCHITECTURE §11/§12, PROGRESS 6a/6b, TRACEABILITY pending rows, CONTEXT) + commit the decision and `docs/design/v1/`
 - [ ] Tokens + fonts (§4), restyle of every existing screen to the mockup density
 - [ ] Resizable + collapsible side columns (AC-UI-01, AC-UI-05, AC-UI-06)
 - [ ] Market pulse bar + status bar (AC-UI-07, AC-UI-08)
@@ -123,7 +123,7 @@ Visual restyle (no AC, checked by the owner and the reviewer against the mockup)
 Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` / `v0.6.2` (instead of `v0.N`), deploy as usual (`railway up` run by the owner).
 
 ## 8. Notes for the builder
-- Read `docs/design/mockup-trading-terminal.png` (open the image) before planning the restyle; match layout, spacing and density, not the brand.
+- Read `docs/design/v1/mockup-trading-terminal.png` (open the image) before planning the restyle; match layout, spacing and density, not the brand.
 - Layout state: one localStorage key `crypto-alert.layout` = `{ left: { width, collapsed }, right: { width, collapsed }, bottom?: { height, collapsed } }`, read defensively (bad JSON → defaults).
 - The chart must resize on column drag (ResizeObserver or `autoSize`), without re-fetching klines.
 - Volume overlay uses the existing kline data (`volume`), no new requests.
