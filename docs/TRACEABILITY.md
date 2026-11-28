@@ -9,7 +9,7 @@
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
 | AC-OPS-01 | 0 | core/ops.spec.ts | AC-OPS-01 health reports db and market data | passing | |
-| AC-I18N-01 | 0 | i18n.spec.ts | AC-I18N-01 Vietnamese by default | passing | |
+| AC-I18N-01 | 0 | core/i18n.spec.ts | AC-I18N-01 Vietnamese by default | passing | |
 | AC-THEME-01 | 0 | core/theme.spec.ts | AC-THEME-01 dark theme by default | passing | |
 | AC-UI-03 | 0 | chart/layout.spec.ts | AC-UI-03 footer shows translated texts and can be closed | passing | |
 | AC-UI-04 | 0 | chart/layout.spec.ts | AC-UI-04 unknown route shows 404 | passing | |
@@ -27,8 +27,8 @@
 | AC-PROF-02 | 1 | core/account.spec.ts | AC-PROF-02 display name validation | passing | |
 | AC-PROF-03 | 1 | core/account.spec.ts | AC-PROF-03 change password | passing | |
 | AC-PROF-04 | 1 | core/account.spec.ts | AC-PROF-04 change password logs out other sessions | passing | |
-| AC-I18N-03 | 1 | i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
-| AC-I18N-05 | 1 | i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
+| AC-I18N-03 | 1 | core/i18n.spec.ts | AC-I18N-03 error messages translated | passing | |
+| AC-I18N-05 | 1 | core/i18n.spec.ts | AC-I18N-05 language persists for guest and account | passing | |
 | AC-THEME-03 | 1 | core/theme.spec.ts | AC-THEME-03 theme persists for guest and account | passing | |
 | AC-MKT-01 | 2 | market/market.spec.ts | AC-MKT-01 list shows only USDT pairs sorted by volume | passing | edited in 6a: two-line rows, four column labels, 48 px rows (test rewritten to the new AC text) |
 | AC-MKT-02 | 2 | market/market.spec.ts | AC-MKT-02 search filters pairs | passing | |
@@ -42,7 +42,7 @@
 | AC-CHART-05 | 2 | chart/chart.spec.ts | AC-CHART-05 legend shows hovered candle | passing | |
 | AC-CHART-06 | 2 | chart/chart.spec.ts | AC-CHART-06 times shown in user timezone | passing | |
 | AC-PROF-05 | 2 | core/account.spec.ts | AC-PROF-05 timezone setting changes displayed times | passing | |
-| AC-I18N-04 | 2 | i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
+| AC-I18N-04 | 2 | core/i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
 | AC-THEME-02 | 2 | core/theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
 | AC-UI-01 | 2 | chart/layout.spec.ts | AC-UI-01 desktop three-column layout | passing | edited in 6a: 240/320 columns, handles, pulse bar 32, status bar 28, header 56; guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
 | AC-UI-02 | 2 | chart/layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
@@ -82,7 +82,7 @@
 | AC-NOTIF-03 | 6 | notifications/notifications.spec.ts | AC-NOTIF-03 mark read and mark all read | passing | integration: notifications.int-spec.ts (read idempotent, read-all) |
 | AC-NOTIF-04 | 6 | notifications/notifications.spec.ts | AC-NOTIF-04 offline trigger shown on next login | passing | waits (expect.poll) until the trigger is stored before logging in again |
 | AC-NOTIF-05 | 6 | notifications/notifications.spec.ts | AC-NOTIF-05 multi-tab delivery and read sync | passing | two pages of one browser context; integration: notification:read reaches every socket of the user only |
-| AC-I18N-02 | 7 | i18n.spec.ts | AC-I18N-02 every visible text switches to English | pending | |
+| AC-I18N-02 | 7 | core/i18n.spec.ts | AC-I18N-02 every visible text switches to English | pending | |
 | AC-OPS-02 | 7 | core/ops.spec.ts | AC-OPS-02 seeded demo account | pending | |
 | AC-MKT-07 | 6a | market/market.spec.ts | AC-MKT-07 market list has All and Watchlist tabs | passing | |
 | AC-UI-05 | 6a | chart/ui.spec.ts | AC-UI-05 side columns can be resized by drag and keyboard | passing | unit: layout.test.ts |
