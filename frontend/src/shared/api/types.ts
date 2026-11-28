@@ -103,3 +103,17 @@ export type Notification = {
 };
 
 export type NotificationList = { items: Notification[]; unreadCount: number };
+
+/** `GET /health` (API.md §2 Health). */
+export type Health = {
+  status: 'ok' | 'degraded';
+  db: 'up' | 'down';
+  marketData: {
+    provider: 'binance' | 'mock';
+    connected: boolean;
+    lastMessageAt: string | null;
+    activeStreams: number;
+  };
+  version: string;
+  time: string;
+};

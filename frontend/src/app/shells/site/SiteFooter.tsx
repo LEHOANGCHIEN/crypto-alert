@@ -11,15 +11,43 @@ const CHARTS_URL = 'https://www.tradingview.com/lightweight-charts/';
 export function SiteFooter({ flush = false }: { flush?: boolean }) {
   const { t } = useTranslation();
   const symbol = useLastSymbol((s) => s.symbol);
-  const products = [
-    { id: 'chart', to: `/chart/${symbol}` },
-    { id: 'overview', to: `/coin/${symbol}` },
-    { id: 'alerts', to: '/alerts' },
-    { id: 'notifications', to: '/notifications' },
+  // Columns list only pages that exist (AC-UI-03).
+  const columns = [
+    {
+      id: 'products',
+      title: 'footer.products',
+      links: [
+        { id: 'chart', to: `/chart/${symbol}`, label: 'nav.chart' },
+        { id: 'overview', to: `/coin/${symbol}`, label: 'nav.overview' },
+        { id: 'alerts', to: '/alerts', label: 'nav.alerts' },
+        { id: 'notifications', to: '/notifications', label: 'nav.notifications' },
+      ],
+    },
+    {
+      id: 'about',
+      title: 'footer.colAbout',
+      links: [
+        { id: 'about', to: '/about', label: 'static.about.title' },
+        { id: 'faq', to: '/faq', label: 'static.faq.title' },
+        { id: 'status', to: '/status', label: 'static.status.title' },
+        { id: 'contact', to: '/contact', label: 'static.contact.title' },
+      ],
+    },
+    { id: 'community', title: 'footer.colCommunity', links: [{ id: 'community-rules', to: '/community-rules', label: 'static.community-rules.title' }] },
+    {
+      id: 'policies',
+      title: 'footer.colPolicies',
+      links: [
+        { id: 'terms', to: '/legal/terms', label: 'static.terms.title' },
+        { id: 'privacy', to: '/legal/privacy', label: 'static.privacy.title' },
+        { id: 'cookies', to: '/legal/cookies', label: 'static.cookies.title' },
+        { id: 'disclaimer', to: '/legal/disclaimer', label: 'static.disclaimer.title' },
+      ],
+    },
   ];
   return (
     <footer data-testid="site-footer" className={`${flush ? '' : 'mt-16'} shrink-0 border-t border-border bg-bg px-4 py-10 text-body text-text-muted lg:px-8`}>
-      <div className="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-[2fr_1fr]">
+      <div className="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-[1.4fr_2.6fr]">
         <div className="flex flex-col gap-2">
           <p className="text-section font-semibold text-text">{t('footer.brand')}</p>
           <p data-testid="footer-title" className="text-text">{t('footer.title')}</p>
@@ -33,12 +61,16 @@ export function SiteFooter({ flush = false }: { flush?: boolean }) {
           <p data-testid="footer-disclaimer">{t('footer.disclaimer')}</p>
           <p data-testid="footer-copyright">{t('footer.copyright', { year: new Date().getFullYear() })}</p>
         </div>
-        <div data-testid="footer-col-products" className="flex flex-col gap-2">
-          <p className="text-meta font-semibold uppercase tracking-wide text-text-faint">{t('footer.products')}</p>
-          {products.map((p) => (
-            <Link key={p.id} to={p.to} data-testid={`footer-link-${p.id}`} className="hover:text-text">
-              {t(`nav.${p.id}`)}
-            </Link>
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+          {columns.map((col) => (
+            <div key={col.id} data-testid={`footer-col-${col.id}`} className="flex flex-col gap-2">
+              <p className="text-meta font-semibold uppercase tracking-wide text-text-faint">{t(col.title)}</p>
+              {col.links.map((l) => (
+                <Link key={l.id} to={l.to} data-testid={`footer-link-${l.id}`} className="hover:text-text">
+                  {t(l.label)}
+                </Link>
+              ))}
+            </div>
           ))}
         </div>
       </div>

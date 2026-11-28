@@ -37,7 +37,10 @@
     "attribution": "Price data: Binance. Charts: TradingView Lightweight Charts™.",
     "copyright": "© {{year}} Crypto Alert",
     "products": "Products",
-    "chartsLink": "Lightweight Charts"
+    "chartsLink": "Lightweight Charts",
+    "colAbout": "About the project",
+    "colCommunity": "Community",
+    "colPolicies": "Policies"
   },
   "pages": {
     "trade": {
@@ -465,5 +468,93 @@
     "recent": "Recently opened",
     "empty": "No matching results.",
     "hint": "Type a coin or page name to search. Pairs you opened recently will appear here."
+  },
+  "static": {
+    "about": {
+      "title": "About",
+      "p1": "Crypto Alert is the specialized course project of a student at the University of Information Technology (UIT, VNU-HCM): a web application for cryptocurrency market tracking with real-time technical charts and price alerts.",
+      "p2": "It shows USDT spot pairs from Binance, candlestick charts with MA, RSI and MACD, a watchlist, one-shot price alerts and in-app notifications. The interface is available in Vietnamese and English, in a dark or light theme.",
+      "p3": "Price data comes from the public Binance API and is called only by this project's server; the browser never talks to Binance directly. Charts use the TradingView Lightweight Charts™ library.",
+      "p4": "Technically: React and TypeScript on the front end, NestJS and PostgreSQL on the server, Socket.IO for real-time data, automated tests with Playwright."
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "q1": "Are prices real-time?",
+      "a1": "Yes. The server keeps one connection to Binance and relays the data to your browser over Socket.IO, normally within a couple of seconds.",
+      "q2": "Which pairs are supported?",
+      "a2": "Spot pairs quoted in USDT that are in trading status on Binance.",
+      "q3": "Do I need an account?",
+      "a3": "Not to view the home page, charts and indicators. The watchlist, price alerts and notifications need a login.",
+      "q4": "How do price alerts work?",
+      "a4": "You set an \"above\" or \"below\" price. When the price reaches it, the app sends one in-app notification, once. There are no emails or messages.",
+      "q5": "Is this investment advice?",
+      "a5": "No. The information is for reference only."
+    },
+    "contact": {
+      "title": "Contact",
+      "p1": "This is a student learning project, not a commercial product, and there is no contact form.",
+      "p2": "To report a bug or give feedback, open an issue in the project's public source repository:"
+    },
+    "community-rules": {
+      "title": "Community rules",
+      "p1": "The community area (ideas, comments) is planned and is not part of the current version. These rules will apply when it opens.",
+      "p2": "Respect others: no personal attacks, discrimination or harassment.",
+      "p3": "No advertising, referral links, scams or spam.",
+      "p4": "Do not post personal information about yourself or others.",
+      "p5": "Trading ideas are shared for discussion only and are not investment advice; no guaranteed returns."
+    },
+    "terms": {
+      "title": "Terms of use",
+      "p1": "Crypto Alert is a learning project. The service is provided \"as is\", without any warranty of accuracy, availability or fitness for a particular purpose.",
+      "p2": "The information shown is for reference only and is not investment advice. You are responsible for your own decisions.",
+      "p3": "The application does not allow real-money trading, order entry or linking exchange accounts.",
+      "p4": "You must not abuse the service, for example by sending unusual volumes of requests or trying to access other users' data. Violating accounts may be blocked.",
+      "p5": "Market data belongs to its source (Binance) and is subject to that source's terms."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "p1": "When you register, the application stores your email, display name and a password hash (argon2id); the password itself is never stored.",
+      "p2": "It also stores your preferences (language, theme, time zone), your watchlist, your price alerts and your notifications. This data is visible only to you.",
+      "p3": "The application uses no tracking analytics, shows no advertising and does not sell or share your data with third parties.",
+      "p4": "One sign-in cookie (refresh_token, httpOnly) keeps you signed in for up to 7 days; see the Cookie policy.",
+      "p5": "To delete your account and data, get in touch through the Contact page."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "p1": "The application uses a single cookie: refresh_token. It is an httpOnly cookie, sent only to the /api/v1/auth path, expires after 7 days and keeps you signed in.",
+      "p2": "The application uses no advertising or tracking cookies.",
+      "p3": "Some choices are stored in your browser (localStorage) on your device: language, theme, indicator settings, screen layout, recently opened pairs and chart type.",
+      "p4": "You can delete this data at any time in your browser settings."
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "p1": "Information is for reference only and is not investment advice.",
+      "p2": "Prices, charts and indicators may be delayed, incomplete or inaccurate. Price alerts may not be delivered if market data is interrupted.",
+      "p3": "Trading cryptocurrencies is high risk and you can lose all of your capital. Do your own research before deciding.",
+      "p4": "The project author is not liable for any loss arising from the use of this application."
+    },
+    "status": {
+      "title": "System status",
+      "intro": "Values come straight from the server and refresh every 30 seconds.",
+      "db": "Database",
+      "dbUp": "Up",
+      "dbDown": "Down",
+      "provider": "Market data provider",
+      "connected": "Market data connection",
+      "yes": "Connected",
+      "no": "Disconnected",
+      "lastMessage": "Last market message",
+      "never": "None yet",
+      "version": "Version",
+      "overall": "Overall status",
+      "ok": "OK",
+      "degraded": "Degraded",
+      "unavailable": "The system status cannot be loaded right now.",
+      "updated": "Updated at"
+    },
+    "home": "Home",
+    "legal": "Legal",
+    "repoLink": "Source repository on GitHub",
+    "breadcrumb": "Breadcrumb"
   }
 }

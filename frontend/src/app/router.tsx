@@ -12,6 +12,8 @@ import { HomePage } from './pages/HomePage';
 import { AlertsPage } from './pages/AlertsPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { CoinPage } from '../features/coin';
+import { ContentPage } from '../features/static/ContentPage';
+import { StatusPage } from '../features/static/StatusPage';
 
 /** `/chart/btcusdt` → `/chart/BTCUSDT` (SPEC §4) */
 function ChartRoute() {
@@ -56,6 +58,15 @@ export const router = createBrowserRouter([
               { path: '/notifications', element: <NotificationsPage /> },
             ],
           },
+          { path: '/about', element: <ContentPage id="about" /> },
+          { path: '/faq', element: <ContentPage id="faq" /> },
+          { path: '/status', element: <StatusPage /> },
+          { path: '/contact', element: <ContentPage id="contact" /> },
+          { path: '/community-rules', element: <ContentPage id="community-rules" /> },
+          { path: '/legal/terms', element: <ContentPage id="terms" /> },
+          { path: '/legal/privacy', element: <ContentPage id="privacy" /> },
+          { path: '/legal/cookies', element: <ContentPage id="cookies" /> },
+          { path: '/legal/disclaimer', element: <ContentPage id="disclaimer" /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

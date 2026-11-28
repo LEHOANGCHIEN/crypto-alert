@@ -37,7 +37,10 @@
     "attribution": "Dữ liệu giá: Binance. Biểu đồ: TradingView Lightweight Charts™.",
     "copyright": "© {{year}} Crypto Alert",
     "products": "Sản phẩm",
-    "chartsLink": "Lightweight Charts"
+    "chartsLink": "Lightweight Charts",
+    "colAbout": "Về dự án",
+    "colCommunity": "Cộng đồng",
+    "colPolicies": "Chính sách"
   },
   "pages": {
     "trade": {
@@ -465,5 +468,93 @@
     "recent": "Đã mở gần đây",
     "empty": "Không tìm thấy kết quả phù hợp.",
     "hint": "Nhập tên coin hoặc trang để tìm kiếm. Các cặp bạn mở gần đây sẽ hiện ở đây."
+  },
+  "static": {
+    "about": {
+      "title": "Giới thiệu",
+      "p1": "Crypto Alert là đồ án chuyên ngành của một sinh viên Trường Đại học Công nghệ Thông tin (UIT, ĐHQG-HCM): một ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá.",
+      "p2": "Ứng dụng hiển thị các cặp giao dịch USDT giao ngay trên Binance, biểu đồ nến với MA, RSI và MACD, danh sách theo dõi, cảnh báo giá một lần và thông báo trong ứng dụng. Có thể dùng tiếng Việt hoặc tiếng Anh, giao diện tối hoặc sáng.",
+      "p3": "Dữ liệu giá lấy từ API công khai của Binance và chỉ được gọi từ máy chủ của dự án; trình duyệt không gọi trực tiếp tới Binance. Biểu đồ dùng thư viện TradingView Lightweight Charts™.",
+      "p4": "Về kỹ thuật: React và TypeScript ở giao diện, NestJS và PostgreSQL ở máy chủ, Socket.IO cho dữ liệu thời gian thực, kiểm thử tự động bằng Playwright."
+    },
+    "faq": {
+      "title": "Câu hỏi thường gặp",
+      "q1": "Giá có thời gian thực không?",
+      "a1": "Có. Máy chủ giữ một kết nối tới Binance và chuyển dữ liệu tới trình duyệt qua Socket.IO, thường chậm không quá vài giây.",
+      "q2": "Ứng dụng hỗ trợ những cặp nào?",
+      "a2": "Các cặp giao dịch giao ngay có đồng định giá USDT và đang ở trạng thái giao dịch trên Binance.",
+      "q3": "Tôi có cần tài khoản không?",
+      "a3": "Không cần để xem trang chủ, biểu đồ và chỉ báo. Danh sách theo dõi, cảnh báo giá và thông báo cần đăng nhập.",
+      "q4": "Cảnh báo giá hoạt động thế nào?",
+      "a4": "Bạn đặt mức giá “vượt lên” hoặc “xuống dưới”. Khi giá chạm mức đó, ứng dụng gửi một thông báo trong ứng dụng, một lần duy nhất. Không có email hay tin nhắn.",
+      "q5": "Đây có phải lời khuyên đầu tư không?",
+      "a5": "Không. Thông tin chỉ mang tính tham khảo."
+    },
+    "contact": {
+      "title": "Liên hệ",
+      "p1": "Đây là dự án học tập do một sinh viên thực hiện, không phải sản phẩm thương mại và không có biểu mẫu liên hệ.",
+      "p2": "Để báo lỗi hoặc góp ý, hãy mở một issue trên kho mã nguồn công khai của dự án:"
+    },
+    "community-rules": {
+      "title": "Quy tắc cộng đồng",
+      "p1": "Khu vực cộng đồng (ý tưởng, bình luận) đang được lên kế hoạch và chưa có trong phiên bản hiện tại. Khi ra mắt, các quy tắc dưới đây sẽ áp dụng.",
+      "p2": "Tôn trọng người khác: không công kích cá nhân, không phân biệt đối xử, không quấy rối.",
+      "p3": "Không đăng quảng cáo, liên kết giới thiệu, nội dung lừa đảo hoặc spam.",
+      "p4": "Không đăng thông tin cá nhân của bạn hoặc của người khác.",
+      "p5": "Ý tưởng giao dịch chỉ mang tính chia sẻ, không phải khuyến nghị đầu tư; không cam kết lợi nhuận."
+    },
+    "terms": {
+      "title": "Điều khoản sử dụng",
+      "p1": "Crypto Alert là một dự án học tập. Dịch vụ được cung cấp “nguyên trạng”, không có bất kỳ bảo đảm nào về tính chính xác, độ sẵn sàng hay tính phù hợp cho một mục đích cụ thể.",
+      "p2": "Thông tin hiển thị chỉ mang tính tham khảo và không phải khuyến nghị đầu tư. Bạn tự chịu trách nhiệm với mọi quyết định của mình.",
+      "p3": "Ứng dụng không cho phép giao dịch bằng tiền thật, đặt lệnh hay liên kết tài khoản sàn giao dịch.",
+      "p4": "Bạn không được lạm dụng dịch vụ, ví dụ gửi lượng yêu cầu bất thường hoặc cố truy cập dữ liệu của người dùng khác. Tài khoản vi phạm có thể bị khóa.",
+      "p5": "Dữ liệu thị trường thuộc về nguồn cung cấp (Binance) và tuân theo điều khoản của nguồn đó."
+    },
+    "privacy": {
+      "title": "Chính sách quyền riêng tư",
+      "p1": "Khi đăng ký, ứng dụng lưu email, tên hiển thị và mật khẩu đã được băm bằng argon2id; mật khẩu gốc không bao giờ được lưu.",
+      "p2": "Ứng dụng cũng lưu tùy chọn của bạn (ngôn ngữ, giao diện, múi giờ), danh sách theo dõi, cảnh báo giá và thông báo của bạn. Dữ liệu này chỉ hiển thị cho chính bạn.",
+      "p3": "Ứng dụng không dùng công cụ phân tích theo dõi, không có quảng cáo và không bán hoặc chia sẻ dữ liệu của bạn với bên thứ ba.",
+      "p4": "Một cookie đăng nhập (refresh_token, httpOnly) được dùng để giữ phiên đăng nhập tối đa 7 ngày; xem trang Chính sách cookie.",
+      "p5": "Để xóa tài khoản và dữ liệu, hãy liên hệ qua trang Liên hệ."
+    },
+    "cookies": {
+      "title": "Chính sách cookie",
+      "p1": "Ứng dụng chỉ dùng một cookie: refresh_token. Đây là cookie httpOnly, chỉ gửi tới đường dẫn /api/v1/auth, hết hạn sau 7 ngày và dùng để giữ bạn đăng nhập.",
+      "p2": "Ứng dụng không dùng cookie quảng cáo hoặc theo dõi.",
+      "p3": "Một số lựa chọn được lưu trong bộ nhớ trình duyệt (localStorage) trên máy của bạn: ngôn ngữ, giao diện, cấu hình chỉ báo, bố cục màn hình, cặp đã mở gần đây và loại biểu đồ.",
+      "p4": "Bạn có thể xóa các dữ liệu này bất cứ lúc nào trong cài đặt trình duyệt."
+    },
+    "disclaimer": {
+      "title": "Miễn trừ trách nhiệm",
+      "p1": "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư.",
+      "p2": "Giá, biểu đồ và chỉ báo có thể bị chậm, thiếu hoặc không chính xác. Cảnh báo giá có thể không được gửi nếu dữ liệu thị trường bị gián đoạn.",
+      "p3": "Giao dịch tiền mã hóa có rủi ro cao và bạn có thể mất toàn bộ vốn. Hãy tự nghiên cứu trước khi quyết định.",
+      "p4": "Tác giả dự án không chịu trách nhiệm cho bất kỳ thiệt hại nào phát sinh từ việc sử dụng ứng dụng."
+    },
+    "status": {
+      "title": "Trạng thái hệ thống",
+      "intro": "Giá trị lấy trực tiếp từ máy chủ và tự làm mới mỗi 30 giây.",
+      "db": "Cơ sở dữ liệu",
+      "dbUp": "Hoạt động",
+      "dbDown": "Không hoạt động",
+      "provider": "Nguồn dữ liệu thị trường",
+      "connected": "Kết nối nguồn dữ liệu",
+      "yes": "Đã kết nối",
+      "no": "Mất kết nối",
+      "lastMessage": "Tin nhắn thị trường gần nhất",
+      "never": "Chưa có",
+      "version": "Phiên bản",
+      "overall": "Tình trạng chung",
+      "ok": "Bình thường",
+      "degraded": "Suy giảm",
+      "unavailable": "Không thể tải trạng thái hệ thống lúc này.",
+      "updated": "Cập nhật lúc"
+    },
+    "home": "Trang chủ",
+    "legal": "Pháp lý",
+    "repoLink": "Kho mã nguồn trên GitHub",
+    "breadcrumb": "Đường dẫn trang"
   }
 }

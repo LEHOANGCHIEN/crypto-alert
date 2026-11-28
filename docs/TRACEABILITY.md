@@ -4,7 +4,7 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 99 ACs · passing 97 · failing 0 · pending 2 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
+**Summary:** 99 ACs · passing 98 · failing 0 · pending 1 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
@@ -104,6 +104,6 @@
 | AC-COIN-04 | 6b | coin/coin.spec.ts | AC-COIN-04 key stats | passing | one test: 7 stat rows equal the API ticker / daily klines, guest page, desktop chart + stats side by side, 390×844 single column and no horizontal scroll; unit: coin.test.ts (highLow) |
 | AC-SITE-01 | 7a | site/home.spec.ts | AC-SITE-01 home shows hero, market summary and movers | passing | unit: lib.test.ts (topMovers), Sparkline.test.ts; checks hero, 4 cards (price/change/colour from the API tickers, sparkline 24 points + own direction, one klines 1h×24 request per card), Gainers/Losers order, mock tick ≤ 2 s, hero search → dialog, vi + en, logged in, 390 px no horizontal scroll |
 | AC-SITE-02 | 7a | site/search.spec.ts | AC-SITE-02 search dialog (Ctrl+K) | passing | unit: search.test.ts (ranking, pages, recent symbols); Ctrl+K and header/pair-selector triggers, focus return, arrows + Enter, recents in localStorage, vi + en empty state |
-| AC-SITE-03 | 7a | site/ | (pending) | pending | |
+| AC-SITE-03 | 7a | site/static.spec.ts | AC-SITE-03 static pages and live status | passing | one test: 9 pages in vi + en (breadcrumb, h1, body, footer, no raw keys, no Vietnamese diacritics in EN), FAQ pairs, /contact repo link, 390 px no horizontal scroll, /status values equal the page own /health response and refresh at 30 s (Playwright clock) |
 | AC-SITE-04 | 7a | site/routes.spec.ts | AC-SITE-04 /trade redirects to /chart; shells never mix | passing | redirect keeps query, upper-casing, chart shell vs site shell element checks, back/forward |
 | AC-SITE-05 | 7a | site/tokens.spec.ts | AC-SITE-05 dark theme is black and text tokens keep 4.5:1 contrast in both themes | passing | computes WCAG contrast from computed CSS variables, 3 text tokens × 3 surfaces, dark + light |
