@@ -449,6 +449,13 @@
   },
   "search": {
     "open": "Search (Ctrl+K)",
-    "pair": "Choose a trading pair"
+    "pair": "Choose a trading pair",
+    "title": "Search",
+    "placeholder": "Search coins, pairs, pages…",
+    "pairs": "Pairs",
+    "pages": "Pages",
+    "recent": "Recently opened",
+    "empty": "No matching results.",
+    "hint": "Type a coin or page name to search. Pairs you opened recently will appear here."
   }
 }

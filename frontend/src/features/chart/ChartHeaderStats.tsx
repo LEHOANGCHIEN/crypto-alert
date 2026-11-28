@@ -4,7 +4,7 @@ import type { SymbolInfo, Ticker } from '../../shared/api/types';
 import { priceDirection } from '../../shared/format';
 import { useFormat } from '../../shared/format/useFormat';
 import { StarButton } from '../watchlist';
-import { coinName } from './coin-names';
+import { coinName } from '../../shared/market/coin-names';
 
 const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;
 

@@ -255,7 +255,7 @@ Merge of each package = docs/PROMPTS.md section e with N=6a / 6b, tag `v0.6.1` /
 - [x] Black dark tokens + contrast test (AC-SITE-05)
 - [x] Route restructure: chart shell at `/chart/:symbol`, `/trade` redirect, login/register default `/`, rename `/trade/`→`/chart/` in code and tests (same strictness) (AC-SITE-04, AC-AUTH-01/04, renamed ACs)
 - [x] Site shell: header with mega-menus + drawer, full footer, pulse bar/status bar only in chart shell (AC-UI-01, AC-UI-03, AC-UI-09)
-- [ ] Search dialog Ctrl+K (AC-SITE-02)
+- [x] Search dialog Ctrl+K (AC-SITE-02)
 - [ ] Home v1 (AC-SITE-01)
 - [ ] Static pages incl. live `/status` (AC-SITE-03)
 - [ ] Railway GitHub autodeploy: owner connects the service (Railway UI) — builder only documents it (ARCHITECTURE §10, PROMPTS e) and verifies after merge; no code

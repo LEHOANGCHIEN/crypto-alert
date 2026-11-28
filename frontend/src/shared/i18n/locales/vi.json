@@ -449,6 +449,13 @@
   },
   "search": {
     "open": "Tìm kiếm (Ctrl+K)",
-    "pair": "Chọn cặp giao dịch"
+    "pair": "Chọn cặp giao dịch",
+    "title": "Tìm kiếm",
+    "placeholder": "Tìm coin, cặp giao dịch, trang…",
+    "pairs": "Cặp giao dịch",
+    "pages": "Trang",
+    "recent": "Đã mở gần đây",
+    "empty": "Không tìm thấy kết quả phù hợp.",
+    "hint": "Nhập tên coin hoặc trang để tìm kiếm. Các cặp bạn mở gần đây sẽ hiện ở đây."
   }
 }
