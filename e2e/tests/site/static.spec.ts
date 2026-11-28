@@ -36,6 +36,11 @@ test('AC-SITE-03 static pages and live status', async ({ page }) => {
     await expect(page.getByTestId('static-title')).toHaveText(p.vi);
     await expect(page.getByTestId('breadcrumb')).toContainText('Trang chủ');
     await expect(page.getByTestId('breadcrumb').locator('[aria-current="page"]')).toHaveText(p.vi);
+    // Breadcrumb is readable: current item is aria-current, 15 px, weight 500, separator hidden from assistive tech.
+    const current = page.getByTestId('breadcrumb').locator('[aria-current="page"]');
+    await expect(current).toHaveCSS('font-size', '15px');
+    await expect(current).toHaveCSS('font-weight', '500');
+    await expect(page.getByTestId('breadcrumb').locator('[aria-hidden="true"]')).toHaveText('›');
     await expect(page.getByTestId('site-footer')).toBeVisible();
     await expect(page.getByTestId('pulse-bar')).toHaveCount(0);
     const viText = await root.innerText();

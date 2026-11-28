@@ -49,6 +49,8 @@
   --text-hub: 56px;
   --text-site-section: 24px;
   --text-page-title: 36px;
+  --text-breadcrumb: 15px;
+  --font-weight-breadcrumb: 500;
 
   --radius-input: 4px;
   --radius-chip: 3px;
@@ -70,6 +72,7 @@
   --spacing-auth-form: 440px;
   --spacing-auth-content: 520px;
   --spacing-dialog: 70vh;
+  --spacing-breadcrumb-gap: 20px;
   --container-site: 1280px;
 }
 
