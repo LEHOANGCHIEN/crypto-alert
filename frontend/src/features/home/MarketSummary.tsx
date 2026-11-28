@@ -26,7 +26,7 @@ function SummaryCard({ symbol, baseAsset, precision, lastPrice, change }: { symb
     <Link to={`/coin/${symbol}`} data-testid={`summary-card-${symbol}`} data-direction={dir} className="block">
       <Card className="flex h-full flex-col gap-3 p-4 hover:bg-surface-2">
         <div className="flex items-center gap-3">
-          <CoinAvatar baseAsset={baseAsset} size="lg" />
+          <CoinAvatar baseAsset={baseAsset} size="lg" testId={`summary-avatar-${symbol}`} />
           <div className="flex flex-col leading-tight">
             <span data-testid={`summary-name-${symbol}`} className="text-section font-semibold text-text">
               {coinName(baseAsset) ?? baseAsset}

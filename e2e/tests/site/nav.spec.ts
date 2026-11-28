@@ -101,6 +101,9 @@ test('AC-UI-09 site header and mega-menu', async ({ page }) => {
   await page.getByTestId('submit-login').click();
   await expect(page).toHaveURL(/\/alerts$/);
   await expect(page.getByTestId('alerts-page')).toBeVisible();
+  // Logged in: the header shows the notification bell and the user menu (instead of Login/Register).
+  await expect(page.getByTestId('site-header').getByTestId('bell')).toBeVisible();
+  await expect(page.getByTestId('site-header').getByTestId('user-menu')).toBeVisible();
 
   // The menu of the current section and the current item carry aria-current="page".
   await expect(page.getByTestId('nav-products')).toHaveAttribute('aria-current', 'page');

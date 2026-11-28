@@ -40,7 +40,7 @@ export function AlertsPage() {
   const price = (symbol: string, v: number) => fmt.price(v, pairs.get(symbol)?.pricePrecision ?? DEFAULT_PRECISION);
 
   return (
-    <div data-testid="alerts-page" className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4">
+    <div data-testid="alerts-page" data-fetching={String(alerts.isFetching)} className="mx-auto flex w-full max-w-screen-2xl flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-price font-semibold">{t('alertsPage.title')}</h1>

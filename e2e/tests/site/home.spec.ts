@@ -49,6 +49,7 @@ test('AC-SITE-01 home shows hero, market summary and movers', async ({ page, req
     const card = page.getByTestId(`summary-card-${s}`);
     await expect(page.getByTestId(`summary-name-${s}`)).toHaveText(NAMES[s]!);
     await expect(card).toContainText(s);
+    await expect(card.getByTestId(`summary-avatar-${s}`)).toHaveText(s.charAt(0)); // coin avatar (first letter of the base asset)
     await expect(page.getByTestId(`summary-price-${s}`)).toHaveText(viPrice(t.lastPrice, precision(s)));
     await expect(page.getByTestId(`summary-change-${s}`)).toHaveText(viPercent(t.priceChangePercent));
     await expect(page.getByTestId(`summary-change-${s}`)).toHaveClass(colorClass[direction(t.priceChangePercent)]);

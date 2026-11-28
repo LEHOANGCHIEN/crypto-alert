@@ -106,12 +106,12 @@ test.describe('dashboard layout', () => {
     const header = (await page.locator('header').boundingBox())!;
     const pulse = (await page.getByTestId('pulse-bar').boundingBox())!;
     const status = (await page.getByTestId('status-bar').boundingBox())!;
-        expect(Math.round(header.height)).toBeGreaterThanOrEqual(44); // compact chart header 44–56 px (AC-UI-01)
+    expect(Math.round(header.height)).toBeGreaterThanOrEqual(44); // compact chart header 44–56 px (AC-UI-01)
     expect(Math.round(header.height)).toBeLessThanOrEqual(56);
     expect(Math.round(pulse.height)).toBe(32);
     expect(Math.round(status.height)).toBe(28);
     expect(pulse.y).toBeGreaterThanOrEqual(header.y + header.height - 1);
-    expect(status.y + status.height).toBeLessThanOrEqual(900 + 1); // status bar at the bottom of the window
+    expect(Math.round(status.y + status.height)).toBe(900); // status bar at the very bottom of the window
 
     // Header: logo (→ `/`), pair selector, language switcher, theme toggle, login/register for a guest; no site footer on the chart page.
     await expect(page.getByTestId('logo')).toBeVisible();

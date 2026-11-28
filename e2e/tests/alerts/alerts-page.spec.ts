@@ -7,6 +7,9 @@ import { apiAlerts, apiSession, round, type Alert } from '../../helpers/alerts';
 
 test.beforeEach(async ({ request }) => resetApp(request));
 
+/** The alerts list query is idle (no refetch in flight), so rows and buttons are not about to be re-rendered. */
+const listSettled = (page: Page) => expect(page.getByTestId('alerts-page')).toHaveAttribute('data-fetching', 'false');
+
 const rows = (page: Page) => page.locator('[data-testid^="alerts-row-"][data-status]');
 
 test('AC-ALERT-12 alerts page', async ({ page, request }) => {
@@ -41,6 +44,7 @@ test('AC-ALERT-12 alerts page', async ({ page, request }) => {
   await expect(page.getByTestId(`alerts-row-${seededActive[0].id}`).getByTestId('alerts-row-status')).toHaveText('Đang chạy');
 
   // --- Status filter + symbol search. ---
+  await listSettled(page);
   await page.getByTestId('alerts-filter-triggered').click();
   await expect(rows(page)).toHaveCount(1);
   await expect(rows(page).first()).toHaveAttribute('data-status', 'TRIGGERED');
@@ -89,16 +93,19 @@ test('AC-ALERT-12 alerts page', async ({ page, request }) => {
 
   // --- Delete an active alert: same rules as the Alerts tab (removed from the table); triggered ones deletable too. ---
   const deleted = page.waitForResponse((r) => r.url().endsWith(`/api/v1/alerts/${newAlert.id}`) && r.request().method() === 'DELETE' && r.status() !== 401);
+  await listSettled(page);
   await page.getByTestId(`alerts-delete-${newAlert.id}`).click();
   expect((await deleted).status()).toBe(200);
   await expect(page.getByTestId(`alerts-row-${newAlert.id}`)).toHaveCount(0);
   await expect(rows(page)).toHaveCount(3);
   const deletedTriggered = page.waitForResponse((r) => r.url().endsWith(`/api/v1/alerts/${seededTriggered.id}`) && r.request().method() === 'DELETE' && r.status() !== 401);
+  await listSettled(page);
   await page.getByTestId(`alerts-delete-${seededTriggered.id}`).click();
   expect((await deletedTriggered).status()).toBe(200);
   await expect(rows(page)).toHaveCount(2);
 
   // --- Clicking a symbol opens the chart. ---
+  await listSettled(page);
   const first = rows(page).first().getByTestId('alerts-row-symbol');
   const symbol = (await first.getAttribute('data-symbol')) as string;
   await first.click();
