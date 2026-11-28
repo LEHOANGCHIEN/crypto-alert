@@ -4,14 +4,14 @@
 > Test title must start with the AC ID exactly, e.g. `test('AC-AUTH-01 register success', …)`. Run one: `npm run test:e2e -- -g "AC-AUTH-01"`.
 > Supporting unit/integration tests may be listed in Notes, but an AC is `passing` only when its Playwright test is.
 
-**Summary:** 99 ACs · passing 93 · failing 0 · pending 6 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
+**Summary:** 99 ACs · passing 95 · failing 0 · pending 4 · last CI run: green on phase-6b-pages (2026-11-28, run 46054361657)
 
 | AC | Phase | E2E file (`e2e/tests/`) | Test title | Status | Notes |
 |---|---|---|---|---|---|
 | AC-OPS-01 | 0 | core/ops.spec.ts | AC-OPS-01 health reports db and market data | passing | |
 | AC-I18N-01 | 0 | core/i18n.spec.ts | AC-I18N-01 Vietnamese by default | passing | |
 | AC-THEME-01 | 0 | core/theme.spec.ts | AC-THEME-01 dark theme by default | passing | |
-| AC-UI-03 | 0 | chart/layout.spec.ts | AC-UI-03 footer shows translated texts and can be closed | passing | |
+| AC-UI-03 | 0 | chart/layout.spec.ts | AC-UI-03 site footer shows texts and every link opens an existing page | passing | rewritten in 7a for the new AC: full site footer, attribution, no close button, visits every footer link (internal not 404, external `_blank` + `noopener noreferrer`), chart page has `statusbar-disclaimer` and no footer |
 | AC-UI-04 | 0 | chart/layout.spec.ts | AC-UI-04 unknown route shows 404 | passing | |
 | AC-AUTH-01 | 1 | core/auth.spec.ts | AC-AUTH-01 register success | passing | |
 | AC-AUTH-02 | 1 | core/auth.spec.ts | AC-AUTH-02 duplicate email rejected | passing | |
@@ -44,7 +44,7 @@
 | AC-PROF-05 | 2 | core/account.spec.ts | AC-PROF-05 timezone setting changes displayed times | passing | |
 | AC-I18N-04 | 2 | core/i18n.spec.ts | AC-I18N-04 number and date formats follow locale | passing | |
 | AC-THEME-02 | 2 | core/theme.spec.ts | AC-THEME-02 toggle applies to page and chart | passing | |
-| AC-UI-01 | 2 | chart/layout.spec.ts | AC-UI-01 desktop three-column layout | passing | edited in 6a: 240/320 columns, handles, pulse bar 32, status bar 28, header 56; guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
+| AC-UI-01 | 2 | chart/layout.spec.ts | AC-UI-01 desktop three-column layout | passing | edited in 7a: compact chart header 44–56 px (logo → `/`, pair selector), no site footer on the chart page; edited in 6a: 240/320 columns, handles, pulse bar 32, status bar 28, header 56; guest header (logo, language, theme, login/register, footer) + logged-in header bell and user menu (reviews/phase-2-ui-01-bell.decision.md) |
 | AC-UI-02 | 2 | chart/layout.spec.ts | AC-UI-02 mobile bottom tabs | passing | |
 | AC-MKT-03 | 3 | market/market.spec.ts | AC-MKT-03 live ticker updates row | passing | |
 | AC-RT-01 | 3 | market/realtime.spec.ts | AC-RT-01 open candle updates live | passing | Unit: backoff, send queue, upstream reconnect (fake WS), SubscriptionManager + caps, ticker batcher; integration: realtime.int-spec.ts |
@@ -93,7 +93,7 @@
 | AC-CHART-08 | 6a | chart/chart.spec.ts | AC-CHART-08 volume bars overlay on the price pane | passing | unit: settings.test.ts (volume default/stored). Live update proven with tick (bar color) + close-candle (new bar, volume 0): the mock tick does not change candle volume |
 | AC-CHART-09 | 6a | chart/chart.spec.ts | AC-CHART-09 chart header shows coin name and 24h stats | passing | unit: coin-names.test.ts (18 assets, unknown → no name); unknown-name case covered by coin-names.test.ts (mock has no USDT pair outside the map) |
 | AC-CHART-10 | 6a | chart/chart.spec.ts | AC-CHART-10 screenshot download and maximize | passing | unit: format.test.ts (file stamp); maximize is CSS (fixed overlay), not the Fullscreen API |
-| AC-UI-09 | 6b | site/nav.spec.ts | AC-UI-09 header navigation | passing | unit: lastSymbol.test.ts; guest header app name hidden below 640 px so the header fits 390 px |
+| AC-UI-09 | 6b | site/nav.spec.ts | AC-UI-09 site header and mega-menu | passing | rewritten in 7a: 64 px site header, search button, Products mega-menu (click/hover/keyboard, Esc, `aria-current`), last-symbol memory, guest return-to, drawer below 1024 px; Markets/Community/News menus not shown yet (no pages) |
 | AC-UI-10 | 6b | chart/ui.spec.ts | AC-UI-10 auth pages two-column layout | passing | one test, /login and /register: 1440×900 two equal columns under the 56 px header, brand panel (headline, 3 features, line; content ≤ 520 px centered), form 440 px centered (±2 horizontal, ±40 vertical), title 28 px, inputs 46 px, button 48 px = form width; 390×844 panel hidden, 16 px margins, no horizontal scroll. Existing AC-AUTH tests unchanged (testids `page-login`/`page-register`/`submit-*` kept) |
 | AC-ALERT-11 | 6b | alerts/alerts-panel.spec.ts | AC-ALERT-11 bottom panel | passing | unit: layout.test.ts (bottom limits/parse), distance.test.ts; one test covers tabs, columns, "Current pair only" on all three tabs, notification click marks read, create → row ≤ 2 s, mock trigger → Triggered, drag/keyboard/dblclick resize, collapse, reload. The right-panel Alerts tab keeps its Active/Triggered lists (AC-ALERT-01…06 unchanged) and gains the "n/20" hint; the lists in the bottom panel use `bottom-*` testids |
 | AC-ALERT-12 | 6b | alerts/alerts-page.spec.ts | AC-ALERT-12 alerts page | passing | one test: guest redirect + return-to, table columns/badges/counts, status filter + search, dialog (FAKEUSDT, already-met, empty target, valid create), delete active + triggered, symbol link, empty state for a new user |
@@ -105,5 +105,5 @@
 | AC-SITE-01 | 7a | site/ | (pending) | pending | |
 | AC-SITE-02 | 7a | site/ | (pending) | pending | |
 | AC-SITE-03 | 7a | site/ | (pending) | pending | |
-| AC-SITE-04 | 7a | site/ | (pending) | pending | |
+| AC-SITE-04 | 7a | site/routes.spec.ts | AC-SITE-04 /trade redirects to /chart; shells never mix | passing | redirect keeps query, upper-casing, chart shell vs site shell element checks, back/forward |
 | AC-SITE-05 | 7a | site/tokens.spec.ts | AC-SITE-05 dark theme is black and text tokens keep 4.5:1 contrast in both themes | passing | computes WCAG contrast from computed CSS variables, 3 text tokens × 3 surfaces, dark + light |

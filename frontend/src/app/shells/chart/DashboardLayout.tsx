@@ -1,14 +1,14 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { ResizeHandle } from '../../shared/layout/ResizeHandle';
-import { useMaximized } from '../../shared/layout/maximize.store';
-import { useLayout } from '../../shared/layout/layout.store';
+import { ResizeHandle } from '../../../shared/layout/ResizeHandle';
+import { useMaximized } from '../../../shared/layout/maximize.store';
+import { useLayout } from '../../../shared/layout/layout.store';
 import { MobileTabBar, type DashboardTab } from './MobileTabBar';
 import { CollapseButton, Rail } from './PanelToggle';
 import { SidePanel } from './SidePanel';
 import { BottomPanel } from './BottomPanel';
-import { useElementHeight } from '../../shared/layout/useElementHeight';
+import { useElementHeight } from '../../../shared/layout/useElementHeight';
 
 type Props = {
   market: (select: () => void) => ReactNode;

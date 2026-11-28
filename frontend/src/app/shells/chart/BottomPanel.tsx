@@ -1,15 +1,15 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import type { Alert, Notification } from '../../shared/api/types';
-import { useAuth } from '../../shared/auth/auth.store';
-import { useFormat } from '../../shared/format/useFormat';
-import { BottomResizeHandle } from '../../shared/layout/BottomResizeHandle';
-import { clampBottom, defaultBottom, maxBottom } from '../../shared/layout/layout';
-import { useLayout } from '../../shared/layout/layout.store';
-import { useSymbols, useTickers } from '../../shared/market/queries';
-import { distancePercent, useAlerts, useDeleteAlert } from '../../features/alerts';
-import { useMarkRead, useNotificationFormat, useNotifications } from '../../features/notifications';
+import type { Alert, Notification } from '../../../shared/api/types';
+import { useAuth } from '../../../shared/auth/auth.store';
+import { useFormat } from '../../../shared/format/useFormat';
+import { BottomResizeHandle } from '../../../shared/layout/BottomResizeHandle';
+import { clampBottom, defaultBottom, maxBottom } from '../../../shared/layout/layout';
+import { useLayout } from '../../../shared/layout/layout.store';
+import { useSymbols, useTickers } from '../../../shared/market/queries';
+import { distancePercent, useAlerts, useDeleteAlert } from '../../../features/alerts';
+import { useMarkRead, useNotificationFormat, useNotifications } from '../../../features/notifications';
 
 type Tab = 'active' | 'triggered' | 'notifications';
 const TABS: Tab[] = ['active', 'triggered', 'notifications'];

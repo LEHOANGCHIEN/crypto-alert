@@ -8,10 +8,16 @@
     "home": "Back to home",
     "main": "Main navigation",
     "menu": "Menu",
-    "chart": "Chart",
-    "overview": "Overview",
-    "alerts": "Alerts",
-    "notifications": "Notifications"
+    "chart": "Supercharts",
+    "overview": "Coin overview",
+    "alerts": "Price alerts",
+    "notifications": "Notifications",
+    "products": "Products",
+    "close": "Close menu",
+    "chartDesc": "Full-screen candlestick chart with MA, RSI, MACD",
+    "overviewDesc": "Price, change and stats of one pair",
+    "alertsDesc": "Create and manage price alerts",
+    "notificationsDesc": "Alerts that have triggered"
   },
   "language": {
     "label": "Language",
@@ -27,7 +33,11 @@
     "title": "Building a Web Application for Cryptocurrency Market Tracking with Real-Time Technical Charts and Price Alerts",
     "course": "Specialized Project — UIT",
     "disclaimer": "Information is for reference only and is not investment advice.",
-    "close": "Close footer"
+    "brand": "Crypto Alert",
+    "attribution": "Price data: Binance. Charts: TradingView Lightweight Charts™.",
+    "copyright": "© {{year}} Crypto Alert",
+    "products": "Products",
+    "chartsLink": "Lightweight Charts"
   },
   "pages": {
     "trade": {
@@ -321,7 +331,8 @@
     "lastUpdate": "Last update",
     "clock": "Current time",
     "pulse": "Market pulse",
-    "pulseLabel": "Quick moves"
+    "pulseLabel": "Quick moves",
+    "disclaimer": "Information is for reference only and is not investment advice."
   },
   "bottomPanel": {
     "label": "Alerts and notifications",
@@ -435,5 +446,9 @@
   },
   "home": {
     "title": "See the market clearly before you decide"
+  },
+  "search": {
+    "open": "Search (Ctrl+K)",
+    "pair": "Choose a trading pair"
   }
 }

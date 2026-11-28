@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import type { Side } from '../../shared/layout/layout';
-import { useLayout } from '../../shared/layout/layout.store';
+import type { Side } from '../../../shared/layout/layout';
+import { useLayout } from '../../../shared/layout/layout.store';
 
 const ICON = 'h-4 w-4';
 

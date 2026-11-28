@@ -8,10 +8,16 @@
     "home": "Về trang chủ",
     "main": "Điều hướng chính",
     "menu": "Menu",
-    "chart": "Biểu đồ",
-    "overview": "Tổng quan",
-    "alerts": "Cảnh báo",
-    "notifications": "Thông báo"
+    "chart": "Siêu biểu đồ",
+    "overview": "Tổng quan coin",
+    "alerts": "Cảnh báo giá",
+    "notifications": "Thông báo",
+    "products": "Sản phẩm",
+    "close": "Đóng menu",
+    "chartDesc": "Biểu đồ nến toàn màn hình với MA, RSI, MACD",
+    "overviewDesc": "Giá, biến động và thống kê của một cặp",
+    "alertsDesc": "Tạo và quản lý cảnh báo giá",
+    "notificationsDesc": "Các cảnh báo đã kích hoạt"
   },
   "language": {
     "label": "Ngôn ngữ",
@@ -27,7 +33,11 @@
     "title": "Xây dựng ứng dụng web theo dõi thị trường tiền mã hóa với biểu đồ kỹ thuật thời gian thực và cảnh báo giá",
     "course": "Đồ án chuyên ngành — UIT",
     "disclaimer": "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư.",
-    "close": "Đóng chân trang"
+    "brand": "Crypto Alert",
+    "attribution": "Dữ liệu giá: Binance. Biểu đồ: TradingView Lightweight Charts™.",
+    "copyright": "© {{year}} Crypto Alert",
+    "products": "Sản phẩm",
+    "chartsLink": "Lightweight Charts"
   },
   "pages": {
     "trade": {
@@ -321,7 +331,8 @@
     "lastUpdate": "Cập nhật gần nhất",
     "clock": "Giờ hiện tại",
     "pulse": "Nhịp thị trường",
-    "pulseLabel": "Biến động nhanh"
+    "pulseLabel": "Biến động nhanh",
+    "disclaimer": "Thông tin chỉ mang tính tham khảo, không phải khuyến nghị đầu tư."
   },
   "bottomPanel": {
     "label": "Cảnh báo và thông báo",
@@ -435,5 +446,9 @@
   },
   "home": {
     "title": "Nhìn rõ thị trường trước khi quyết định"
+  },
+  "search": {
+    "open": "Tìm kiếm (Ctrl+K)",
+    "pair": "Chọn cặp giao dịch"
   }
 }

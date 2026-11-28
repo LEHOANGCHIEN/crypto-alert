@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useConnection } from '../../shared/socket/connection.store';
+import { useConnection } from '../../../shared/socket/connection.store';
 
 /** "Reconnecting…" while the socket to our backend is down (after it was up once). */
 export function ConnBanner() {

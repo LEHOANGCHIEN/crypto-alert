@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
-import { parseInterval } from '../../features/chart/TimeframeBar';
-import { priceDirection } from '../../shared/format';
-import { useFormat } from '../../shared/format/useFormat';
-import { useSymbols, useTickers } from '../../shared/market/queries';
-import { PriceCell } from '../../shared/ui/PriceCell';
+import { parseInterval } from '../../../features/chart/TimeframeBar';
+import { priceDirection } from '../../../shared/format';
+import { useFormat } from '../../../shared/format/useFormat';
+import { useSymbols, useTickers } from '../../../shared/market/queries';
+import { PriceCell } from '../../../shared/ui/PriceCell';
 
 export const PULSE_SYMBOLS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'DOGEUSDT'] as const;
 const DIRECTION_CLASS = { up: 'text-up', down: 'text-down', flat: 'text-text-muted' } as const;

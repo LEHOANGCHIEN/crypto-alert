@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate, useParams } from 'react-router-dom';
-import { AppLayout } from './layout/AppLayout';
+import { RootLayout } from './RootLayout';
+import { SiteShell } from './shells/site/SiteShell';
+import { ChartShell } from './shells/chart/ChartShell';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { AccountPage } from '../features/account/AccountPage';
 import { LoginPage } from '../features/auth/LoginPage';
@@ -33,22 +35,30 @@ function CoinRoute() {
 
 export const router = createBrowserRouter([
   {
-    element: <AppLayout />,
+    element: <RootLayout />,
     children: [
-      { path: '/', element: <HomePage /> },
-      { path: '/chart/:symbol', element: <ChartRoute /> },
-      { path: '/trade/:symbol', element: <TradeRedirect /> },
-      { path: '/coin/:symbol', element: <CoinRoute /> },
-      { element: <GuestOnly />, children: [{ path: '/login', element: <LoginPage /> }, { path: '/register', element: <RegisterPage /> }] },
       {
-        element: <RequireAuth />,
+        element: <ChartShell />,
+        children: [{ path: '/chart/:symbol', element: <ChartRoute /> }],
+      },
+      {
+        element: <SiteShell />,
         children: [
-          { path: '/account', element: <AccountPage /> },
-          { path: '/alerts', element: <AlertsPage /> },
-          { path: '/notifications', element: <NotificationsPage /> },
+          { path: '/', element: <HomePage /> },
+          { path: '/trade/:symbol', element: <TradeRedirect /> },
+          { path: '/coin/:symbol', element: <CoinRoute /> },
+          { element: <GuestOnly />, children: [{ path: '/login', element: <LoginPage /> }, { path: '/register', element: <RegisterPage /> }] },
+          {
+            element: <RequireAuth />,
+            children: [
+              { path: '/account', element: <AccountPage /> },
+              { path: '/alerts', element: <AlertsPage /> },
+              { path: '/notifications', element: <NotificationsPage /> },
+            ],
+          },
+          { path: '*', element: <NotFoundPage /> },
         ],
       },
-      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]);

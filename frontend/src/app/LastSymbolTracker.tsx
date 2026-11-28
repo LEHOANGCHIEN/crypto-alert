@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useMatch } from 'react-router-dom';
-import { useSymbols } from '../../shared/market/queries';
-import { useLastSymbol } from '../../shared/nav/lastSymbol';
+import { useSymbols } from '../shared/market/queries';
+import { useLastSymbol } from '../shared/nav/lastSymbol';
 
 /** Remembers the last real pair opened on /chart/:symbol or /coin/:symbol (unknown pairs are ignored). */
 export function LastSymbolTracker() {

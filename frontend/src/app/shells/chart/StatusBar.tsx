@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormat } from '../../shared/format/useFormat';
-import { useTickers } from '../../shared/market/queries';
-import { useConnection } from '../../shared/socket/connection.store';
+import { useFormat } from '../../../shared/format/useFormat';
+import { useTickers } from '../../../shared/market/queries';
+import { useConnection } from '../../../shared/socket/connection.store';
 
 type State = 'connected' | 'connecting' | 'reconnecting' | 'delayed';
 
@@ -45,6 +45,9 @@ export function StatusBar() {
         <span data-testid="status-text" role="status">
           {text}
         </span>
+      </span>
+      <span data-testid="statusbar-disclaimer" className="truncate">
+        {t('statusBar.disclaimer')}
       </span>
       <span className="flex-1" />
       <span>

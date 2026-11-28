@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../shared/auth/auth.store';
-import { WatchlistPanel } from '../../features/watchlist';
-import { AlertsPanel } from '../../features/alerts';
+import { useAuth } from '../../../shared/auth/auth.store';
+import { WatchlistPanel } from '../../../features/watchlist';
+import { AlertsPanel } from '../../../features/alerts';
 import type { DashboardTab } from './MobileTabBar';
 import { CollapseButton } from './PanelToggle';
 

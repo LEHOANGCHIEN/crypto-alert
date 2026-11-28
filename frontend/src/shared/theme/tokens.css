@@ -52,7 +52,8 @@
   --radius-button: 4px;
   --radius-card: 6px;
 
-  --spacing-header: 56px;
+  --spacing-header: 48px;
+  --spacing-site-header: 64px;
   --spacing-pulse: 32px;
   --spacing-toolbar: 40px;
   --spacing-statusbar: 28px;

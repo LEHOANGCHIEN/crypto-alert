@@ -249,7 +249,7 @@ test('AC-UI-08 status bar shows connection state, last update and a clock', asyn
   const text = page.getByTestId('status-text');
   const dot = page.getByTestId('status-dot');
   await expect(bar).toBeVisible();
-  await expect(page.getByTestId('footer-title')).toBeVisible();
+  await expect(page.getByTestId('statusbar-disclaimer')).toBeVisible();
 
   // Connected: exact Vietnamese text, dot = accent (never the up/down colors).
   await expect(text).toHaveText('Đã kết nối');

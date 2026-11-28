@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useConnection } from '../../shared/socket/connection.store';
+import { useConnection } from '../../../shared/socket/connection.store';
 
 /** Header badge while the upstream market data feed is reconnecting (API.md §4.3 `market:status`). */
 export function MarketStatusBadge() {

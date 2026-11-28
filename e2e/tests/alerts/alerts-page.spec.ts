@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
+import { openProductsMenu } from '../../helpers/nav';
 import { logoutViaUi, registerViaUi } from '../../helpers/auth';
 import { lastPrice } from '../../helpers/market';
 import { apiAlerts, apiSession, round, type Alert } from '../../helpers/alerts';
@@ -107,6 +108,7 @@ test('AC-ALERT-12 alerts page', async ({ page, request }) => {
   await logoutViaUi(page);
   await registerViaUi(page);
   await expect(page.getByTestId('user-menu')).toBeVisible();
+  await openProductsMenu(page);
   await page.getByTestId('nav-alerts').click();
   await expect(page.getByTestId('alerts-page-empty')).toBeVisible();
   await page.getByTestId('alerts-empty-link').click();

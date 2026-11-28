@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { resetApp } from '../../helpers/reset';
+import { openProductsMenu } from '../../helpers/nav';
 import { lastPrice, left, pushTick } from '../../helpers/market';
 import { apiCreateAlert, apiNotifications, apiSession, round } from '../../helpers/alerts';
 
@@ -24,6 +25,7 @@ test('AC-NOTIF-06 notifications page', async ({ page, request }) => {
   await page.getByTestId('submit-login').click();
   await expect(page).toHaveURL(/\/notifications$/);
   await expect(page.getByTestId('notifications-page')).toBeVisible();
+  await openProductsMenu(page);
   await expect(page.getByTestId('nav-notifications')).toHaveAttribute('aria-current', 'page');
 
   expect(listRequests.length).toBeGreaterThan(0);
@@ -41,8 +43,8 @@ test('AC-NOTIF-06 notifications page', async ({ page, request }) => {
   await expect(seeded.getByTestId('notification-chart-link')).toHaveAttribute('href', '/chart/SOLUSDT');
 
   // --- A new notification (mock trigger) appears at the top within 2 s. ---
-  // The socket is recreated with the new token after login: push the tick only when the status bar shows "connected".
-  await expect(page.getByTestId('status-text')).toHaveText('Đã kết nối');
+  // The socket is recreated with the new token after login: push the tick only when the realtime socket is connected (site pages have no status bar).
+  await expect(page.getByTestId('site-shell')).toHaveAttribute('data-connected', 'true');
   const session = apiSession(request);
   const price = await lastPrice(request, 'BTCUSDT');
   await apiCreateAlert(request, await session(), 'BTCUSDT', 'ABOVE', round(price + 100));
@@ -80,6 +82,7 @@ test('AC-NOTIF-06 notifications page', async ({ page, request }) => {
   for (const unread of await items(page).evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.unread))) expect(unread).toBe('false');
 
   // --- Bell panel has a "View all" link to this page. ---
+  await openProductsMenu(page);
   await page.getByTestId('nav-chart').click();
   await expect(page).toHaveURL(/\/chart\/BTCUSDT/);
   await page.getByTestId('bell').click();
