@@ -493,7 +493,8 @@
     "contact": {
       "title": "Liên hệ",
       "p1": "Đây là dự án học tập do một sinh viên thực hiện, không phải sản phẩm thương mại và không có biểu mẫu liên hệ.",
-      "p2": "Để báo lỗi hoặc góp ý, hãy mở một issue trên kho mã nguồn công khai của dự án:"
+      "p2": "Để báo lỗi hoặc góp ý, hãy mở một issue trên kho mã nguồn công khai của dự án:",
+      "social": "Mạng xã hội của tác giả:"
     },
     "community-rules": {
       "title": "Quy tắc cộng đồng",
@@ -556,5 +557,8 @@
     "legal": "Pháp lý",
     "repoLink": "Kho mã nguồn trên GitHub",
     "breadcrumb": "Đường dẫn trang"
+  },
+  "social": {
+    "ariaLabel": "{{label}} của Lê Hoàng Chiến"
   }
 }

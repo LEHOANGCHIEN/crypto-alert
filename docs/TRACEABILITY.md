@@ -11,7 +11,7 @@
 | AC-OPS-01 | 0 | core/ops.spec.ts | AC-OPS-01 health reports db and market data | passing | |
 | AC-I18N-01 | 0 | core/i18n.spec.ts | AC-I18N-01 Vietnamese by default | passing | |
 | AC-THEME-01 | 0 | core/theme.spec.ts | AC-THEME-01 dark theme by default | passing | |
-| AC-UI-03 | 0 | chart/layout.spec.ts | AC-UI-03 site footer shows texts and every link opens an existing page | passing | rewritten in 7a for the new AC: full site footer, attribution, no close button, visits every footer link (internal not 404, external `_blank` + `noopener noreferrer`), chart page has `statusbar-disclaimer` and no footer |
+| AC-UI-03 | 0 | site/footer.spec.ts | AC-UI-03 site footer shows texts and every link opens an existing page | passing | rewritten in 7a for the new AC: full site footer, attribution, no close button, visits every footer link (internal not 404, external `_blank` + `noopener noreferrer`), chart page has `statusbar-disclaimer` and no footer; 7a review: phone (390×844) chart page shows `chart-disclaimer-mobile` without horizontal scroll; 7 social links (`footer-social-<id>`, exact URLs from `shared/config/social.ts`, target/rel/aria-label) and the same 7 on `/contact` (`contact-social-<id>`); moved from chart/ to site/ |
 | AC-UI-04 | 0 | chart/layout.spec.ts | AC-UI-04 unknown route shows 404 | passing | |
 | AC-AUTH-01 | 1 | core/auth.spec.ts | AC-AUTH-01 register success | passing | |
 | AC-AUTH-02 | 1 | core/auth.spec.ts | AC-AUTH-02 duplicate email rejected | passing | |

@@ -493,7 +493,8 @@
     "contact": {
       "title": "Contact",
       "p1": "This is a student learning project, not a commercial product, and there is no contact form.",
-      "p2": "To report a bug or give feedback, open an issue in the project's public source repository:"
+      "p2": "To report a bug or give feedback, open an issue in the project's public source repository:",
+      "social": "The author's social links:"
     },
     "community-rules": {
       "title": "Community rules",
@@ -556,5 +557,8 @@
     "legal": "Legal",
     "repoLink": "Source repository on GitHub",
     "breadcrumb": "Breadcrumb"
+  },
+  "social": {
+    "ariaLabel": "{{label}} of Lê Hoàng Chiến"
   }
 }

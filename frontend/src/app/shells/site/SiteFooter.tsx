@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLastSymbol } from '../../../shared/nav/lastSymbol';
+import { FooterSocial } from '../../../shared/ui/SocialLinks';
 
 const CHARTS_URL = 'https://www.tradingview.com/lightweight-charts/';
 
@@ -52,6 +53,7 @@ export function SiteFooter({ flush = false }: { flush?: boolean }) {
           <p className="text-section font-semibold text-text">{t('footer.brand')}</p>
           <p data-testid="footer-title" className="text-text">{t('footer.title')}</p>
           <p data-testid="footer-course">{t('footer.course')}</p>
+          <FooterSocial />
           <p data-testid="footer-attribution">
             {t('footer.attribution')}{' '}
             <a href={CHARTS_URL} target="_blank" rel="noopener noreferrer" data-testid="footer-link-charts" className="text-accent hover:underline">

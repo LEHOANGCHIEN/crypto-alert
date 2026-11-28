@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { ContactSocial } from '../../shared/ui/SocialLinks';
 import { StaticPage } from './StaticPage';
 import { REPO_URL, STATIC_PAGES, type StaticPageId } from './pages';
 
@@ -27,6 +28,12 @@ export function ContentPage({ id }: { id: Exclude<StaticPageId, 'status'> }) {
             {t('static.repoLink')}: {REPO_URL}
           </a>
         </p>
+      )}
+      {id === 'contact' && (
+        <section>
+          <p className="mb-2">{t('static.contact.social')}</p>
+          <ContactSocial />
+        </section>
       )}
     </StaticPage>
   );
