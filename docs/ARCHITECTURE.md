@@ -43,7 +43,7 @@ flowchart LR
   Browser --> SPA
 ```
 
-**Frontend shells (since 7a):** the SPA has two shells. The **site shell** (`app/shells/site/`: SiteHeader + MegaMenu, SiteFooter, SearchDialog) wraps every site page (home, coin overview, alerts, notifications, account, auth, static pages). The **chart shell** (`app/shells/chart/`: compact ChartHeader, PulseBar, three-column dashboard, BottomPanel, StatusBar with the disclaimer, no footer) wraps `/chart/:symbol` only.
+**Frontend shells (since 7a):** the SPA has two shells. The **site shell** (`app/shells/site/`: SiteHeader + MegaMenu, SiteFooter; the Ctrl+K `SearchDialog` lives in `shared/search/`) wraps every site page (home, coin overview, alerts, notifications, account, auth, static pages). The **chart shell** (`app/shells/chart/`: compact ChartHeader, PulseBar, three-column dashboard, BottomPanel, StatusBar with the disclaimer, no footer) wraps `/chart/:symbol` only.
 
 **Planned (phases 7b–7f), not built yet:** backend modules `catalog`, `derivatives`, `sentiment`, `jobs`, `screener` (7b), `news` and `ai` (7d, 7f), `community` (7e) — see §7. Each external source sits behind its own provider interface with a real and a mock implementation.
 
@@ -185,9 +185,9 @@ On every socket `connect` (first connect and every reconnect, including after lo
   src/
     app/              router · providers
       shells/
-        site/         SiteHeader · MegaMenu · SiteFooter · SearchDialog
-        chart/        DashboardLayout · SidePanel · BottomPanel · MobileTabBar · PulseBar · StatusBar · ChartHeader (compact)
-    pages/            thin route components: home · chart · coin · alerts · notifications · account · auth · static/ · errors/ (later: markets · screener · heatmap · symbol · news · ideas · users)
+        site/         SiteHeader · SiteShell · MegaMenu · MobileDrawer · SiteFooter
+        chart/        DashboardLayout · SidePanel · BottomPanel · MobileTabBar · PulseBar · StatusBar · ChartHeader (compact) · mobile disclaimer line (`chart-disclaimer-mobile`)
+    app/pages/        thin route components: home · chart · coin · alerts · notifications · account · auth · static/ · errors/ (later: markets · screener · heatmap · symbol · news · ideas · users)
     features/
       auth/ · account/ · market/ · chart/ · indicators/ (lib/: sma, rsi, macd — pure functions) · watchlist/ · alerts/ · notifications/ · coin/ (later features per phase)
     shared/
@@ -197,7 +197,9 @@ On every socket `connect` (first connect and every reconnect, including after lo
       format/         formatPrice · formatPercent · formatCompact · formatDateTime (Intl, locale + timezone aware)
       theme/          tokens.css · ThemeProvider
       preferences/    guest (localStorage) ↔ account (API) sync
-      ui/             Button · Input · Select · Tabs · Toast · Badge · Modal · Spinner · EmptyState · Card · Pill · SectionHeader · Breadcrumb · CoinAvatar · Sparkline · Dialog
+      search/         SearchDialog · search store (Ctrl+K)
+      config/         social.ts (the owner's social links, the only place their URLs live)
+      ui/             Button · Input · Select · Tabs · Toast · Badge · Modal · Spinner · EmptyState · Card · Pill · SectionHeader · Breadcrumb · CoinAvatar · Sparkline · SocialLinks
 /e2e                  playwright.config.ts · fixtures/indicators.golden.json · helpers/ (mock control, login)
   tests/              core/ (auth, account, i18n, theme, ops) · market/ (market, realtime) · chart/ (chart, indicators, layout, ui chart-shell tests) · alerts/ (alerts, alerts-page, alerts-panel) · notifications/ (notifications, notifications-page) · watchlist/ · coin/ · site/ (nav, home, search, footer, static pages, routes, tokens) · later markets/ · symbol/ · news/ · community/ · ai/
 /docs                 SPEC · ARCHITECTURE · API · DATABASE · PROGRESS · TRACEABILITY · PROMPTS · design/v1 (history) · design/v2 (approved mockups)
@@ -321,10 +323,10 @@ Rule: **green/red only for price direction** (text, candles, MACD histogram, vol
 | Weights | 400 body · 500 labels/buttons · 600 headings, price |
 | Spacing scale | 4 · 8 · 12 · 16 · 24 · 32 px (`--space-1…6`) |
 | Radius | 3–4 (chips, inputs) · 6 (cards) |
-| Fixed heights | header 56 · market pulse bar 32 · chart toolbar 40 · status bar 28 · market row 48 (two lines) · mobile tab bar 56 |
+| Fixed heights | chart header 48 (token `--spacing-header`, within 44–56) · site header 64 (`--spacing-site-header`) · market pulse bar 32 · chart toolbar 40 · status bar 28 · market row 48 (two lines) · mobile tab bar 56 |
 | Structure | Panels separated by 1 px `--color-border` lines, no gaps, no card shadows |
 | Motion | price flash: `--color-up-soft`/`--color-down-soft`, fade 600 ms; respect `prefers-reduced-motion` |
-| Site pages | Container max 1280 px (+32 px side padding; token `--container-site` → `max-w-site`); hub title 56–64 px / 800; page/static title 36 px (`--text-page-title`); footer columns utility `grid-cols-footer`; dialog max height `--spacing-dialog` (70vh → `max-h-dialog`); section title 24–26 px / 700 with a `›` link; cards radius 16 px with 1 px border, no shadow; pill tabs (active = filled); spacing between sections 48–56 px. Chart shell keeps the dense 6a values |
+| Site pages | Container max 1280 px (+32 px side padding; token `--container-site` → `max-w-site`); hub title 56–64 px / 800; page/static title 36 px (`--text-page-title`); breadcrumb 15 px / weight 500 / 20 px gap below (`--text-breadcrumb`, `--font-weight-breadcrumb`, `--spacing-breadcrumb-gap`); footer columns utility `grid-cols-footer`; dialog max height `--spacing-dialog` (70vh → `max-h-dialog`); section title 24–26 px / 700 with a `›` link; cards radius 16 px with 1 px border, no shadow; pill tabs (active = filled); spacing between sections 48–56 px. Chart shell keeps the dense 6a values |
 | Focus | 2 px `--color-accent` outline, offset 2 px |
 | Empty/loading | Skeleton rows for lists, spinner for chart, translated empty states with an action button |
 

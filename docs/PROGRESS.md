@@ -300,7 +300,7 @@ Checklist and ACs: added by reviews/phase-7f-*.decision.md.
 - [ ] Security pass: `helmet`, cookie flags in prod, test endpoints impossible in prod, no secrets in repo (`secrets:check` on whole tree), dependency audit (`npm audit --omit=dev`, fix high/critical)
 - [ ] Accessibility pass: focus ring, contrast of tokens, `+`/`−` signs on changes
 - [ ] All ACs passing (all IDs in TRACEABILITY); CI green
-- [ ] Production check from `main` after merge (autodeploy); seed demo data (incl. community samples) on production
+- [ ] Production check from `main` after merge (autodeploy); seed demo data (incl. community samples) on production, smoke-check each feature on the live URL
 - [ ] README final: title, features, screenshots, live URL, demo account, how to run, architecture summary
 - [ ] Screenshots for the report in `docs/screenshots/` (dashboard dark/light, chart with indicators, alerts, notifications, mobile, EN)
 - [ ] Throttle GET /market/klines per client IP (@nestjs/throttler, RATE_LIMITED + Retry-After; update API.md §3.3 errors and ARCHITECTURE security row) — from reviews/phase-2-review.decision.md R4

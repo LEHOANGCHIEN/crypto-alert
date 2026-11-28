@@ -122,9 +122,9 @@ The Phase Review for Phase <N> returned VERDICT: PASS. Merge it safely:
 2. git switch main && git pull --ff-only.
 3. git merge --no-ff phase-<N>-<name> -m "chore: merge phase <N> <name>" and push main. If there is a conflict, stop and explain in Vietnamese; do not resolve by deleting work.
 4. Wait for CI on main to be green (gh run watch). If red, stop and tell me to use the ROLLBACK or STUCK BUG prompt.
-5. Create annotated tag v0.<N> on the merge commit ("Phase <N> complete") and push the tag. For Phase 8 also create and push tag v1.0 (and v0.8).
+5. Create the annotated tag named in the phase decision (7a→v0.7.1, 7b→v0.7.2, 7c→v0.7.3, 7d→v0.7.4, 7e→v0.7.5, 7f→v0.7.6, 8→v0.8 and v1.0) on the merge commit and push it.
 6. Railway autodeploys `main` once CI on the merge commit passes. Wait (poll up to 15 min) until GET <URL>/api/v1/health returns ok with the new version/behaviour; if no new deployment appears, stop and ask the owner (fallback: owner runs `railway up --ci -s web`).
-7. On main, append to docs/PROGRESS.md the merge log line: "- YYYY-MM-DD · MERGED into main · merge <short-hash> · tag v0.<N> · CI green · deployed", set the phase state to "done" in the Status table, commit "docs: log phase <N> merge", push.
+7. On main, append to docs/PROGRESS.md the merge log line: "- YYYY-MM-DD · MERGED into main · merge <short-hash> · tag <tag> · CI green · deployed", set the phase state to "done" in the Status table, commit "docs: log phase <N> merge", push.
 Never force-push, rewrite history, or delete branches or tags. End with a 3-line Vietnamese summary and the next prompt to use (PHASE START PROMPT for phase <N+1>, with its settings).
 ```
 
