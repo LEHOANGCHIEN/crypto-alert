@@ -1,11 +1,18 @@
-import { useTranslation } from 'react-i18next';
+import { useConnection } from '../../shared/socket/connection.store';
+import { useLiveTickers } from '../../shared/market/useLiveMarket';
+import { Hero } from '../../features/home/Hero';
+import { MarketSummary } from '../../features/home/MarketSummary';
+import { Movers } from '../../features/home/Movers';
 
-/** `/` — home (built up in Phase 7a item "Home v1"). */
+/** `/` — home (F14, docs/design/v2/01-home.png): hero, market summary, movers. Real data only. */
 export function HomePage() {
-  const { t } = useTranslation();
+  useLiveTickers();
+  const live = useConnection((s) => s.tickersLive);
   return (
-    <div data-testid="page-home" className="mx-auto max-w-[1280px] px-8 py-12">
-      <h1 className="text-auth-headline font-bold">{t('home.title')}</h1>
+    <div data-testid="page-home" data-live={String(live)} className="mx-auto w-full max-w-[1280px] px-0 sm:px-4 lg:px-8">
+      <Hero />
+      <MarketSummary />
+      <Movers />
     </div>
   );
 }

@@ -46,11 +46,14 @@
   --text-auth-title: 28px;
   --text-auth-headline: 32px;
   --text-coin-price: 48px;
+  --text-hub: 56px;
+  --text-site-section: 24px;
 
   --radius-input: 4px;
   --radius-chip: 3px;
   --radius-button: 4px;
   --radius-card: 6px;
+  --radius-site-card: 16px;
 
   --spacing-header: 48px;
   --spacing-site-header: 64px;

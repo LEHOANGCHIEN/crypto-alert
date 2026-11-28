@@ -445,7 +445,15 @@
     }
   },
   "home": {
-    "title": "Nhìn rõ thị trường trước khi quyết định"
+    "title": "Nhìn rõ thị trường trước khi quyết định",
+    "subtitle": "Giá thời gian thực, biểu đồ kỹ thuật, cảnh báo giá và danh sách theo dõi — tất cả trên một ứng dụng web.",
+    "searchPlaceholder": "Tìm coin hoặc cặp giao dịch…",
+    "openChart": "Mở siêu biểu đồ",
+    "summary": "Tóm tắt thị trường",
+    "movers": "Biến động",
+    "gainers": "Tăng mạnh",
+    "losers": "Giảm mạnh",
+    "unavailable": "Dữ liệu tạm thời không khả dụng. Vui lòng thử lại sau."
   },
   "search": {
     "open": "Tìm kiếm (Ctrl+K)",

@@ -445,7 +445,15 @@
     }
   },
   "home": {
-    "title": "See the market clearly before you decide"
+    "title": "See the market clearly before you decide",
+    "subtitle": "Real-time prices, technical charts, price alerts and a watchlist — all in one web app.",
+    "searchPlaceholder": "Search a coin or trading pair…",
+    "openChart": "Open Supercharts",
+    "summary": "Market summary",
+    "movers": "Movers",
+    "gainers": "Gainers",
+    "losers": "Losers",
+    "unavailable": "Data is temporarily unavailable. Please try again later."
   },
   "search": {
     "open": "Search (Ctrl+K)",
